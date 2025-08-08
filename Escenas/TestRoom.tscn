@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://vrnkru72h5ue"]
+
+[ext_resource type="PackedScene" uid="uid://bifm8y6ay0c1p" path="res://Escenas/antena.tscn" id="1_fd3fr"]
+[ext_resource type="PackedScene" uid="uid://bl4ujwa2pvekk" path="res://Escenas/box.tscn" id="2_6fhq6"]
+[ext_resource type="Texture2D" uid="uid://7rxl1nffn6qb" path="res://icon.svg" id="3_citrw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yn4q4"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Antena" parent="." instance=ExtResource("1_fd3fr")]
+position = Vector2(128, 400)
+
+[node name="Box" parent="." instance=ExtResource("2_6fhq6")]
+position = Vector2(712, 352)
+rotation = 0.523598
+collision_layer = 3
+collision_mask = 3
+script = null
+
+[node name="Box2" parent="." instance=ExtResource("2_6fhq6")]
+position = Vector2(856, 384)
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(624, 248)
+gravity_scale = 0.0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource("CircleShape2D_yn4q4")
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_citrw")

@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://bifm8y6ay0c1p"]
+
+[ext_resource type="Texture2D" uid="uid://br6lf6isoi6w0" path="res://art/Antena.png" id="1_eag2v"]
+[ext_resource type="Script" path="res://Scripts/antena.gd" id="1_ntbdq"]
+[ext_resource type="Script" path="res://Scripts/Circulo.gd" id="3_3rb7l"]
+
+[sub_resource type="Curve2D" id="Curve2D_ha60g"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -120, 0, 0, 0, 0, 0, 120, 0)
+}
+point_count = 2
+
+[node name="Antena" type="StaticBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_ntbdq")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = -1.5708
+scale = Vector2(0.75, -0.75)
+texture = ExtResource("1_eag2v")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(70, -106, 87, -100, 101, -74, 98, -29, 71, 33, 27, 83, 0, 88, -24, 80, -56, 40, -128, 40, -128, -48, -56, -48, -8, -72, 40, -104)
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_ha60g")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2(-120, 0)
+
+[node name="Circulo" type="Node2D" parent="."]
+position = Vector2(88, 24)
+script = ExtResource("3_3rb7l")

@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://db1uy487h2482"]
+
+[ext_resource type="Script" path="res://Scripts/palanca_antena.gd" id="1_ew2b0"]
+[ext_resource type="Texture2D" uid="uid://c4kxpv7rp6od1" path="res://art/palanca.png" id="1_ifqvv"]
+[ext_resource type="AudioStream" uid="uid://dd40y1yp3d8m4" path="res://art/LeverSfx_1.wav" id="3_hc1y2"]
+[ext_resource type="AudioStream" uid="uid://c6pli0sfajj2q" path="res://art/LeverSfx_2.wav" id="4_1h8l1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n6s5h"]
+size = Vector2(72, 88)
+
+[node name="Area2D" type="Area2D"]
+scale = Vector2(1, -1)
+script = ExtResource("1_ew2b0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4, -4)
+shape = SubResource("RectangleShape2D_n6s5h")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = -1.5708
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_ifqvv")
+hframes = 4
+
+[node name="SonidoCambio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_hc1y2")
+
+[node name="SonidoCambio2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_1h8l1")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

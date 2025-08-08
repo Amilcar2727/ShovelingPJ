@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://bl4ujwa2pvekk"]
+
+[ext_resource type="Texture2D" uid="uid://dhn54rhprve1b" path="res://art/box.png" id="1_0x7jw"]
+[ext_resource type="Script" path="res://Scripts/box.gd" id="1_4t1a3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0x7jw")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 0.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
+size = Vector2(35, 37)
+
+[node name="Box" type="RigidBody2D"]
+z_index = 2
+collision_mask = 3
+gravity_scale = 0.0
+script = ExtResource("1_4t1a3")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.08, 0.08)
+sprite_frames = SubResource("SpriteFrames_gf44t")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_jdfon")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

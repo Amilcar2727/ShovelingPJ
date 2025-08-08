@@ -1,0 +1,40 @@
+# Godot 4+ specific ignores
+.import/
+.godot/
+*.import
+
+# Builds
+build/
+exports/
+
+# Exportacion local
+export.cfg
+export_presets.cfg
+
+# User files
+.project_metadata
+.editor_settings-*
+*.translation
+
+# Archivos temporales
+ehthumbs.db
+Desktop.ini
+.DS_Store
+Thumbs.db
+
+# Sistem files
+*.tmp
+*.temp
+*.log
+
+# Backup Files
+*.bak
+*.old
+*.orig
+
+# Exported files
+*.exe
+*.pck
+*.zip
+*.tar
+*.gz
