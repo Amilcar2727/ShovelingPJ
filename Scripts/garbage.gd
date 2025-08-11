@@ -38,9 +38,4 @@ func ChangeColorBlue():
 	actual_modulate = "blue";
 	
 func _on_body_entered(body):
-	if body.is_in_group("box") and body.hitted == true and hitted == false:
-		if body.linear_velocity.y <= 0: 
-			linear_velocity += Vector2(0,-body.linear_velocity.x);
-		else:
-			linear_velocity += Vector2(0,body.linear_velocity.x);
-		hitted = true;
+	hitted = true;

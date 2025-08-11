@@ -40,5 +40,5 @@ func ChangeColorBlue():
 	$AnimatedSprite2D.modulate = Color(0, 0, 0.75, 1);
 	actual_modulate = "blue";
 	
-func _on_body_entered(body):
+func _on_body_entered(_body):
 	hitted = true;

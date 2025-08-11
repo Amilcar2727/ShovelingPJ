@@ -12,10 +12,15 @@ func _ready():
 	$AntenaPower.hide();
 	$Logo.show();
 
-func show_message(text):
+func show_message(text,color=null):
 	$Message.text = text;
+	if color == null:
+		$Message.add_theme_color_override("font_color", Color(1,1,1,1));
+	else:
+		$Message.add_theme_color_override("font_color", color);
 	$Message.show();
 	$MessageTimer.start();
+	
 func show_game_over():
 	show_message("Time-Out!");
 	# Wait until the MessageTimer has counted down.
@@ -28,10 +33,9 @@ func show_game_over():
 func show_game_won(player:String):
 	var msgWinner = str(player) + " has won!";
 	if(player == "Player 1"):
-		$Message.add_theme_color_override("font_color", Color(1,0.36,0.3,1));
+		show_message(msgWinner, Color(1,0.36,0.3,1));
 	elif(player == "Player 2"):
-		$Message.add_theme_color_override("font_color", Color(0.35,0.61,1,1));
-	show_message(msgWinner);
+		show_message(msgWinner, Color(0.35,0.61,1,1));
 	# Wait until the MessageTimer has counted down.
 	await $MessageTimer.timeout;
 	$Message.add_theme_color_override("font_color", Color(1,1,1,1));

@@ -1,10 +1,11 @@
 extends Node
 @export var box_scene: PackedScene;
 @export var garbage_scene: PackedScene;
-@export var deathTime:int = 60;
-var rondaT = false;
-@onready var player1 = $Player1
-@onready var player2 = $Player2
+const Initialtime:int = 10;
+var deathTime:int = Initialtime;
+var rondaT := false;
+@onready var player1 := $Player1
+@onready var player2 := $Player2
 @onready var HUD = $HUD
 # Antena
 @export var antena_scene:PackedScene;
@@ -12,6 +13,10 @@ var rondaT = false;
 var antena_instancia;
 var palanca_instancia;
 var empezarAntena;
+# SuddenDeath
+signal suddenDSignal;
+@onready var suddenManager:Node = $"SuddenDeathManager";
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#Asignamos las acciones del Input Map para player 1
@@ -28,33 +33,27 @@ func _ready():
 	$BackgroundScn1.hide();
 	$CintasAbajo.hide();
 	$CintasArriba.hide();
-	#ANTENA
-	empezarAntena = false;
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	#SuddenDeath
+	suddenManager.sdFinish.connect(_on_sdFinish);
+	#empezarAntena = false;
+	
 func _process(_delta):
 	pass;
-
-func game_over_by_time():
-	AnimacionAntenaImpacto();
-	HUD.show_game_over();
-	$DeathTimer.stop();
-	$BoxTimer.stop();
-	$Music.stop();
-	$LaserSound.play();
 	
 func game_win(winner:String):
 	HUD.show_game_won(winner);
 	HUD.update_score(str($Player1.score),str($Player2.score));
-	if antena_instancia != null:
-		antena_instancia.alcanzoDestino = true;
-		antena_instancia.get_node("Circulo").animating = false;
+	#if antena_instancia != null:
+		#antena_instancia.alcanzoDestino = true;
+		#antena_instancia.get_node("Circulo").animating = false;
 	$DeathTimer.stop();
+	suddenManager.stop_timer();
 	$BoxTimer.stop();
 	$Music.stop();
 	$DeathSound.play();
 
 func new_game():
-	deathTime = 11;
+	deathTime = Initialtime;
 	$Background.hide();
 	$BackgroundScn1.show();
 	rondaT = false;
@@ -73,10 +72,10 @@ func new_game():
 	#$Music.play(); 
 	$StartTimer.start();
 	get_tree().call_group("box","queue_free");
-	empezarAntena = false;
-	if antena_instancia != null:
-		antena_instancia.queue_free();
-		palanca_instancia.queue_free();
+	#empezarAntena = false;
+	#if antena_instancia != null:
+		#antena_instancia.queue_free();
+		#palanca_instancia.queue_free();
 
 func AnimacionesStart(nodoPadre:Node2D):
 	for child in nodoPadre.get_children():
@@ -101,47 +100,66 @@ func _on_box_timer_timeout():
 		throwable.position = $SpawnBoxesP2.position - diferencia;
 	## == Spawneamos la caja agregandolo a la escena:
 	add_child(throwable);
+	
+func game_over_by_time():
+	#AnimacionAntenaImpacto();
+	HUD.show_game_over();
+	$BoxTimer.stop();
+	$Music.stop();
+	#$LaserSound.play();
+
 func _on_death_timer_timeout():
 	deathTime -= 1;
 	HUD.update_time(deathTime);
-	if(deathTime == 0):	#GameOver
-		palanca_instancia.get_node("CollisionShape2D").disabled = true;
-		if antena_instancia.apunta_jugador == 1:
-			player2.score += 1;
-			player1.hide();
-			player1.position = Vector2(0,0);
-		else:
-			player1.score += 1;
-			player2.hide();
-			player2.position = Vector2(0,0);
-		HUD.update_score(str(player1.score),str(player2.score));
-		game_over_by_time();
+	if(deathTime == 0):	#SuddenDeath
+		$DeathTimer.stop();
+		HUD.show_message("MUERTE SÚBITA!",Color(128, 0, 128, 1));
+		suddenDSignal.emit();
+		#palanca_instancia.get_node("CollisionShape2D").disabled = true;
+		#if antena_instancia.apunta_jugador == 1:
+			#player2.score += 1;
+			#player1.hide();
+			#player1.position = Vector2(0,0);
+		#else:
+			#player1.score += 1;
+			#player2.hide();
+			#player2.position = Vector2(0,0);
 	# ==== ANTENA ==== #
-	if(deathTime <= 10 and not empezarAntena):
-		antena_instancia = antena_scene.instantiate();
-		palanca_instancia = palanca_scene.instantiate();
-		antena_instancia.position = Vector2(-120, 370);
-		palanca_instancia.position = Vector2(1250, 384);
-		add_child(antena_instancia);
-		add_child(palanca_instancia);
-		empezarAntena = true;
+	#if(deathTime <= 10 and not empezarAntena):
+		#spawnObject(antena_instancia, antena_scene, Vector2(-120, 370));
+		#spawnObject(palanca_instancia, palanca_scene, Vector2(1250, 384));
+		#empezarAntena = true;
+		
+func spawnObject(instancia,escena:PackedScene,pos:Vector2):
+	instancia = escena.instantiate();
+	instancia.position = pos;
+	add_child(instancia);
 
 func _on_start_timer_timeout():
 	$BoxTimer.start();
 	$DeathTimer.start();
 	
+func on_win(player):
+	if rondaT == false:
+		player.score += 1;
+		rondaT = true;
+		game_win("Player "+str(player.player_id));
+		
 func _on_player_1_hit():
-	if rondaT == false:
-		#P1 died
-		player2.score += 1;
-		rondaT = true;
-		game_win("Player 2");
+	#P1 died
+	on_win(player2);
 func _on_player_2_hit():
-	if rondaT == false:
-		#P2 died
-		player1.score += 1;
-		rondaT = true;
-		game_win("Player 1");
+	#P2 died
+	on_win(player1);
+
+func _on_sdFinish():
+	HUD.update_score(str(player1.score),str(player2.score));
+	player1.hide();
+	player2.hide();
+	player1.position = Vector2(0,0);
+	player2.position = Vector2(0,0);
+	game_over_by_time();
+	
 func AnimacionAntenaImpacto():
 	$HUD/AntenaPower.show();
 	await get_tree().create_timer(1.0).timeout;
