@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://vrnkru72h5ue"]
+[gd_scene load_steps=6 format=3 uid="uid://vrnkru72h5ue"]
 
 [ext_resource type="PackedScene" uid="uid://bifm8y6ay0c1p" path="res://Escenas/antena.tscn" id="1_fd3fr"]
 [ext_resource type="PackedScene" uid="uid://bl4ujwa2pvekk" path="res://Escenas/box.tscn" id="2_6fhq6"]
 [ext_resource type="Texture2D" uid="uid://7rxl1nffn6qb" path="res://icon.svg" id="3_citrw"]
+[ext_resource type="PackedScene" uid="uid://dq71x3kfsmduk" path="res://Escenas/TimerBomb.tscn" id="4_pc5rg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yn4q4"]
 
@@ -31,3 +32,6 @@ shape = SubResource("CircleShape2D_yn4q4")
 [node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
 scale = Vector2(0.05, 0.05)
 texture = ExtResource("3_citrw")
+
+[node name="BombaTimer" parent="." instance=ExtResource("4_pc5rg")]
+position = Vector2(608, 304)
