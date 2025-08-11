@@ -91,28 +91,32 @@ func _on_collision_area_body_entered(body):
 				hit.emit();
 				$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
 				$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
-			else:
+			elif body.typeName == "Garbage":
 				body.queue_free();
 				onBanana = true;
+			else:
+				pass;
 func _on_shoveling_area_body_entered(body):
 	#Color
-	if body.has_node("AnimatedSprite2D"):
-		if player_id == 1:
-			body.ChangeColorRed();
-		elif player_id == 2:
-			body.ChangeColorBlue();
 	if body.is_in_group("box"):
-		current_box = body;
-		shovel_ready = true;
-func _on_shoveling_area_body_exited(body):
-	if body.has_node("AnimatedSprite2D"):
-		if !body.hitted:
-			body.ChangeColorOrig();
-		elif body.hitted and body.last_hitter != player_id and body.last_hitter != 0:
+		if body.has_node("AnimatedSprite2D"):
 			if player_id == 1:
-				body.ChangeColorBlue();
-			else:
 				body.ChangeColorRed();
+			elif player_id == 2:
+				body.ChangeColorBlue();
+	current_box = body;
+	shovel_ready = true;
+		
+func _on_shoveling_area_body_exited(body):
+	if body.is_in_group("box"):
+		if body.has_node("AnimatedSprite2D"):
+			if !body.hitted:
+				body.ChangeColorOrig();
+			elif body.hitted and body.last_hitter != player_id and body.last_hitter != 0:
+				if player_id == 1:
+					body.ChangeColorBlue();
+				else:
+					body.ChangeColorRed();
 	if body == current_box:
 		current_box = null;
 		

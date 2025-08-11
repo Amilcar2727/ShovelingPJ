@@ -1,7 +1,7 @@
 extends Node
 @export var box_scene: PackedScene;
 @export var garbage_scene: PackedScene;
-const Initialtime:int = 10;
+const Initialtime:int = 2;
 var deathTime:int = Initialtime;
 var rondaT := false;
 @onready var player1 := $Player1
@@ -50,7 +50,6 @@ func game_win(winner:String):
 	suddenManager.stop_timer();
 	$BoxTimer.stop();
 	$Music.stop();
-	$DeathSound.play();
 
 func new_game():
 	deathTime = Initialtime;
@@ -114,6 +113,7 @@ func _on_death_timer_timeout():
 	if(deathTime == 0):	#SuddenDeath
 		$DeathTimer.stop();
 		HUD.show_message("MUERTE SÚBITA!",Color(128, 0, 128, 1));
+		$BoxTimer.stop();
 		suddenDSignal.emit();
 		#palanca_instancia.get_node("CollisionShape2D").disabled = true;
 		#if antena_instancia.apunta_jugador == 1:
@@ -146,19 +146,30 @@ func on_win(player):
 		game_win("Player "+str(player.player_id));
 		
 func _on_player_1_hit():
+	$DeathSound.play();
 	#P1 died
 	on_win(player2);
 func _on_player_2_hit():
+	$DeathSound.play();
 	#P2 died
 	on_win(player1);
 
-func _on_sdFinish():
-	HUD.update_score(str(player1.score),str(player2.score));
-	player1.hide();
-	player2.hide();
-	player1.position = Vector2(0,0);
-	player2.position = Vector2(0,0);
-	game_over_by_time();
+func _on_sdFinish(last_hitter):
+	if last_hitter == null:
+		HUD.update_score(str(player1.score),str(player2.score));
+		player1.hide();
+		player2.hide();
+		player1.position = Vector2(0,0);
+		player2.position = Vector2(0,0);
+		game_over_by_time();
+	elif last_hitter == 1:
+		player2.hide();
+		player2.position = Vector2(0,0);
+		on_win(player1);
+	elif last_hitter == 2:
+		player1.hide();
+		player1.position = Vector2(0,0);
+		on_win(player2);
 	
 func AnimacionAntenaImpacto():
 	$HUD/AntenaPower.show();
