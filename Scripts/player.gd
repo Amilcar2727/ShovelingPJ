@@ -82,7 +82,7 @@ func leftOrRight(orientationA:String):
 		elif(player_id == 2):
 			scale.x = 1;
 func _on_collision_area_body_entered(body):
-	if body.name != "Antena":
+	if body.is_in_group("box"):
 		if body.last_hitter != player_id and body.last_hitter != 0 and body.linear_velocity.length() > 300:
 			if body.typeName == "Box":
 				print(body.name);

@@ -11,13 +11,16 @@ signal whos_last_hitter(last_hitter);
 func _on_timer_timeout() -> void:
 	time_left-=1;
 	label.text = str(time_left);
-	if mass > 1.4:
+	if mass >= 1.3:
 		mass -= 0.3;
 	else:
-		mass = 1.4;
+		mass = 1.3;
 	if(time_left==0):
 		timer.stop();
-		get_parent().queue_free();
+		queue_free(); 
+
+func stop():
+	timer.stop();
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	emit_signal("whos_last_hitter",last_hitter);

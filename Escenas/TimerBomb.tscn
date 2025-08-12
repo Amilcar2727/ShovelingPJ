@@ -18,6 +18,8 @@ animations = [{
 size = Vector2(48, 72)
 
 [node name="BombaTimer" type="RigidBody2D"]
+collision_layer = 16
+collision_mask = 46
 mass = 5.0
 gravity_scale = 0.0
 script = ExtResource("1_s4nei")

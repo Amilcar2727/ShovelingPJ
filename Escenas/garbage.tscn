@@ -19,7 +19,8 @@ size = Vector2(35, 45)
 
 [node name="GarbageBin" type="RigidBody2D"]
 z_index = 2
-collision_mask = 3
+collision_layer = 8
+collision_mask = 95
 gravity_scale = 0.0
 script = ExtResource("1_2s2lk")
 metadata/_edit_group_ = true

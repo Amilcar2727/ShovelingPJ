@@ -155,14 +155,7 @@ func _on_player_2_hit():
 	on_win(player1);
 
 func _on_sdFinish(last_hitter):
-	if last_hitter == null:
-		HUD.update_score(str(player1.score),str(player2.score));
-		player1.hide();
-		player2.hide();
-		player1.position = Vector2(0,0);
-		player2.position = Vector2(0,0);
-		game_over_by_time();
-	elif last_hitter == 1:
+	if last_hitter == 1:
 		player2.hide();
 		player2.position = Vector2(0,0);
 		on_win(player1);
@@ -170,6 +163,14 @@ func _on_sdFinish(last_hitter):
 		player1.hide();
 		player1.position = Vector2(0,0);
 		on_win(player2);
+	else:
+		HUD.update_score(str(player1.score),str(player2.score));
+		player1.hide();
+		player2.hide();
+		player1.position = Vector2(0,0);
+		player2.position = Vector2(0,0);
+		game_over_by_time();
+	
 	
 func AnimacionAntenaImpacto():
 	$HUD/AntenaPower.show();
