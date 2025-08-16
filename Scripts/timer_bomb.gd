@@ -11,10 +11,11 @@ signal whos_last_hitter(last_hitter);
 func _on_timer_timeout() -> void:
 	time_left-=1;
 	label.text = str(time_left);
-	if mass >= 1.3:
-		mass -= 0.3;
+	if mass > 1.31:
+		mass -= 0.37;
 	else:
 		mass = 1.3;
+	print(mass);
 	if(time_left==0):
 		timer.stop();
 		queue_free(); 

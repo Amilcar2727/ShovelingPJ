@@ -1,7 +1,7 @@
 extends Node
 @export var box_scene: PackedScene;
 @export var garbage_scene: PackedScene;
-const Initialtime:int = 2;
+const Initialtime:int = 60;
 var deathTime:int = Initialtime;
 var rondaT := false;
 @onready var player1 := $Player1
@@ -16,6 +16,7 @@ var empezarAntena;
 # SuddenDeath
 signal suddenDSignal;
 @onready var suddenManager:Node = $"SuddenDeathManager";
+var onSDEvent := false;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,6 +36,7 @@ func _ready():
 	$CintasArriba.hide();
 	#SuddenDeath
 	suddenManager.sdFinish.connect(_on_sdFinish);
+	onSDEvent = false;
 	#empezarAntena = false;
 	
 func _process(_delta):
@@ -47,7 +49,9 @@ func game_win(winner:String):
 		#antena_instancia.alcanzoDestino = true;
 		#antena_instancia.get_node("Circulo").animating = false;
 	$DeathTimer.stop();
-	suddenManager.stop_timer();
+	if onSDEvent:
+		suddenManager.stop_timer();
+		onSDEvent = false;
 	$BoxTimer.stop();
 	$Music.stop();
 
@@ -71,6 +75,7 @@ func new_game():
 	#$Music.play(); 
 	$StartTimer.start();
 	get_tree().call_group("box","queue_free");
+	onSDEvent = false;
 	#empezarAntena = false;
 	#if antena_instancia != null:
 		#antena_instancia.queue_free();
@@ -114,6 +119,8 @@ func _on_death_timer_timeout():
 		$DeathTimer.stop();
 		HUD.show_message("MUERTE SÚBITA!",Color(128, 0, 128, 1));
 		$BoxTimer.stop();
+		get_tree().call_group("box","queue_free");
+		onSDEvent = true;
 		suddenDSignal.emit();
 		#palanca_instancia.get_node("CollisionShape2D").disabled = true;
 		#if antena_instancia.apunta_jugador == 1:
