@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://4ioh44e3ga0r" path="res://art/MapChoose.png" id="1_if8rd"]
 [ext_resource type="Script" path="res://Scripts/choosing_map.gd" id="1_n5h42"]
 [ext_resource type="Texture2D" uid="uid://b5yah7esycg63" path="res://art/FactoryBackGround.jpg" id="2_7qntd"]
-[ext_resource type="Script" path="res://Resources/MapData.gd" id="2_dgom2"]
+[ext_resource type="Script" path="res://Resources&AutoLoads/MapData.gd" id="2_dgom2"]
 [ext_resource type="Texture2D" uid="uid://dsvkxl7s5fpy5" path="res://art/SpaceshipBackGround.png" id="3_tr52a"]
 [ext_resource type="Texture2D" uid="uid://pe8pttaaaqpo" path="res://art/WhiteForestBackGround.png" id="4_64vi5"]
 
@@ -107,6 +107,19 @@ grow_vertical = 2
 texture_normal = ExtResource("4_64vi5")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="ModeName" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -176.0
+offset_top = 32.0
+offset_right = 176.0
+offset_bottom = 120.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 60
+text = "VERSUS MODE"
 
 [node name="MapName" type="Label" parent="."]
 layout_mode = 1

@@ -1,50 +1,55 @@
 extends Control
 
-var num_Players := 1;
-var mode = "VERSUS"; #TUTORIAL
-
 func _ready() -> void:
-	num_Players = 1;
-	mode = "VERSUS"
+	GameData.num_Players = 1;
+	GameData.mode = GameData.MODE_TUTORIAL;
 	$P2.hide();
+	_on_1player();
 	#Boton P1 deshabilitado por ahora
 	$PlayersContainer/BtnP1.disabled = true;
+	$PlayersContainer/BtnP2.modulate.a = 0.75;
+
+func _on_1player() -> void:
+	$ModeContainer/BtnLeft.disabled = true;
+	$ModeContainer/BtnRight.disabled = true;
+	GameData.mode = GameData.MODE_TUTORIAL;
+	$ModeContainer/LabelModo.text = GameData.mode;
 	$PlayersContainer/BtnP2.text = "Press 
-								to Play";
-	# Botones Mode
-	$ModeContainer/BtnTutorial.modulate.a = 0.5;
-	$ModeContainer/BtnVersus.modulate.a = 1;
-	print("Num Players = ",num_Players);
+									to Play";
+
+func _on_2player() -> void:
+	#BOTONES MODO
+	$ModeContainer/BtnLeft.disabled = false;
+	$ModeContainer/BtnRight.disabled = false;
+	#UI Player 2
+	$PlayersContainer/BtnP2.text = "";
+	
 
 func _on_btn_p_2_pressed() -> void:
-	if num_Players == 1:
-		num_Players = 2;
+	if GameData.num_Players == 1:
+		GameData.num_Players = 2;
 		$P2.show();
-		$LabelP2.show();
-		$PlayersContainer/BtnP2.text = "";
-		print("Num Players = ",num_Players);
+		_on_2player();
 	else:
-		num_Players = 1;
+		GameData.num_Players = 1;
 		$P2.hide();
-		$PlayersContainer/BtnP2.text = "Press 
-									to Play";
-		print("Num Players = ",num_Players);
+		_on_1player();
 		
-func _on_btn_tutorial_pressed() -> void:
-	mode = "TUTORIAL";
-	$ModeContainer/BtnTutorial.modulate.a = 1;
-	$ModeContainer/BtnVersus.modulate.a = 0.5;
-	print("Mode: ",mode);
-	
-func _on_btn_versus_pressed() -> void:
-	mode = "VERSUS";
-	$ModeContainer/BtnTutorial.modulate.a = 0.5;
-	$ModeContainer/BtnVersus.modulate.a = 1;
-	print("Mode: ",mode);
-
+func _on_btn_mode_pressed() -> void:
+	if GameData.mode == GameData.MODE_TUTORIAL:
+		GameData.mode = GameData.MODE_VERSUS;
+	else:
+		GameData.mode = GameData.MODE_TUTORIAL;
+	$ModeContainer/LabelModo.text = GameData.mode;
 
 func _on_btn_back_menu_pressed() -> void:
 	get_tree().change_scene_to_file("res://Escenas/MainMenu.tscn");
 
 func _on_btn_go_pressed() -> void:
-	get_tree().change_scene_to_file("res://Escenas/ChoosingModeLoad.tscn");
+	if GameData.mode == GameData.MODE_VERSUS:
+		get_tree().change_scene_to_file("res://Escenas/ChoosingModeLoad.tscn");
+	else:
+		pass;
+	print("Players: ",GameData.num_Players);
+	print("Mode: ",GameData.mode);
+	

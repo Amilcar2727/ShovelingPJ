@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 RigidBodyAutoScaler="*res://addons/rigidbody_auto_scaler/RigidBodyAutoScaler.gd"
+GameData="*res://Resources&AutoLoads/GameData.gd"
 
 [display]
 

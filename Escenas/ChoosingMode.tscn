@@ -48,6 +48,7 @@ theme_override_font_sizes/font_size = 150
 custom_minimum_size = Vector2(180, 200)
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
+toggle_mode = true
 text = "Press 
 to Play"
 
@@ -74,19 +75,30 @@ offset_right = 232.0
 offset_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 50
+theme_override_constants/separation = 25
 alignment = 1
 metadata/_edit_group_ = true
 
-[node name="BtnTutorial" type="Button" parent="ModeContainer"]
+[node name="BtnLeft" type="Button" parent="ModeContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "Tutorial"
+toggle_mode = true
+text = "<"
 
-[node name="BtnVersus" type="Button" parent="ModeContainer"]
+[node name="LabelModo" type="Label" parent="ModeContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "TUTORIAL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnRight" type="Button" parent="ModeContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "Versus"
+toggle_mode = true
+text = ">"
 
 [node name="BtnGo" type="Button" parent="."]
 layout_mode = 1
@@ -148,7 +160,7 @@ theme_override_font_sizes/font_size = 30
 text = "<"
 
 [connection signal="pressed" from="PlayersContainer/BtnP2" to="." method="_on_btn_p_2_pressed"]
-[connection signal="pressed" from="ModeContainer/BtnTutorial" to="." method="_on_btn_tutorial_pressed"]
-[connection signal="pressed" from="ModeContainer/BtnVersus" to="." method="_on_btn_versus_pressed"]
+[connection signal="pressed" from="ModeContainer/BtnLeft" to="." method="_on_btn_mode_pressed"]
+[connection signal="pressed" from="ModeContainer/BtnRight" to="." method="_on_btn_mode_pressed"]
 [connection signal="pressed" from="BtnGo" to="." method="_on_btn_go_pressed"]
 [connection signal="pressed" from="BtnBackMenu" to="." method="_on_btn_back_menu_pressed"]
