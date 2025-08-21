@@ -15,7 +15,7 @@ func _on_timer_timeout() -> void:
 		mass -= 0.37;
 	else:
 		mass = 1.3;
-	print(mass);
+		
 	if(time_left==0):
 		timer.stop();
 		queue_free(); 

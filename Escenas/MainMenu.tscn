@@ -1,0 +1,100 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddcntaunf6m8h"]
+
+[ext_resource type="Texture2D" uid="uid://bl6853sgmdob0" path="res://art/LaboratoryMenu.png" id="1_0dvyi"]
+[ext_resource type="Script" path="res://Scripts/main_menu.gd" id="1_q7chf"]
+[ext_resource type="FontFile" uid="uid://b3t7t64bu3bwr" path="res://art/Xolonium-Regular.ttf" id="3_6sxyk"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q7chf")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_0dvyi")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 32.0
+offset_top = -80.0
+offset_right = 240.0
+offset_bottom = -3.0
+grow_vertical = 2
+metadata/_edit_group_ = true
+
+[node name="BtnPlay" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Play"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 32.0
+offset_top = 8.0
+offset_right = 240.0
+offset_bottom = 166.0
+grow_vertical = 2
+theme_override_constants/separation = 5
+metadata/_edit_group_ = true
+
+[node name="BtnOptions" type="Button" parent="VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Options
+"
+
+[node name="BtnCredits" type="Button" parent="VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Credits
+"
+
+[node name="BtnExit" type="Button" parent="VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Exit
+"
+
+[node name="Message" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = -152.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_6sxyk")
+theme_override_font_sizes/font_size = 60
+text = "Beaver Project!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[connection signal="pressed" from="VBoxContainer/BtnPlay" to="." method="_on_btn_play_pressed"]
+[connection signal="pressed" from="VBoxContainer2/BtnOptions" to="." method="_on_btn_options_pressed"]
+[connection signal="pressed" from="VBoxContainer2/BtnCredits" to="." method="_on_btn_credits_pressed"]
+[connection signal="pressed" from="VBoxContainer2/BtnExit" to="." method="_on_btn_exit_pressed"]

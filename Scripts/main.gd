@@ -1,7 +1,7 @@
 extends Node
 @export var box_scene: PackedScene;
 @export var garbage_scene: PackedScene;
-const Initialtime:int = 60;
+const Initialtime:int = 1;
 var deathTime:int = Initialtime;
 var rondaT := false;
 @onready var player1 := $Player1

@@ -1,0 +1,154 @@
+[gd_scene load_steps=10 format=3 uid="uid://dhmtld04uf28y"]
+
+[ext_resource type="Texture2D" uid="uid://4ioh44e3ga0r" path="res://art/MapChoose.png" id="1_if8rd"]
+[ext_resource type="Script" path="res://Scripts/choosing_map.gd" id="1_n5h42"]
+[ext_resource type="Texture2D" uid="uid://b5yah7esycg63" path="res://art/FactoryBackGround.jpg" id="2_7qntd"]
+[ext_resource type="Script" path="res://Resources/MapData.gd" id="2_dgom2"]
+[ext_resource type="Texture2D" uid="uid://dsvkxl7s5fpy5" path="res://art/SpaceshipBackGround.png" id="3_tr52a"]
+[ext_resource type="Texture2D" uid="uid://pe8pttaaaqpo" path="res://art/WhiteForestBackGround.png" id="4_64vi5"]
+
+[sub_resource type="Resource" id="Resource_puk5n"]
+script = ExtResource("2_dgom2")
+name = "Lost Factory"
+texture = ExtResource("2_7qntd")
+
+[sub_resource type="Resource" id="Resource_hyuii"]
+script = ExtResource("2_dgom2")
+name = "UFO Incident"
+texture = ExtResource("3_tr52a")
+
+[sub_resource type="Resource" id="Resource_gxjva"]
+script = ExtResource("2_dgom2")
+name = "Snowy Forest"
+texture = ExtResource("4_64vi5")
+
+[node name="ChoosingMap" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n5h42")
+maps = Array[ExtResource("2_dgom2")]([SubResource("Resource_puk5n"), SubResource("Resource_hyuii"), SubResource("Resource_gxjva")])
+
+[node name="BackGround" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_if8rd")
+expand_mode = 1
+
+[node name="BtnStart" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -440.0
+offset_top = -120.0
+offset_right = -200.0
+offset_bottom = -43.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 50
+text = "Start!"
+
+[node name="Map1" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -552.0
+offset_top = -176.0
+offset_right = -304.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("2_7qntd")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Map2" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -264.0
+offset_top = -176.0
+offset_right = -16.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("3_tr52a")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Map3" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -408.0
+offset_right = -160.0
+offset_bottom = 144.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("4_64vi5")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="MapName" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -424.0
+offset_top = -168.0
+offset_right = -140.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 60
+text = "Lost Factory"
+
+[node name="BtnBackMenu" type="Button" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 96.0
+offset_bottom = 72.0
+theme_override_font_sizes/font_size = 30
+text = "<"
+
+[node name="MapOnScreen" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -488.0
+offset_top = -184.0
+offset_right = -176.0
+offset_bottom = 80.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 1
+
+[connection signal="pressed" from="Map1" to="." method="_on_map_1_pressed"]
+[connection signal="pressed" from="Map2" to="." method="_on_map_2_pressed"]
+[connection signal="pressed" from="Map3" to="." method="_on_map_3_pressed"]
+[connection signal="pressed" from="BtnBackMenu" to="." method="_on_btn_back_menu_pressed"]

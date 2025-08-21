@@ -1,0 +1,32 @@
+extends Control
+
+var CurrentlyMap := "";
+#ListaMapas
+@export var maps:Array[MapData]
+@onready var mapOnScreen = $MapOnScreen as TextureRect;
+var current_index := 0;
+
+func _ready() -> void:
+	## PRIMER MAPA POR DEFECTO
+	show_map(-1);
+
+func show_map(i:int)->void:
+	if(i!=-1):
+		current_index = i;
+		var map_data = maps[i];
+		mapOnScreen.texture = map_data.texture;
+		$MapName.text = map_data.name;
+	else:
+		$MapName.text = "-select map-";
+		
+func _on_btn_back_menu_pressed() -> void:
+	get_tree().change_scene_to_file("res://Escenas/ChoosingMode.tscn");
+
+func _on_map_1_pressed() -> void:
+	show_map(0);
+	
+func _on_map_2_pressed() -> void:
+	show_map(1);
+	
+func _on_map_3_pressed() -> void:
+	show_map(2);

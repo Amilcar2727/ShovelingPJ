@@ -1,0 +1,154 @@
+[gd_scene load_steps=4 format=3 uid="uid://cyywhhx7sx64s"]
+
+[ext_resource type="Texture2D" uid="uid://c8drtdbjfr8rd" path="res://art/LabElevator1.png" id="1_64ys5"]
+[ext_resource type="Script" path="res://Scripts/choosing_mode.gd" id="1_r346o"]
+[ext_resource type="Texture2D" uid="uid://bfd451a8jrajb" path="res://art/CastorWalking3.png" id="2_0me1d"]
+
+[node name="Mode" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r346o")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_64ys5")
+expand_mode = 1
+
+[node name="PlayersContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -253.0
+offset_top = -58.5
+offset_right = 165.0
+offset_bottom = 154.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+metadata/_edit_group_ = true
+
+[node name="BtnP1" type="Button" parent="PlayersContainer"]
+custom_minimum_size = Vector2(180, 200)
+layout_mode = 2
+theme_override_font_sizes/font_size = 150
+
+[node name="BtnP2" type="Button" parent="PlayersContainer"]
+custom_minimum_size = Vector2(180, 200)
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Press 
+to Play"
+
+[node name="P1" type="Sprite2D" parent="."]
+position = Vector2(464, 424)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_0me1d")
+
+[node name="P2" type="Sprite2D" parent="."]
+position = Vector2(728, 424)
+scale = Vector2(-0.25, 0.25)
+texture = ExtResource("2_0me1d")
+
+[node name="ModeContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -136.0
+offset_right = 232.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 50
+alignment = 1
+metadata/_edit_group_ = true
+
+[node name="BtnTutorial" type="Button" parent="ModeContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Tutorial"
+
+[node name="BtnVersus" type="Button" parent="ModeContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Versus"
+
+[node name="BtnGo" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 400.0
+offset_top = -336.0
+offset_right = 624.0
+offset_bottom = -225.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 75
+text = "GO!"
+
+[node name="LabelP1" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -136.0
+offset_right = -120.0
+offset_bottom = -67.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.712692, 2.85175e-06, 9.62615e-07, 1)
+theme_override_font_sizes/font_size = 50
+text = "P1"
+
+[node name="LabelP2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 40.0
+offset_top = -136.0
+offset_right = 112.0
+offset_bottom = -67.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.18902, 0.124919, 0.860163, 1)
+theme_override_font_sizes/font_size = 50
+text = "P2"
+
+[node name="BtnBackMenu" type="Button" parent="."]
+layout_mode = 1
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 96.0
+offset_bottom = 72.0
+theme_override_font_sizes/font_size = 30
+text = "<"
+
+[connection signal="pressed" from="PlayersContainer/BtnP2" to="." method="_on_btn_p_2_pressed"]
+[connection signal="pressed" from="ModeContainer/BtnTutorial" to="." method="_on_btn_tutorial_pressed"]
+[connection signal="pressed" from="ModeContainer/BtnVersus" to="." method="_on_btn_versus_pressed"]
+[connection signal="pressed" from="BtnGo" to="." method="_on_btn_go_pressed"]
+[connection signal="pressed" from="BtnBackMenu" to="." method="_on_btn_back_menu_pressed"]
