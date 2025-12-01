@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Shoveling Project"
-run/main_scene="res://Escenas/scene1.tscn"
+run/main_scene="res://Escenas/Map1_Factory.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
