@@ -14,7 +14,6 @@ events = [SubResource("InputEventAction_xy4pk")]
 script = ExtResource("1_n6waq")
 
 [node name="AntenaPower" type="ColorRect" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -22,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.886275, 0, 0.0823529, 0.952941)
 
-[node name="DeathLabel" type="Label" parent="."]
+[node name="TimerLabel" type="Label" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -104,14 +103,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -630.0
+offset_left = -640.0
 offset_top = -76.0
-offset_right = 650.0
+offset_right = 640.0
 offset_bottom = 76.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
-size_flags_vertical = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
@@ -123,6 +121,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="StartButton" type="Button" parent="."]
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -143,10 +142,42 @@ text = "Start"
 wait_time = 2.0
 one_shot = true
 
-[node name="Logo" type="Sprite2D" parent="."]
-position = Vector2(640, 230)
+[node name="OptionsButton" type="Button" parent="."]
+offset_left = 29.0
+offset_top = 23.0
+offset_right = 85.0
+offset_bottom = 65.0
+theme_override_font_sizes/font_size = 30
+text = "="
+
+[node name="GoBackGameButton" type="Button" parent="."]
+visible = false
+offset_left = 29.0
+offset_top = 23.0
+offset_right = 85.0
+offset_bottom = 65.0
+theme_override_font_sizes/font_size = 30
+text = "<"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -161.0
+offset_top = -89.0
+offset_right = 166.0
+offset_bottom = 277.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Logo" type="Sprite2D" parent="VBoxContainer"]
+visible = false
+position = Vector2(161, -41)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("3_36xhk")
 
-[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]
+[connection signal="pressed" from="OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="GoBackGameButton" to="." method="_on_go_back_game_button_pressed"]
