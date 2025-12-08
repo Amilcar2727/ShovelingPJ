@@ -90,18 +90,41 @@ func AnimacionesStart(nodoPadre:Node2D):
 		if child is AnimatedSprite2D:
 			child.play();
 
+func elegirCajaType():
+	var random = randf();
+	const cajas = [
+		{"tipo": 1, "prob": 0.60}, ##Caja
+		{"tipo": 2, "prob": 0.10}, ##Basura
+		{"tipo": 3, "prob": 0.05}, ##BalonOxigeno
+		{"tipo": 4, "prob": 0.25}, ##Nada
+	]
+	var acumulado = 0.0
+	for op in cajas:
+		acumulado += op["prob"]
+		if(random <= acumulado):
+			return op["tipo"];
+	return null;
+
 func _on_box_timer_timeout():
 	#Creamos una instancia de caja o basura
 	var throwable;
-	var type = randi_range(0,1);
+	var type = 1#elegirCajaType();
 	var spawn = randi_range(0,1);
 	var diferencia;
-	if type == 0:
+	if type == 1:
+		print("Spawneando caja normal.")
 		throwable = box_scene.instantiate();
 		diferencia = Vector2.ZERO;
-	else:
+	elif type == 2:
+		print("Spawneando basura.")
 		throwable = garbage_scene.instantiate();
 		diferencia = Vector2(0,-17);
+	elif type == 3:
+		print("Spawneando balon de oxigeno.")
+		return;
+	else:
+		print("Spawneando nada xd.")
+		return;
 	if spawn == 0:
 		throwable.position = $SpawnBoxesP1.position + diferencia;
 	elif spawn == 1:
