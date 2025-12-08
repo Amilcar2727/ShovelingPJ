@@ -1,7 +1,7 @@
 extends Node
 @export var box_scene: PackedScene;
 @export var garbage_scene: PackedScene;
-const Initialtime:int = 1;
+const Initialtime:int = 60;
 var deathTime:int = Initialtime;
 var rondaT := false;
 @onready var player1 := $Player1
@@ -38,6 +38,7 @@ func _ready():
 	suddenManager.sdFinish.connect(_on_sdFinish);
 	onSDEvent = false;
 	#empezarAntena = false;
+	new_game();
 	
 func _process(_delta):
 	pass;
@@ -65,7 +66,7 @@ func new_game():
 	AnimacionesStart($CintasAbajo);
 	AnimacionesStart($CintasArriba);
 	HUD.update_time(deathTime);
-	HUD.show_message("Get Ready");
+	HUD.show_message("Get Ready!");
 	player1.start($StartPositionP1.position);
 	player1.orientation = "right";
 	player2.start($StartPositionP2.position);
@@ -76,6 +77,9 @@ func new_game():
 	$StartTimer.start();
 	get_tree().call_group("box","queue_free");
 	onSDEvent = false;
+	suddenManager.stop_timer();
+	if suddenManager.SDObject_instance != null:
+		suddenManager.SDObject_instance.queue_free();
 	#empezarAntena = false;
 	#if antena_instancia != null:
 		#antena_instancia.queue_free();

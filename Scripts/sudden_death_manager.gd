@@ -25,7 +25,8 @@ func _on_area_bomb(_body:Node) -> void:
 	bomb_in_area = 1 - bomb_in_area;
 func stop_timer() -> void:
 	suddenDTimer.stop();
-	SDObject_instance.stop();
+	if SDObject_instance != null:
+		SDObject_instance.stop();
 func _on_death_timer_timeout() -> void:
 	suddenTime -= 1;
 	HUD.update_time(suddenTime);

@@ -11,6 +11,7 @@ _data = {
 point_count = 2
 
 [node name="Antena" type="StaticBody2D"]
+position = Vector2(312, 472)
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_ntbdq")

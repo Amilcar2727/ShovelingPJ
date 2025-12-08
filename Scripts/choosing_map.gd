@@ -33,3 +33,18 @@ func _on_map_2_pressed() -> void:
 	
 func _on_map_3_pressed() -> void:
 	show_map(2);
+
+## START X MAP
+func _on_btn_start_pressed() -> void:
+	var map_data = maps[current_index]
+	var map_path:String;
+	
+	if(current_index == 0):
+		map_path = "res://Escenas/Map1_Factory.tscn"
+	elif(current_index == 1):
+		return
+		map_path = "res://Escenas/Map1_Factory.tscn"
+	elif(current_index == 2):
+		return
+		map_path = "res://Escenas/Map1_Factory.tscn"
+	get_tree().change_scene_to_file(map_path);

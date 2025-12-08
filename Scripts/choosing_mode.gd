@@ -1,5 +1,4 @@
 extends Control
-
 func _ready() -> void:
 	GameData.num_Players = 1;
 	GameData.mode = GameData.MODE_TUTORIAL;

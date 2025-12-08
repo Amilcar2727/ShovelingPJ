@@ -161,6 +161,7 @@ grow_horizontal = 0
 grow_vertical = 2
 expand_mode = 1
 
+[connection signal="pressed" from="BtnStart" to="." method="_on_btn_start_pressed"]
 [connection signal="pressed" from="Map1" to="." method="_on_map_1_pressed"]
 [connection signal="pressed" from="Map2" to="." method="_on_map_2_pressed"]
 [connection signal="pressed" from="Map3" to="." method="_on_map_3_pressed"]
