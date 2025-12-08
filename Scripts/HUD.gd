@@ -49,9 +49,10 @@ func show_game_won(player:String):
 	
 func update_time(time):
 	$TimerLabel.text = str(time);
+	
 func update_score(scoreP1:String,scoreP2:String):
-	$ScoreP1.text = scoreP1;
-	$ScoreP2.text = scoreP2;
+	actualizarPlayerScore(1,int(scoreP1));
+	actualizarPlayerScore(2,int(scoreP2));
 
 func _on_message_timer_timeout():
 	$Message.hide();
@@ -63,3 +64,17 @@ func _on_options_button_pressed() -> void:
 func _on_go_back_game_button_pressed() -> void:
 	$GoBackGameButton.hide();
 	$OptionsButton.show();
+
+func actualizarHijos(list,Score:int) -> void:
+	if(Score > 3): ##Maximo de rondas ganadas
+		return;
+	for i in range(Score):
+		list[i].show();
+		
+func actualizarPlayerScore(player,Score) -> void:
+	var list:Array
+	if player == 1:
+		list = $P1PointsCont.get_children();
+	else:
+		list = $P2PointsCont.get_children();
+	actualizarHijos(list, Score);
