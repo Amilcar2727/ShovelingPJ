@@ -29,7 +29,15 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	
 func _on_visible_on_screen_notifier_2d_screen_exited():
 	queue_free();
-	
+
+func ChangeColor(player_id):
+	if player_id == 1:
+		ChangeColorRed();
+	elif player_id == 2:
+		ChangeColorBlue();
+	else:
+		ChangeColorOrig();
+
 func ChangeColorOrig():
 	$AnimatedSprite2D.modulate = Color(1,1,1,1);
 	actual_modulate = "normal";

@@ -112,18 +112,15 @@ func _on_box_timer_timeout():
 	var spawn = randi_range(0,1);
 	var diferencia;
 	if type == 1:
-		print("Spawneando caja normal.")
 		throwable = box_scene.instantiate();
 		diferencia = Vector2.ZERO;
 	elif type == 2:
-		print("Spawneando basura.")
 		throwable = garbage_scene.instantiate();
 		diferencia = Vector2(0,-17);
 	elif type == 3:
 		print("Spawneando balon de oxigeno.")
 		return;
 	else:
-		print("Spawneando nada xd.")
 		return;
 	if spawn == 0:
 		throwable.position = $SpawnBoxesP1.position + diferencia;
