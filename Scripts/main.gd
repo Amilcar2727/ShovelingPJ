@@ -108,7 +108,7 @@ func elegirCajaType():
 func _on_box_timer_timeout():
 	#Creamos una instancia de caja o basura
 	var throwable;
-	var type = 1#elegirCajaType();
+	var type = elegirCajaType();
 	var spawn = randi_range(0,1);
 	var diferencia;
 	if type == 1:
