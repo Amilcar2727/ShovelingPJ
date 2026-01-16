@@ -14,7 +14,7 @@ var orientation = "right";
 #Powers
 var shovel_action := "";
 var shovel_up_action := "";
-var shovel_ready := false;
+#var shovel_ready := false;
 var current_boxes := [];
 var impulso_fuerza = 600;
 var can_launch_box = true; #Timer
@@ -63,10 +63,6 @@ func _process(delta):
 	
 	if velocity.x!=0:
 		$AnimatedSprite2D.animation = "walk";
-		
-	##Lanzamiento
-	if(len(current_boxes)!=0):
-		shovel_ready = true;
 
 func start(pos):
 	position = pos;
@@ -119,55 +115,15 @@ func _on_shoveling_area_body_entered(body):
 	if body not in (current_boxes):
 		changeColorBody('clear');
 		current_boxes.push_back(body);
-		print("Actualmente - in: ",current_boxes)
 		changeColorBody('draw');
-		#if body.has_node("AnimatedSprite2D") and body.is_in_group("box") and !body.hitted:
-			#current_boxes[len(current_boxes)-1].ChangeColor(player_id);
-			#for box in current_boxes:
-				#if box.name != body.name:
-					#box.ChangeColor(0);
-	##Color
-	#if body.is_in_group("box"):
-		###Agregamos la caja al array
-		#current_boxes.push_back(body);
-		###Si habia una caja ya agregada, le cambiamos a color orig
-		#if(len(current_boxes)!=0):
-			#var prev_box = current_boxes[0];
-			#if prev_box.has_node("AnimatedSprite2D"):
-				#prev_box.ChangeColor(0);
-		###Cambiamos su color mod a la caja actual
-		#if body.has_node("AnimatedSprite2D"):
-			#body.ChangeColor(player_id);
-	###Anunciamos que estamos listos para shovelear :g
-	#shovel_ready = true;
 		
 func _on_shoveling_area_body_exited(body):
-	var box_index = current_boxes.find(body)
+	var box_index = current_boxes.find(body);
 	if box_index != -1:
 		changeColorBody('clear')
 		current_boxes.pop_at(box_index);
-		print("Actualmente - out: ",current_boxes)
 		changeColorBody('draw')
-		#
-		#if body.has_node("AnimatedSprite2D") and body.is_in_group("box") and !body.hitted:
-			#body.ChangeColor(0);
 	
-	#if body.is_in_group("box"):
-		#if body.has_node("AnimatedSprite2D"):
-			#if !body.hitted:
-				#body.ChangeColor(0);
-			#elif body.hitted and body.last_hitter != player_id and body.last_hitter != 0:
-				#body.ChangeColor(player_id);
-		### Eliminamos de la referencia
-		#if !body.hitted:
-			#current_boxes.pop_front();
-		### Si habia otra caja en nuestra referencia, la pintamos de nuevo
-		#if(len(current_boxes) != 0):
-			#var prev_box = current_boxes[0];
-			#if prev_box != null:	
-				#if prev_box.has_node("AnimatedSprite2D"):
-					#prev_box.ChangeColor(player_id+1);
-
 func before_launch_box(player_id, mode:String):
 	var player = 1 if (player_id == 1) else -1;
 	if mode == "especial":
@@ -179,38 +135,13 @@ func before_launch_box(player_id, mode:String):
 			launch_box(impulso_fuerza,-120*player);
 	
 func set_launch(mode:String):
-	print("Shoveleando! ",current_boxes)
-	if shovel_ready and len(current_boxes)!=0 and can_launch_box:
+	if len(current_boxes)!=0 and can_launch_box:
 		if player_id == 1:
 			before_launch_box(player_id, mode);
 		elif player_id == 2:
 			before_launch_box(player_id, mode);
 		can_launch_box = false;
 		$TimerShovel.start();
-		
-	#if shovel_ready and can_launch_box and (len(current_boxes)!=0):
-		#if player_id == 1:
-			#if mode == "especial":
-				#launch_box(impulso_fuerza,-90);
-				#can_launch_box = false;
-				#$TimerShovel.start();
-				#return;
-			#if orientation == "right":
-				#launch_box(impulso_fuerza,-60);
-			#elif orientation == "left":
-				#launch_box(impulso_fuerza,-120);
-		#elif player_id == 2:
-			#if mode == "especial":
-				#launch_box(impulso_fuerza,90);
-				#can_launch_box = false;
-				#$TimerShovel.start();
-				#return;
-			#if orientation == "right":
-				#launch_box(impulso_fuerza,60);
-			#elif orientation == "left":
-				#launch_box(impulso_fuerza,120);
-		#can_launch_box = false;
-		#$TimerShovel.start();
 		
 func launch_box(impulso:float, angulo:float):
 	## Caja por lanzar
@@ -223,29 +154,7 @@ func launch_box(impulso:float, angulo:float):
 	current_box.linear_velocity = Vector2.ZERO;
 	var anguloF = deg_to_rad(angulo);
 	var vector_fuerza = Vector2(cos(anguloF),sin(anguloF)) * impulso;
-	print("Shoveling: ", current_box);
 	current_box.apply_impulse(vector_fuerza);
-	
-	#
-	
-	
-	#if len(current_boxes)!=0:
-		### La caja por lanzar es la ultima que tenemos mapeada
-		#var current_box = current_boxes[len(current_boxes)-1];
-		#if current_box.hitted == false:
-			#current_box.hitted = true;
-		#current_box.set_collision_mask_value(1,true);
-		#current_box.linear_velocity = Vector2.ZERO;
-		#var anguloF = deg_to_rad(angulo);
-		#var vector_fuerza = Vector2(cos(anguloF),sin(anguloF)) * impulso;
-		#current_box.apply_impulse(vector_fuerza);
-		#
-		#current_box.last_hitter = player_id;
-		#current_boxes.pop_back();
-		#if len(current_boxes) != 0:
-			#shovel_ready = true;
-		#else:
-			#shovel_ready = false;
 			
 func _on_timer_timeout():
 	can_launch_box = true;
