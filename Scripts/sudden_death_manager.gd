@@ -76,7 +76,6 @@ func a_little_push():
 		var vector_fuerza = Vector2(cos(anguloF),sin(anguloF)) * 100;
 		objeto.last_hitter = ultimo_hitter; #Actualizamos la bomba con la info
 		objeto.apply_impulse(Vector2(vector_fuerza));
-		print("Last Hitter: ",ultimo_hitter);
 
 func on_bomba_boom(last_hitter):
 	ultimo_hitter = last_hitter;

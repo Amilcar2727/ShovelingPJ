@@ -24,7 +24,6 @@ func stop():
 	timer.stop();
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
-	print("Bomba -> Last_hitter: ", last_hitter);
 	emit_signal("whos_last_hitter",last_hitter);
 	await get_tree().create_timer(1.0).timeout;
 	queue_free();
