@@ -18,10 +18,13 @@ var shovel_up_action := "";
 var current_boxes := [];
 var impulso_fuerza = 600;
 var can_launch_box = true; #Timer
+# Animation y more
+var can_move := false;
 # Banana
 var enviado = false; ##  Debug
 var onBanana:bool;
 func _ready():
+	can_move = false;
 	onBanana = false;
 	screen_size = get_viewport_rect().size;
 	orientation = "right";
@@ -30,6 +33,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if !can_move:
+		return;
 	var velocity = Vector2.ZERO;	#Player's movement vector
 	if Input.is_action_pressed(shovel_action):
 		set_launch("normal");

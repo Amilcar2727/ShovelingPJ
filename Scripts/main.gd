@@ -1,6 +1,7 @@
 extends Node
 @export var box_scene: PackedScene;
 @export var garbage_scene: PackedScene;
+@export var anim_camera_manager:Node;
 const Initialtime:int = 60;
 var deathTime:int = Initialtime;
 var rondaT := false;
@@ -30,14 +31,23 @@ func _ready():
 	player2.right_action = "player2_right";
 	player2.shovel_action = "player2_shovel";
 	player2.shovel_up_action = "player2_shovel_up";
-	$Background.show();
-	$BackgroundScn1.hide();
-	$CintasAbajo.hide();
-	$CintasArriba.hide();
+	$Background.hide();
+	$BackgroundScn1.show();
+	$CintasAbajo.show();
+	$CintasArriba.show();
 	#SuddenDeath
 	suddenManager.sdFinish.connect(_on_sdFinish);
 	onSDEvent = false;
 	#empezarAntena = false;
+	
+	##Empezar animacion inicial
+	HUD.hide();
+	player1.can_move = false;
+	player2.can_move = false;
+	player1.show();
+	player2.show();
+	await anim_camera_manager.animationCameraInitPlay()
+	##Nuevo juego
 	new_game();
 	
 func _process(_delta):
@@ -65,6 +75,7 @@ func new_game():
 	$CintasArriba.show();
 	AnimacionesStart($CintasAbajo);
 	AnimacionesStart($CintasArriba);
+	HUD.show();
 	HUD.update_time(deathTime);
 	HUD.show_message("Get Ready!");
 	player1.start($StartPositionP1.position);
@@ -73,6 +84,9 @@ func new_game():
 	player2.rotation = deg_to_rad(180);
 	player2.scale.x = -1;
 	player2.orientation = "right";
+	#Movimiento
+	player1.can_move = true;
+	player2.can_move = true;
 	#$Music.play(); 
 	$StartTimer.start();
 	get_tree().call_group("box","queue_free");
