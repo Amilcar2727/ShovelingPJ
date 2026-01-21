@@ -1,6 +1,7 @@
 extends Node
 @export var box_scene: PackedScene;
 @export var garbage_scene: PackedScene;
+@export var oxygenbomb_scene : PackedScene;
 @export var anim_camera_manager:Node;
 const Initialtime:int = 60;
 var deathTime:int = Initialtime;
@@ -115,8 +116,8 @@ func _on_box_timer_timeout():
 		throwable = garbage_scene.instantiate();
 		diferencia = Vector2(0,-17);
 	elif type == 3:
-		print("Spawneando balon de oxigeno.")
-		return;
+		throwable = oxygenbomb_scene.instantiate();
+		diferencia = Vector2(0,-20);
 	else:
 		return;
 	if spawn == 0:
