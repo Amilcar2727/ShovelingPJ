@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cov3gytt0xnlx"]
+[gd_scene load_steps=7 format=3 uid="uid://cov3gytt0xnlx"]
 
 [ext_resource type="Script" path="res://Scripts/oxygen_bomb.gd" id="1_j5142"]
 [ext_resource type="Texture2D" uid="uid://cep35tpbxrnjt" path="res://art/OxygenBomb.png" id="2_5k88f"]
+[ext_resource type="Texture2D" uid="uid://dc0oqistqab7t" path="res://art/ripple.png" id="3_4h13d"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
 animations = [{
@@ -17,10 +18,13 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
 size = Vector2(35, 45)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_oyfp7"]
+radius = 128.25
+
 [node name="OxygenBomb" type="RigidBody2D"]
 z_index = 2
-collision_layer = 8
-collision_mask = 95
+collision_layer = 4
+collision_mask = 15
 gravity_scale = 0.0
 script = ExtResource("1_j5142")
 metadata/_edit_group_ = true
@@ -36,4 +40,14 @@ shape = SubResource("RectangleShape2D_jdfon")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 
+[node name="ExplosionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea"]
+shape = SubResource("CircleShape2D_oyfp7")
+
+[node name="ExplosionSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("3_4h13d")
+
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="body_entered" from="ExplosionArea" to="." method="_on_area_2d_body_entered"]
