@@ -4,7 +4,7 @@ extends Node
 @export var anim_camera_manager:Node;
 const Initialtime:int = 60;
 var deathTime:int = Initialtime;
-var rondaT := false;
+var rondaN = 1;
 @onready var player1 := $Player1
 @onready var player2 := $Player2
 @onready var HUD = $HUD
@@ -35,65 +35,63 @@ func _ready():
 	$BackgroundScn1.show();
 	$CintasAbajo.show();
 	$CintasArriba.show();
+	#Nro ronda
+	rondaN = 1;
 	#SuddenDeath
 	suddenManager.sdFinish.connect(_on_sdFinish);
 	onSDEvent = false;
 	#empezarAntena = false;
 	
 	##Empezar animacion inicial
-	HUD.hide();
-	player1.can_move = false;
-	player2.can_move = false;
+	on_animation();
 	player1.show();
 	player2.show();
 	await anim_camera_manager.animationCameraInitPlay()
 	##Nuevo juego
 	new_game();
-	
-func _process(_delta):
-	pass;
-	
-func game_win(winner:String):
-	HUD.show_game_won(winner);
-	HUD.update_score(str($Player1.score),str($Player2.score));
-	#if antena_instancia != null:
-		#antena_instancia.alcanzoDestino = true;
-		#antena_instancia.get_node("Circulo").animating = false;
-	$DeathTimer.stop();
-	if onSDEvent:
-		suddenManager.stop_timer();
-		onSDEvent = false;
-	$BoxTimer.stop();
-	$Music.stop();
 
+func on_animation():
+	HUD.hide();
+	player1.can_move = false;
+	player2.can_move = false;
+	
 func new_game():
+	print("Nuevo Juego. Ronda Nº "+str(rondaN));
 	deathTime = Initialtime;
 	$Background.hide();
 	$BackgroundScn1.show();
-	rondaT = false;
 	$CintasAbajo.show();
 	$CintasArriba.show();
 	AnimacionesStart($CintasAbajo);
 	AnimacionesStart($CintasArriba);
 	HUD.show();
 	HUD.update_time(deathTime);
-	HUD.show_message("Get Ready!");
+	#HUD.show_message("Get Ready!");
 	player1.start($StartPositionP1.position);
 	player1.orientation = "right";
+	player1.scale.x = 1;
 	player2.start($StartPositionP2.position);
 	player2.rotation = deg_to_rad(180);
 	player2.scale.x = -1;
 	player2.orientation = "right";
-	#Movimiento
-	player1.can_move = true;
-	player2.can_move = true;
-	#$Music.play(); 
-	$StartTimer.start();
+	#$Music.play();
 	get_tree().call_group("box","queue_free");
 	onSDEvent = false;
 	suddenManager.stop_timer();
 	if suddenManager.SDObject_instance != null:
 		suddenManager.SDObject_instance.queue_free();
+	#Start game
+	# Momento entre rondas
+	#Movimiento
+	print("Empieza animacion get ready...")
+	player1.can_move = false;
+	player2.can_move = false;
+	await HUD.getReady(rondaN);
+	#Movimiento
+	player1.can_move = true;
+	player2.can_move = true;
+	$BoxTimer.start();
+	$DeathTimer.start();
 	#empezarAntena = false;
 	#if antena_instancia != null:
 		#antena_instancia.queue_free();
@@ -104,25 +102,10 @@ func AnimacionesStart(nodoPadre:Node2D):
 		if child is AnimatedSprite2D:
 			child.play();
 
-func elegirCajaType():
-	var random = randf();
-	const cajas = [
-		{"tipo": 1, "prob": 0.60}, ##Caja
-		{"tipo": 2, "prob": 0.10}, ##Basura
-		{"tipo": 3, "prob": 0.05}, ##BalonOxigeno
-		{"tipo": 4, "prob": 0.25}, ##Nada
-	]
-	var acumulado = 0.0
-	for op in cajas:
-		acumulado += op["prob"]
-		if(random <= acumulado):
-			return op["tipo"];
-	return null;
-
 func _on_box_timer_timeout():
 	#Creamos una instancia de caja o basura
 	var throwable;
-	var type = elegirCajaType();
+	var type = BaseBox.elegirCajaType();
 	var spawn = randi_range(0,1);
 	var diferencia;
 	if type == 1:
@@ -179,16 +162,31 @@ func spawnObject(instancia,escena:PackedScene,pos:Vector2):
 	instancia = escena.instantiate();
 	instancia.position = pos;
 	add_child(instancia);
-
-func _on_start_timer_timeout():
-	$BoxTimer.start();
-	$DeathTimer.start();
 	
+func game_show_win(winner:String):
+	await HUD.show_game_won(winner);
+	HUD.update_score(str($Player1.score),str($Player2.score));
+	#if antena_instancia != null:
+		#antena_instancia.alcanzoDestino = true;
+		#antena_instancia.get_node("Circulo").animating = false;
+
 func on_win(player):
-	if rondaT == false:
-		player.score += 1;
-		rondaT = true;
-		game_win("Player "+str(player.player_id));
+	print("=== Win moment... ===");
+	$DeathTimer.stop();
+	$BoxTimer.stop();
+	player.score += 1;
+	print("Mostramos ganador durante 4 segundos...");
+	await game_show_win("Player "+str(player.player_id));
+	$Music.stop();
+	if onSDEvent:
+		suddenManager.stop_timer();
+		onSDEvent = false;
+	#Aumenta en 1 a las rondas
+	if player1.score != 3 && player2.score != 3:
+		rondaN += 1;
+		new_game();
+	else:
+		finishGame();
 		
 func _on_player_1_hit():
 	$DeathSound.play();
@@ -215,9 +213,11 @@ func _on_sdFinish(last_hitter):
 		player1.position = Vector2(0,0);
 		player2.position = Vector2(0,0);
 		game_over_by_time();
-	
-	
+
 func AnimacionAntenaImpacto():
 	$HUD/AntenaPower.show();
 	await get_tree().create_timer(1.0).timeout;
 	$HUD/AntenaPower.hide();
+	
+func finishGame():
+	print("Terminando juego"); 

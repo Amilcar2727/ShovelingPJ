@@ -1,6 +1,6 @@
 extends CanvasLayer;
 # Notifies `Main` node that the button has been pressed
-signal start_game;
+signal start_game; #Ya no se usa :v
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$TimerLabel.show();
@@ -19,33 +19,42 @@ func show_message(text,color=null):
 		$Message.add_theme_color_override("font_color", Color(1,1,1,1));
 	else:
 		$Message.add_theme_color_override("font_color", color);
-	$Message.show();
-	$MessageTimer.start();
+	#$MessageTimer.start();
+	
+func getReady(rondaN):
+	show_message("Round " + str(rondaN));
+	await get_tree().create_timer(1.5).timeout;
+	show_message("Get Ready!");
+	await get_tree().create_timer(1.5).timeout;
+	show_message("Shovel!");
+	await get_tree().create_timer(0.5).timeout;
+	$Message.hide();
 	
 func show_game_over():
 	show_message("Time-Out!");
 	# Wait until the MessageTimer has counted down.
 	await $MessageTimer.timeout;
 	$Message.text = "Shoveling Project!";
-	$Message.show();
 	# Make a one-shot timer and wait for it to finish.
 	await get_tree().create_timer(3.0).timeout;
 	start_game.emit();
 	
 func show_game_won(player:String):
+	$Message.show();
 	var msgWinner = str(player) + " has won!";
 	if(player == "Player 1"):
 		show_message(msgWinner, Color(1,0.36,0.3,1));
 	elif(player == "Player 2"):
 		show_message(msgWinner, Color(0.35,0.61,1,1));
+	await get_tree().create_timer(4.0).timeout;
 	# Wait until the MessageTimer has counted down.
-	await $MessageTimer.timeout;
+	#await $MessageTimer.timeout;
 	# Make a one-shot timer and wait for it to finish.
-	$Message.text = "Shoveling Project!";
-	$Message.add_theme_color_override("font_color", Color(1,1,1,1));
-	$Message.show();
-	await get_tree().create_timer(2.0).timeout;
-	start_game.emit();
+	#$Message.text = "Shoveling Project!";
+	#$Message.add_theme_color_override("font_color", Color(1,1,1,1));
+	#await get_tree().create_timer(2.0).timeout;
+	#Wtf estaba haciendo esto aca xd
+	#start_game.emit();
 	
 func update_time(time):
 	$TimerLabel.text = str(time);
@@ -54,8 +63,8 @@ func update_score(scoreP1:String,scoreP2:String):
 	actualizarPlayerScore(1,int(scoreP1));
 	actualizarPlayerScore(2,int(scoreP2));
 
-func _on_message_timer_timeout():
-	$Message.hide();
+#func _on_message_timer_timeout():
+	#$Message.hide();
 	
 func _on_options_button_pressed() -> void:
 	$GoBackGameButton.show();
