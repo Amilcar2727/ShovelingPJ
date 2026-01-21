@@ -42,6 +42,21 @@ func _setup_physics():
 	contact_monitor = true;
 	max_contacts_reported = 1;
 	connect("body_entered",Callable(self,"_on_body_entered"));
+	
+static func elegirCajaType():
+	var random = randf();
+	const cajas = [
+		{"tipo": 1, "prob": 0.60}, ##Caja
+		{"tipo": 2, "prob": 0.10}, ##Basura
+		{"tipo": 3, "prob": 0.05}, ##BalonOxigeno
+		{"tipo": 4, "prob": 0.25}, ##Nada
+	]
+	var acumulado = 0.0
+	for op in cajas:
+		acumulado += op["prob"]
+		if(random <= acumulado):
+			return op["tipo"];
+	return null;
 
 ## Colores
 func ChangeColor(player_id):
