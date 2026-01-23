@@ -190,11 +190,9 @@ func on_win(player):
 		finishGame();
 		
 func _on_player_1_hit():
-	$DeathSound.play();
 	#P1 died
 	on_win(player2);
 func _on_player_2_hit():
-	$DeathSound.play();
 	#P2 died
 	on_win(player1);
 

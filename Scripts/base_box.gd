@@ -24,10 +24,17 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	ultima_velocidad = state.get_linear_velocity();
 	
 func _on_visible_on_screen_notifier_2d_screen_exited():
+	await get_tree().create_timer(1).timeout; #Esperamos 1 segundo para eliminarlo
 	queue_free();
 
 func _on_body_entered(_body):
 	hitted = true;
+	
+func _on_impact(_body):
+	pass;
+	
+func _on_explosion(_body):
+	queue_free();
 	
 ## Helpers
 func _play_random_animation():
@@ -48,8 +55,8 @@ static func elegirCajaType():
 	const cajas = [
 		{"tipo": 1, "prob": 0.60}, ##Caja
 		{"tipo": 2, "prob": 0.10}, ##Basura
-		{"tipo": 3, "prob": 0.05}, ##BalonOxigeno
-		{"tipo": 4, "prob": 0.25}, ##Nada
+		{"tipo": 3, "prob": 0.15}, ##BalonOxigeno 0.05
+		{"tipo": 4, "prob": 0.15}, ##Nada
 	]
 	var acumulado = 0.0
 	for op in cajas:

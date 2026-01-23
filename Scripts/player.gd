@@ -92,15 +92,15 @@ func _on_collision_area_body_entered(body):
 	if body.is_in_group("box"):
 		if body.last_hitter != player_id and body.last_hitter != 0 and body.linear_velocity.length() > 300:
 			if body.typeName == "Box":
-				print(body.name);
-				hide();
-				body.queue_free();
-				hit.emit();
+				body._on_impact(self);
 				$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
 				$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
 			elif body.typeName == "Garbage":
-				body.queue_free();
-				onBanana = true;
+				body._on_impact(self);
+			elif body.typeName == "OxygenBomb":
+				body._on_impact(self);
+				$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
+				$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
 			else:
 				pass;
 				
@@ -163,6 +163,10 @@ func launch_box(impulso:float, angulo:float):
 			
 func _on_timer_timeout():
 	can_launch_box = true;
+
+func _on_explosion(_body):
+	hide();
+	hit.emit();
 
 func _on_timer_banana_timeout():
 	speed = 500;
