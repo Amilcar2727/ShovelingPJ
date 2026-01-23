@@ -6,6 +6,7 @@ extends Node
 const Initialtime:int = 60;
 var deathTime:int = Initialtime;
 var rondaN = 1;
+var rondaT := false;
 @onready var player1 := $Player1
 @onready var player2 := $Player2
 @onready var HUD = $HUD
@@ -58,6 +59,7 @@ func on_animation():
 	
 func new_game():
 	print("Nuevo Juego. Ronda Nº "+str(rondaN));
+	rondaT = false;
 	deathTime = Initialtime;
 	$Background.hide();
 	$BackgroundScn1.show();
@@ -172,6 +174,9 @@ func game_show_win(winner:String):
 		#antena_instancia.get_node("Circulo").animating = false;
 
 func on_win(player):
+	if rondaT:
+		return;
+	rondaT = true;
 	print("=== Win moment... ===");
 	$DeathTimer.stop();
 	$BoxTimer.stop();

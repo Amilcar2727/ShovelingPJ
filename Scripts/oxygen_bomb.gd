@@ -18,11 +18,13 @@ func ChangeColorBlue():
 	actual_modulate = "blue";
 
 func _on_body_entered(_body):
-	super._on_body_entered(_body);
 	##Si el cuerpo choca con el jugador, hiteable, o piso, explota
 	if (_body.name in ["Floor1", "Floor2"] or _body.is_in_group("box")) and _body != self:
-		explote();
-		
+		if hitted:
+			explote();
+		else:
+			pass;
+	super._on_body_entered(_body);
 func explote():
 	if exploting:
 		return;
@@ -57,3 +59,6 @@ func _on_impact(_body):
 	explote();
 	_body.hide();
 	_body.hit.emit();
+
+func _on_explosion(_body):
+	explote();
