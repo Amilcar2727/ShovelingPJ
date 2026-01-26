@@ -58,7 +58,6 @@ func on_animation():
 	player2.can_move = false;
 	
 func new_game():
-	print("Nuevo Juego. Ronda Nº "+str(rondaN));
 	rondaT = false;
 	deathTime = Initialtime;
 	$Background.hide();
@@ -86,7 +85,6 @@ func new_game():
 	#Start game
 	# Momento entre rondas
 	#Movimiento
-	print("Empieza animacion get ready...")
 	player1.can_move = false;
 	player2.can_move = false;
 	await HUD.getReady(rondaN);
@@ -140,8 +138,8 @@ func _on_death_timer_timeout():
 	deathTime -= 1;
 	HUD.update_time(deathTime);
 	if(deathTime == 0):	#SuddenDeath
+		HUD.show_sudden_death();
 		$DeathTimer.stop();
-		HUD.show_message("MUERTE SÚBITA!",Color(128, 0, 128, 1));
 		$BoxTimer.stop();
 		get_tree().call_group("box","queue_free");
 		onSDEvent = true;
@@ -177,11 +175,9 @@ func on_win(player):
 	if rondaT:
 		return;
 	rondaT = true;
-	print("=== Win moment... ===");
 	$DeathTimer.stop();
 	$BoxTimer.stop();
 	player.score += 1;
-	print("Mostramos ganador durante 4 segundos...");
 	await game_show_win("Player "+str(player.player_id));
 	$Music.stop();
 	if onSDEvent:

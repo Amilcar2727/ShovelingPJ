@@ -23,6 +23,7 @@ func _ready() -> void:
 
 func _on_area_bomb(_body:Node) -> void:
 	bomb_in_area = 1 - bomb_in_area;
+	
 func stop_timer() -> void:
 	suddenDTimer.stop();
 	if SDObject_instance != null:
@@ -32,7 +33,6 @@ func _on_death_timer_timeout() -> void:
 	HUD.update_time(suddenTime);
 	if(suddenTime == 0):
 		suddenDTimer.stop();
-		print(bomb_in_area);
 		##Si es 1, está en area del 2do jugador
 		if bomb_in_area:
 			sdFinish.emit(1);
@@ -67,14 +67,15 @@ func a_little_push():
 	if objeto is RigidBody2D:
 		bomb_in_area = randi_range(0,1);
 		var anguloF;
-		if bomb_in_area:
+		if bomb_in_area: #1 -> True
 			anguloF = deg_to_rad(235);
-			ultimo_hitter = bomb_in_area;
-		else:
+			ultimo_hitter = bomb_in_area; #1
+		else: #0, False
 			anguloF = deg_to_rad(145);
-			ultimo_hitter = bomb_in_area + 2;
+			ultimo_hitter = bomb_in_area + 2; #2
 		var vector_fuerza = Vector2(cos(anguloF),sin(anguloF)) * 100;
 		objeto.last_hitter = ultimo_hitter; #Actualizamos la bomba con la info
+		
 		objeto.apply_impulse(Vector2(vector_fuerza));
 
 func on_bomba_boom(last_hitter):

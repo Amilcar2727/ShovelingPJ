@@ -1,10 +1,11 @@
 extends CanvasLayer;
 # Notifies `Main` node that the button has been pressed
 signal start_game; #Ya no se usa :v
+@onready var messageLabel := $Message
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$TimerLabel.show();
-	$Message.text = "Beaver Project!";
+	messageLabel.text = "Beaver Project!";
 	#$Message.hide();
 	#$Scores.hide();
 	#$ScoreP1.hide();
@@ -14,11 +15,11 @@ func _ready():
 	$GoBackGameButton.hide();
 	
 func show_message(text,color=null):
-	$Message.text = text;
+	messageLabel.text = text;
 	if color == null:
-		$Message.add_theme_color_override("font_color", Color(1,1,1,1));
+		messageLabel.add_theme_color_override("font_color", Color(1,1,1,1));
 	else:
-		$Message.add_theme_color_override("font_color", color);
+		messageLabel.add_theme_color_override("font_color", color);
 	#$MessageTimer.start();
 	
 func getReady(rondaN):
@@ -28,19 +29,25 @@ func getReady(rondaN):
 	await get_tree().create_timer(1.5).timeout;
 	show_message("Shovel!");
 	await get_tree().create_timer(0.5).timeout;
-	$Message.hide();
+	messageLabel.hide();
+	
+func show_sudden_death():
+	messageLabel.show();
+	show_message("MUERTE SÚBITA!",Color(128, 0, 128, 1));
+	await get_tree().create_timer(1.5).timeout;
+	messageLabel.hide();
 	
 func show_game_over():
 	show_message("Time-Out!");
 	# Wait until the MessageTimer has counted down.
 	await $MessageTimer.timeout;
-	$Message.text = "Shoveling Project!";
+	messageLabel.text = "Shoveling Project!";
 	# Make a one-shot timer and wait for it to finish.
 	await get_tree().create_timer(3.0).timeout;
 	start_game.emit();
 	
 func show_game_won(player:String):
-	$Message.show();
+	messageLabel.show();
 	var msgWinner = str(player) + " has won!";
 	if(player == "Player 1"):
 		show_message(msgWinner, Color(1,0.36,0.3,1));
