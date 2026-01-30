@@ -5,7 +5,7 @@ signal start_game; #Ya no se usa :v
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$TimerLabel.show();
-	messageLabel.text = "Beaver Project!";
+	messageLabel.text = "Shoveling Project!";
 	#$Message.hide();
 	#$Scores.hide();
 	#$ScoreP1.hide();
@@ -24,17 +24,17 @@ func show_message(text,color=null):
 	
 func getReady(rondaN):
 	show_message("Round " + str(rondaN));
-	await get_tree().create_timer(1.5).timeout;
+	await get_tree().create_timer(1.5,false).timeout;
 	show_message("Get Ready!");
-	await get_tree().create_timer(1.5).timeout;
+	await get_tree().create_timer(1.5,false).timeout;
 	show_message("Shovel!");
-	await get_tree().create_timer(0.5).timeout;
+	await get_tree().create_timer(0.5,false).timeout;
 	messageLabel.hide();
 	
 func show_sudden_death():
 	messageLabel.show();
 	show_message("MUERTE SÚBITA!",Color(128, 0, 128, 1));
-	await get_tree().create_timer(1.5).timeout;
+	await get_tree().create_timer(1.5,false).timeout;
 	messageLabel.hide();
 	
 func show_game_over():
@@ -43,7 +43,7 @@ func show_game_over():
 	await $MessageTimer.timeout;
 	messageLabel.text = "Shoveling Project!";
 	# Make a one-shot timer and wait for it to finish.
-	await get_tree().create_timer(3.0).timeout;
+	await get_tree().create_timer(3.0,false).timeout;
 	start_game.emit();
 	
 func show_game_won(player:String):
@@ -53,7 +53,7 @@ func show_game_won(player:String):
 		show_message(msgWinner, Color(1,0.36,0.3,1));
 	elif(player == "Player 2"):
 		show_message(msgWinner, Color(0.35,0.61,1,1));
-	await get_tree().create_timer(4.0).timeout;
+	await get_tree().create_timer(4.0,false).timeout;
 	# Wait until the MessageTimer has counted down.
 	#await $MessageTimer.timeout;
 	# Make a one-shot timer and wait for it to finish.

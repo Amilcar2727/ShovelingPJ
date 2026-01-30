@@ -52,7 +52,7 @@ func _on_main_sudden_d_signal() -> void:
 	# Empezamos el timer
 	suddenDTimer.start();
 	# Esperamos medio segundo
-	await get_tree().create_timer(1).timeout;
+	await get_tree().create_timer(1,false).timeout;
 	# Hacemos aparecer las paredes:
 	WallBomb1.get_node("CollisionShape2D").disabled = false;
 	WallBomb2.get_node("CollisionShape2D").disabled = false;

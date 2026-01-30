@@ -7,9 +7,10 @@ const Initialtime:int = 60;
 var deathTime:int = Initialtime;
 var rondaN = 1;
 var rondaT := false;
-@onready var player1 := $Player1
-@onready var player2 := $Player2
-@onready var HUD = $HUD
+@onready var player1 := $Player1;
+@onready var player2 := $Player2;
+@onready var HUD = $HUD;
+@onready var pauseMenu = $MenuPause;
 # Antena
 @export var antena_scene:PackedScene;
 @export var palanca_scene:PackedScene;
@@ -52,6 +53,12 @@ func _ready():
 	##Nuevo juego
 	new_game();
 
+##Input
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		if !get_tree().paused: #Si pausamos
+			pauseMenu.open();
+	
 func on_animation():
 	HUD.hide();
 	player1.can_move = false;
@@ -216,7 +223,7 @@ func _on_sdFinish(last_hitter):
 
 func AnimacionAntenaImpacto():
 	$HUD/AntenaPower.show();
-	await get_tree().create_timer(1.0).timeout;
+	await get_tree().create_timer(1.0,false).timeout;
 	$HUD/AntenaPower.hide();
 	
 func finishGame():

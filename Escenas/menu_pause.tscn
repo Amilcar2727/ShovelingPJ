@@ -1,0 +1,84 @@
+[gd_scene load_steps=7 format=3 uid="uid://bh5ixu7ybodg1"]
+
+[ext_resource type="Script" path="res://Scripts/menu_pause.gd" id="1_al7x7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_abekj"]
+bg_color = Color(0, 0, 0, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4m26q"]
+bg_color = Color(0.227451, 0.180392, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqa22"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rsf7g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l20sc"]
+
+[node name="MenuPause" type="CanvasLayer"]
+process_mode = 3
+layer = 2
+script = ExtResource("1_al7x7")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_abekj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_right = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="BtnReanudar" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_4m26q")
+text = "RESUME"
+
+[node name="BtnReMatch" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_aqa22")
+text = "Restart Match"
+
+[node name="BtnGoMaps" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_rsf7g")
+text = "Go back Map Selector"
+
+[node name="BtnMainMenu" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_l20sc")
+text = "Go back Main Menu"
+
+[connection signal="pressed" from="Panel/VBoxContainer/BtnReanudar" to="." method="_on_btn_reanudar_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/BtnReMatch" to="." method="_on_btn_re_match_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/BtnGoMaps" to="." method="_on_btn_go_maps_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/BtnMainMenu" to="." method="_on_btn_main_menu_pressed"]

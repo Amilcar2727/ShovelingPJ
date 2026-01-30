@@ -15,7 +15,7 @@ func _process(delta):
 		else:
 			#Detener animacion
 			animating = false;
-			await get_tree().create_timer(0.5).timeout;
+			await get_tree().create_timer(0.5,false).timeout;
 			queue_free();
 
 func _draw():

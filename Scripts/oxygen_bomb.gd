@@ -52,7 +52,7 @@ func explote():
 	$CollisionShape2D.disabled = true;
 	$AnimatedSprite2D.visible = false;
 	$ExplosionSprite.visible = true;
-	await get_tree().create_timer(0.5).timeout; #Simula animacion
+	await get_tree().create_timer(0.5,false).timeout; #Simula animacion
 	queue_free();
 	
 func _on_impact(_body):

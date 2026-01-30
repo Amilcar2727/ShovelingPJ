@@ -12,6 +12,7 @@ action = &"start_game"
 events = [SubResource("InputEventAction_xy4pk")]
 
 [node name="HUD" type="CanvasLayer"]
+process_mode = 1
 script = ExtResource("1_n6waq")
 
 [node name="AntenaPower" type="ColorRect" parent="."]
