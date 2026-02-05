@@ -55,8 +55,8 @@ static func elegirCajaType():
 	const cajas = [
 		{"tipo": 1, "prob": 0.60}, ##Caja
 		{"tipo": 2, "prob": 0.10}, ##Basura
-		{"tipo": 3, "prob": 0.07}, ##BalonOxigeno 0.07
-		{"tipo": 4, "prob": 0.23}, ##Nada
+		{"tipo": 3, "prob": 0.8}, ##BalonOxigeno 0.07
+		{"tipo": 4, "prob": 0.22}, ##Nada
 	]
 	var acumulado = 0.0
 	for op in cajas:

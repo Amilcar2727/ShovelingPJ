@@ -21,7 +21,8 @@ var empezarAntena;
 signal suddenDSignal;
 @onready var suddenManager:Node = $"SuddenDeathManager";
 var onSDEvent := false;
-
+## Minieventos
+var onDark = false;
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#Asignamos las acciones del Input Map para player 1
@@ -141,9 +142,25 @@ func game_over_by_time():
 	$Music.stop();
 	#$LaserSound.play();
 
+func _makeDark():
+	#Probabilidad
+	var nr = randf();
+	#Oscurecer
+	if nr <= 0.2:
+		print("Oscureciendo");
+		onDark = true;
+		$Background.show();
+		$Background/AnimationPlayer.play("Lightning_off");
+		await $Background/AnimationPlayer.animation_finished;
+		player1._on_dark(true);
+		player2._on_dark(true);
+		$DarkTimer.start();
+
 func _on_death_timer_timeout():
 	deathTime -= 1;
 	HUD.update_time(deathTime);
+	if !onDark:
+		_makeDark();
 	if(deathTime == 0):	#SuddenDeath
 		HUD.show_sudden_death();
 		$DeathTimer.stop();
@@ -228,3 +245,12 @@ func AnimacionAntenaImpacto():
 	
 func finishGame():
 	print("Terminando juego"); 
+
+func _on_dark_timer_timeout() -> void:
+	print("Prendiendo luces")
+	onDark = false;
+	player1._on_dark(false);
+	player2._on_dark(false);
+	$Background/AnimationPlayer.play("Lightning_on");
+	await $Background/AnimationPlayer.animation_finished;
+	$Background.hide();
