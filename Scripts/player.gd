@@ -29,6 +29,7 @@ func _ready():
 	screen_size = get_viewport_rect().size;
 	orientation = "right";
 	$Banana.hide();
+	$PointLight2D.hide();
 	hide();
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -168,6 +169,9 @@ func _on_explosion(_body):
 	hide();
 	hit.emit();
 
+func _on_dark(v=true):
+	$PointLight2D.visible = v;
+	
 func _on_timer_banana_timeout():
 	speed = 500;
 	$Banana.hide();

@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cov3gytt0xnlx"]
+[gd_scene load_steps=8 format=3 uid="uid://cov3gytt0xnlx"]
 
 [ext_resource type="Script" path="res://Scripts/oxygen_bomb.gd" id="1_j5142"]
 [ext_resource type="Texture2D" uid="uid://cep35tpbxrnjt" path="res://art/OxygenBomb.png" id="2_5k88f"]
 [ext_resource type="Texture2D" uid="uid://dc0oqistqab7t" path="res://art/ripple.png" id="3_4h13d"]
+[ext_resource type="Texture2D" uid="uid://dw7q5f5y5v48o" path="res://art/2d_lights_and_shadows_neutral_point_light.webp" id="4_73x72"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
 animations = [{
@@ -28,7 +29,6 @@ collision_mask = 47
 mass = 2.0
 gravity_scale = 0.0
 script = ExtResource("1_j5142")
-metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.08, 0.08)
@@ -36,12 +36,13 @@ sprite_frames = SubResource("SpriteFrames_gf44t")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 0)
+position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_jdfon")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 
 [node name="ExplosionArea" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 collision_mask = 37
 
@@ -51,5 +52,18 @@ shape = SubResource("CircleShape2D_oyfp7")
 [node name="ExplosionSprite" type="Sprite2D" parent="."]
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("3_4h13d")
+
+[node name="Luces" type="Node2D" parent="."]
+
+[node name="PointLight2D" type="PointLight2D" parent="Luces"]
+scale = Vector2(2.5, 2.5)
+color = Color(1, 1, 0.101961, 1)
+energy = 2.0
+texture = ExtResource("4_73x72")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Luces"]
+color = Color(0.713726, 0, 0.0156863, 1)
+energy = 10.0
+texture = ExtResource("4_73x72")
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

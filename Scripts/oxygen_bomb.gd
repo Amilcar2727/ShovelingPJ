@@ -8,6 +8,7 @@ func _ready():
 	$ExplosionSprite.visible = false;
 	$AnimatedSprite2D.visible = true;
 	exploting = false;
+	$Luces.visible = false;
 	super()
 	
 func ChangeColorRed():
@@ -52,6 +53,7 @@ func explote():
 	$CollisionShape2D.disabled = true;
 	$AnimatedSprite2D.visible = false;
 	$ExplosionSprite.visible = true;
+	$Luces.visible = true;
 	await get_tree().create_timer(0.5,false).timeout; #Simula animacion
 	queue_free();
 	
