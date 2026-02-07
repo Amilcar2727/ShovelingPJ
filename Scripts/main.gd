@@ -72,8 +72,6 @@ func new_game():
 	$BackgroundScn1.show();
 	$CintasAbajo.show();
 	$CintasArriba.show();
-	AnimacionesStart($CintasAbajo);
-	AnimacionesStart($CintasArriba);
 	HUD.show();
 	HUD.update_time(deathTime);
 	#HUD.show_message("Get Ready!");
@@ -96,11 +94,15 @@ func new_game():
 	player1.can_move = false;
 	player2.can_move = false;
 	await HUD.getReady(rondaN);
+	#Cintas animacion
+	AnimacionesStart($CintasAbajo);
+	AnimacionesStart($CintasArriba);
 	#Movimiento
 	player1.can_move = true;
 	player2.can_move = true;
 	$BoxTimer.start();
 	$DeathTimer.start();
+	$LightningTimer.start();
 	#empezarAntena = false;
 	#if antena_instancia != null:
 		#antena_instancia.queue_free();
@@ -146,7 +148,7 @@ func _makeDark():
 	#Probabilidad
 	var nr = randf();
 	#Oscurecer
-	if nr <= 0.2:
+	if nr <= 0.10:
 		print("Oscureciendo");
 		onDark = true;
 		$Background.show();
@@ -159,12 +161,11 @@ func _makeDark():
 func _on_death_timer_timeout():
 	deathTime -= 1;
 	HUD.update_time(deathTime);
-	if !onDark:
-		_makeDark();
 	if(deathTime == 0):	#SuddenDeath
 		HUD.show_sudden_death();
 		$DeathTimer.stop();
 		$BoxTimer.stop();
+		$LightningTimer.stop();
 		get_tree().call_group("box","queue_free");
 		onSDEvent = true;
 		suddenDSignal.emit();
@@ -201,6 +202,7 @@ func on_win(player):
 	rondaT = true;
 	$DeathTimer.stop();
 	$BoxTimer.stop();
+	$LightningTimer.stop();
 	player.score += 1;
 	await game_show_win("Player "+str(player.player_id));
 	$Music.stop();
@@ -254,3 +256,8 @@ func _on_dark_timer_timeout() -> void:
 	$Background/AnimationPlayer.play("Lightning_on");
 	await $Background/AnimationPlayer.animation_finished;
 	$Background.hide();
+
+
+func _on_lightning_timer_timeout() -> void:
+	if !onDark:
+		_makeDark();
