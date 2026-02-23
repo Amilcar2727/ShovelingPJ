@@ -1,0 +1,416 @@
+[gd_scene load_steps=20 format=3 uid="uid://286trt08qrj5"]
+
+[ext_resource type="Texture2D" uid="uid://cep35tpbxrnjt" path="res://art/OxygenBomb.png" id="1_e43q8"]
+[ext_resource type="Script" path="res://Scripts/victory_screen.gd" id="1_m0o6h"]
+[ext_resource type="Texture2D" uid="uid://bfd451a8jrajb" path="res://art/CastorWalking3.png" id="1_v35fw"]
+[ext_resource type="Texture2D" uid="uid://dc0oqistqab7t" path="res://art/ripple.png" id="2_3boey"]
+[ext_resource type="Texture2D" uid="uid://dw7q5f5y5v48o" path="res://art/2d_lights_and_shadows_neutral_point_light.webp" id="2_ceo61"]
+[ext_resource type="Texture2D" uid="uid://dhn54rhprve1b" path="res://art/box.png" id="3_kg6om"]
+[ext_resource type="Texture2D" uid="uid://co2k0grqcde6j" path="res://art/Crown2.png" id="3_xap22"]
+[ext_resource type="Texture2D" uid="uid://dfbwpq0emtocx" path="res://art/Logo1.png" id="4_124br"]
+[ext_resource type="Texture2D" uid="uid://b1ytr07pvap4f" path="res://art/Rubble1.webp" id="4_wu21h"]
+[ext_resource type="Texture2D" uid="uid://dhbeaskuslhtj" path="res://art/GarbageBin.png" id="4_xyisv"]
+[ext_resource type="Texture2D" uid="uid://d0ilwrxkc5b2y" path="res://art/Rubble2.png" id="5_wkmsc"]
+
+[sub_resource type="Animation" id="Animation_yrkpq"]
+resource_name = "Floating"
+length = 2.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.4, 1.2, 1.4, 2.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(664, 218), Vector2(664, 195), Vector2(664, 195), Vector2(664, 218)]
+}
+
+[sub_resource type="Animation" id="Animation_56p6h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(664, 208)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aug3h"]
+_data = {
+"Floating": SubResource("Animation_yrkpq"),
+"RESET": SubResource("Animation_56p6h")
+}
+
+[sub_resource type="Animation" id="Animation_wvufe"]
+resource_name = "FloatingFantasma"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:skew")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0872665, -0.0872665, 0.0872665]
+}
+
+[sub_resource type="Animation" id="Animation_1fa40"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:skew")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5tcr7"]
+_data = {
+"FloatingFantasma": SubResource("Animation_wvufe"),
+"RESET": SubResource("Animation_1fa40")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p0nxk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0a4w7"]
+
+[node name="VictoryScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m0o6h")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.118827, 0.0592012, 0.242832, 1)
+metadata/_edit_lock_ = true
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="WinnerContainer" type="Node2D" parent="Visuals"]
+
+[node name="Winner" type="Sprite2D" parent="Visuals/WinnerContainer"]
+z_index = 10
+position = Vector2(688, 379)
+scale = Vector2(-0.43125, 0.437109)
+texture = ExtResource("1_v35fw")
+
+[node name="Crown" type="Sprite2D" parent="Visuals/WinnerContainer"]
+self_modulate = Color(0.848905, 0.848905, 0.848905, 1)
+position = Vector2(664, 208)
+rotation = 0.297343
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("3_xap22")
+
+[node name="PointLight2D" type="PointLight2D" parent="Visuals/WinnerContainer/Crown"]
+position = Vector2(-58.5962, -191.224)
+rotation = -0.297343
+scale = Vector2(20, 20)
+color = Color(0.983752, 0.973888, 0, 1)
+texture = ExtResource("2_ceo61")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/WinnerContainer/Crown"]
+libraries = {
+"": SubResource("AnimationLibrary_aug3h")
+}
+
+[node name="FloatingProps" type="Node2D" parent="Visuals"]
+
+[node name="Rubble1" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(856, 96)
+rotation = -0.247812
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble18" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(696, 104)
+rotation = -0.247812
+scale = Vector2(0.0377254, 0.0377254)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble2" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(496, 168)
+rotation = 0.941971
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble3" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(744, 128)
+rotation = -2.02359
+scale = Vector2(0.0650024, 0.0650024)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble11" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(704, 64)
+rotation = -2.02359
+scale = Vector2(0.0409808, 0.0409808)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble12" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(608, 128)
+rotation = -1.28331
+scale = Vector2(0.0409808, 0.0409808)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble13" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(640, 48)
+rotation = -1.28331
+scale = Vector2(0.0354074, 0.0354074)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble14" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(800, 56)
+rotation = -2.21405
+scale = Vector2(0.0354074, 0.0354074)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble15" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(936, 136)
+rotation = -2.21405
+scale = Vector2(0.0354074, 0.0354074)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble4" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(920, 184)
+rotation = -1.05434
+scale = Vector2(0.0652173, 0.0652173)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble5" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(488, 72)
+rotation = -2.32156
+scale = Vector2(0.0652173, 0.0652173)
+texture = ExtResource("4_wu21h")
+
+[node name="Rubble6" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(920, 96)
+rotation = -5.26462
+scale = Vector2(0.0442334, 0.0652173)
+texture = ExtResource("5_wkmsc")
+
+[node name="Rubble7" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(816, 152)
+rotation = -6.03283
+scale = Vector2(0.0442334, 0.0652173)
+texture = ExtResource("5_wkmsc")
+
+[node name="Rubble8" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(648, 96.0001)
+rotation = -7.51737
+scale = Vector2(0.0442334, 0.0652173)
+texture = ExtResource("5_wkmsc")
+
+[node name="Rubble9" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(528, 120)
+rotation = -6.37257
+scale = Vector2(0.0442334, 0.0652173)
+texture = ExtResource("5_wkmsc")
+
+[node name="Rubble10" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(432, 96)
+rotation = -5.30352
+scale = Vector2(0.0293135, 0.0336068)
+texture = ExtResource("5_wkmsc")
+
+[node name="Rubble16" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(480, 128)
+rotation = -4.19204
+scale = Vector2(0.0293135, 0.0336068)
+texture = ExtResource("5_wkmsc")
+
+[node name="Rubble17" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(672, 72)
+rotation = -4.50582
+scale = Vector2(0.0202809, 0.0232513)
+texture = ExtResource("5_wkmsc")
+
+[node name="Box1" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(408, 144)
+rotation = 0.470986
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("3_kg6om")
+
+[node name="Garbage1" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(568, 80)
+rotation = 0.549948
+scale = Vector2(0.06, 0.06)
+texture = ExtResource("4_xyisv")
+
+[node name="Bomb1" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(760, 88)
+rotation = -1.15806
+scale = Vector2(0.06, 0.06)
+texture = ExtResource("1_e43q8")
+
+[node name="Box2" type="Sprite2D" parent="Visuals/FloatingProps"]
+position = Vector2(880, 144)
+rotation = -0.477746
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_kg6om")
+
+[node name="LoserContainer" type="Node2D" parent="Visuals"]
+
+[node name="Loser" type="Sprite2D" parent="Visuals/LoserContainer"]
+modulate = Color(0.775063, 0.775063, 0.775063, 1)
+position = Vector2(1120, 336)
+scale = Vector2(-0.1, 0.2)
+texture = ExtResource("1_v35fw")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Visuals/LoserContainer/Loser"]
+libraries = {
+"": SubResource("AnimationLibrary_5tcr7")
+}
+
+[node name="Aro" type="Sprite2D" parent="Visuals/LoserContainer"]
+position = Vector2(1116, 275)
+rotation = 0.349066
+scale = Vector2(0.1, 0.1)
+skew = 0.783653
+texture = ExtResource("2_3boey")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.129412)
+metadata/_edit_lock_ = true
+
+[node name="Control" type="Control" parent="."]
+z_index = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="LoserLbl" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 1096.0
+offset_top = -160.0
+offset_right = 1155.0
+offset_bottom = -104.0
+grow_vertical = 2
+rotation = 0.0349066
+scale = Vector2(1.07733, 1)
+theme_override_colors/font_color = Color(0.223529, 0.505882, 0.843137, 0.729412)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.639216)
+theme_override_constants/line_spacing = -30
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 40
+text = "P2"
+
+[node name="WinnerLbl" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 80.0
+offset_top = -200.0
+offset_right = 509.0
+offset_bottom = -35.0
+grow_vertical = 2
+rotation = 0.0349066
+scale = Vector2(1.07733, 1)
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -30
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 120
+text = "P1"
+
+[node name="WinTitle2" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = -192.0
+offset_right = 493.0
+offset_bottom = 108.0
+grow_vertical = 2
+rotation = -0.0523599
+scale = Vector2(1.07733, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -30
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 120
+text = "
+WINS!"
+
+[node name="Buttons" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -528.0
+offset_top = -130.0
+offset_right = 552.0
+offset_bottom = -42.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 300
+alignment = 1
+
+[node name="BtnRematch" type="Button" parent="Control/Buttons"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/h_separation = -10
+theme_override_constants/icon_max_width = 50
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_p0nxk")
+text = "REMATCH"
+icon = ExtResource("1_e43q8")
+expand_icon = true
+
+[node name="BtnMaps" type="Button" parent="Control/Buttons"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/icon_max_width = 70
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_0a4w7")
+text = "MAPS"
+icon = ExtResource("4_124br")
+expand_icon = true
+
+[connection signal="pressed" from="Control/Buttons/BtnRematch" to="." method="_on_btn_rematch_pressed"]
+[connection signal="pressed" from="Control/Buttons/BtnMaps" to="." method="_on_btn_maps_pressed"]
