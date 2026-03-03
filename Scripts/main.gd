@@ -168,7 +168,6 @@ func _on_death_timer_timeout():
 		HUD.show_sudden_death();
 		$DeathTimer.stop();
 		$BoxTimer.stop();
-		$LightningTimer.stop();
 		get_tree().call_group("box","queue_free");
 		onSDEvent = true;
 		suddenDSignal.emit();
@@ -221,27 +220,18 @@ func on_win(player):
 		
 func _on_player_1_hit():
 	#P1 died
+	player1._on_dead();
 	on_win(player2);
 func _on_player_2_hit():
 	#P2 died
+	player2._on_dead();
 	on_win(player1);
 
 func _on_sdFinish(last_hitter):
 	if last_hitter == 1:
-		player2.hide();
-		player2.position = Vector2(0,0);
-		on_win(player1);
+		_on_player_2_hit();
 	elif last_hitter == 2:
-		player1.hide();
-		player1.position = Vector2(0,0);
-		on_win(player2);
-	else:
-		HUD.update_score(str(player1.score),str(player2.score));
-		player1.hide();
-		player2.hide();
-		player1.position = Vector2(0,0);
-		player2.position = Vector2(0,0);
-		game_over_by_time();
+		_on_player_1_hit();
 
 func AnimacionAntenaImpacto():
 	$HUD/AntenaPower.show();
@@ -257,6 +247,7 @@ func finishGame():
 
 func _on_dark_timer_timeout() -> void:
 	print("Prendiendo luces")
+	print("================");
 	onDark = false;
 	player1._on_dark(false);
 	player2._on_dark(false);

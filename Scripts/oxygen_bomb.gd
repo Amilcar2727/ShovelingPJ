@@ -37,15 +37,12 @@ func explote():
 	await get_tree().physics_frame; #Espera un frame
 	await get_tree().physics_frame; #Espera un frame
 	#Eliminamos los objetos en el area
-	print("Bodies:", $ExplosionArea.get_overlapping_bodies().size())
 	for body in $ExplosionArea.get_overlapping_bodies(): #Hiteables
 		if body.has_method("_on_explosion") and body != self:
 			#print(body.name);
 			body._on_explosion(self);
 	for area in $ExplosionArea.get_overlapping_areas(): #Players
-		print("Area: ",area);
 		var rootNode = area.get_parent();
-		print("Padre del area: ",rootNode.name);
 		if rootNode.has_method("_on_explosion") and rootNode != self:
 			rootNode._on_explosion(self);
 	#Apagamos area

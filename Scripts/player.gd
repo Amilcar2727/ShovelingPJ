@@ -169,6 +169,11 @@ func _on_explosion(_body):
 	hide();
 	hit.emit();
 
+func _on_dead():
+	if self.visible == true:
+		self.visible = false;
+	self.position = Vector2(0,0);
+
 func _on_dark(v=true):
 	$PointLight2D.visible = v;
 	
