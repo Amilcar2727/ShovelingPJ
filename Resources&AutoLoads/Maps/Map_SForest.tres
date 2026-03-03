@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MapData" load_steps=3 format=3 uid="uid://c126nu7ddpgu0"]
+
+[ext_resource type="Script" path="res://Resources&AutoLoads/MapData.gd" id="1_rlhyk"]
+[ext_resource type="Texture2D" uid="uid://pe8pttaaaqpo" path="res://art/WhiteForestBackGround.png" id="2_q5fa5"]
+
+[resource]
+script = ExtResource("1_rlhyk")
+name = "Snowy Forest"
+texture = ExtResource("2_q5fa5")
+scene_path = "res://Escenas/Map3_SForest.tscn"
+victory_bckg = ExtResource("2_q5fa5")

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MapData" load_steps=3 format=3 uid="uid://btix44vg4th8m"]
+
+[ext_resource type="Script" path="res://Resources&AutoLoads/MapData.gd" id="1_ehpa7"]
+[ext_resource type="Texture2D" uid="uid://dsvkxl7s5fpy5" path="res://art/SpaceshipBackGround.png" id="2_q30qg"]
+
+[resource]
+script = ExtResource("1_ehpa7")
+name = "UFO Incident"
+texture = ExtResource("2_q30qg")
+scene_path = "res://Escenas/Map2_UFO.tscn"
+victory_bckg = ExtResource("2_q30qg")

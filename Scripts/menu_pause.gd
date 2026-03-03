@@ -28,12 +28,15 @@ func _on_btn_reanudar_pressed() -> void:
 	
 func _on_btn_re_match_pressed() -> void:
 	get_tree().paused = false;
+	GameData._reset_score();
 	get_tree().reload_current_scene();
 	
 func _on_btn_go_maps_pressed() -> void:
 	get_tree().paused = false;
+	GameData._reset_score();
 	get_tree().change_scene_to_file("res://Escenas/ChoosingMap.tscn");
 	
 func _on_btn_main_menu_pressed() -> void:
 	get_tree().paused = false;
+	GameData._reset_config();
 	get_tree().change_scene_to_file("res://Escenas/MainMenu.tscn");

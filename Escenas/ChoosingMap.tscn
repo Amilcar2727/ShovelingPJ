@@ -4,23 +4,11 @@
 [ext_resource type="Script" path="res://Scripts/choosing_map.gd" id="1_n5h42"]
 [ext_resource type="Texture2D" uid="uid://b5yah7esycg63" path="res://art/FactoryBackGround.jpg" id="2_7qntd"]
 [ext_resource type="Script" path="res://Resources&AutoLoads/MapData.gd" id="2_dgom2"]
+[ext_resource type="Resource" uid="uid://bookgglwd2leo" path="res://Resources&AutoLoads/Maps/Map_LFactory.tres" id="3_1l7xa"]
 [ext_resource type="Texture2D" uid="uid://dsvkxl7s5fpy5" path="res://art/SpaceshipBackGround.png" id="3_tr52a"]
 [ext_resource type="Texture2D" uid="uid://pe8pttaaaqpo" path="res://art/WhiteForestBackGround.png" id="4_64vi5"]
-
-[sub_resource type="Resource" id="Resource_puk5n"]
-script = ExtResource("2_dgom2")
-name = "Lost Factory"
-texture = ExtResource("2_7qntd")
-
-[sub_resource type="Resource" id="Resource_hyuii"]
-script = ExtResource("2_dgom2")
-name = "UFO Incident"
-texture = ExtResource("3_tr52a")
-
-[sub_resource type="Resource" id="Resource_gxjva"]
-script = ExtResource("2_dgom2")
-name = "Snowy Forest"
-texture = ExtResource("4_64vi5")
+[ext_resource type="Resource" uid="uid://btix44vg4th8m" path="res://Resources&AutoLoads/Maps/Map_UFO.tres" id="4_nhr26"]
+[ext_resource type="Resource" uid="uid://c126nu7ddpgu0" path="res://Resources&AutoLoads/Maps/Map_SForest.tres" id="5_1h6vm"]
 
 [node name="ChoosingMap" type="Control"]
 layout_mode = 3
@@ -30,7 +18,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_n5h42")
-maps = Array[ExtResource("2_dgom2")]([SubResource("Resource_puk5n"), SubResource("Resource_hyuii"), SubResource("Resource_gxjva")])
+maps = Array[ExtResource("2_dgom2")]([ExtResource("3_1l7xa"), ExtResource("4_nhr26"), ExtResource("5_1h6vm")])
 
 [node name="BackGround" type="TextureRect" parent="."]
 layout_mode = 1

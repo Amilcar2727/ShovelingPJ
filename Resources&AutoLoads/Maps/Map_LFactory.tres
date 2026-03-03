@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MapData" load_steps=3 format=3 uid="uid://bookgglwd2leo"]
+
+[ext_resource type="Script" path="res://Resources&AutoLoads/MapData.gd" id="1_y5t5e"]
+[ext_resource type="Texture2D" uid="uid://b5yah7esycg63" path="res://art/FactoryBackGround.jpg" id="2_xg2eb"]
+
+[resource]
+script = ExtResource("1_y5t5e")
+name = "Lost Factory"
+texture = ExtResource("2_xg2eb")
+scene_path = "res://Escenas/Map1_Factory.tscn"
+victory_bckg = ExtResource("2_xg2eb")

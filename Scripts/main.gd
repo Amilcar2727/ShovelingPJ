@@ -10,7 +10,10 @@ var rondaT := false;
 @onready var player1 := $Player1;
 @onready var player2 := $Player2;
 @onready var HUD = $HUD;
-@onready var pauseMenu = $MenuPause;
+@onready var pauseMenu = $MenuPause; #ElPeneDeDavidCHEstuvoAqui
+#Yonieskbro:awawa
+#rAnatieneelanoasibiengrande- anton
+#antonesunhomosexualLamecaca- eylleen
 # Antena
 @export var antena_scene:PackedScene;
 @export var palanca_scene:PackedScene;
@@ -246,7 +249,11 @@ func AnimacionAntenaImpacto():
 	$HUD/AntenaPower.hide();
 	
 func finishGame():
-	print("Terminando juego"); 
+	print("Terminando juego");
+	GameData.score_p1 = player1.score;
+	GameData.score_p2 = player2.score;
+	GameData.winner = int(player2.score > player1.score) + 1;
+	get_tree().change_scene_to_file("res://Escenas/VictoryScreen.tscn");
 
 func _on_dark_timer_timeout() -> void:
 	print("Prendiendo luces")
