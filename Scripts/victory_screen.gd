@@ -32,8 +32,11 @@ func _ready() -> void:
 func _on_btn_rematch_pressed() -> void:
 	print("Reiniciando match!");
 	GameData._reset_score();
-	get_tree().change_scene_to_file(GameData.current_map_data.scene_path);
-	
+	if GameData.current_map_data != null and GameData.current_map_data.scene_path != null:
+		get_tree().change_scene_to_file(GameData.current_map_data.scene_path);
+	else:
+		_on_btn_maps_pressed();
+		
 func _on_btn_maps_pressed() -> void:
 	GameData._reset_score();
 	get_tree().change_scene_to_file("res://Escenas/ChoosingMap.tscn");

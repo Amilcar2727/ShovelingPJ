@@ -1,4 +1,5 @@
 extends Node
+
 @export var box_scene: PackedScene;
 @export var garbage_scene: PackedScene;
 @export var oxygenbomb_scene : PackedScene;
@@ -148,18 +149,13 @@ func game_over_by_time():
 	#$LaserSound.play();
 
 func _makeDark():
-	#Probabilidad
-	var nr = randf();
-	#Oscurecer
-	if nr <= 0.10:
-		print("Oscureciendo");
-		onDark = true;
-		$Background.show();
-		$Background/AnimationPlayer.play("Lightning_off");
-		await $Background/AnimationPlayer.animation_finished;
-		player1._on_dark(true);
-		player2._on_dark(true);
-		$DarkTimer.start();
+	onDark = true;
+	$Background.show();
+	$Background/AnimationPlayer.play("Lightning_off");
+	await $Background/AnimationPlayer.animation_finished;
+	player1._on_dark(true);
+	player2._on_dark(true);
+	$DarkTimer.start();
 
 func _on_death_timer_timeout():
 	deathTime -= 1;
@@ -246,16 +242,17 @@ func finishGame():
 	get_tree().change_scene_to_file("res://Escenas/VictoryScreen.tscn");
 
 func _on_dark_timer_timeout() -> void:
-	print("Prendiendo luces")
-	print("================");
-	onDark = false;
 	player1._on_dark(false);
 	player2._on_dark(false);
 	$Background/AnimationPlayer.play("Lightning_on");
 	await $Background/AnimationPlayer.animation_finished;
 	$Background.hide();
-
+	onDark = false;
 
 func _on_lightning_timer_timeout() -> void:
-	if !onDark:
+	#Probabilidad
+	if $Background/AnimationPlayer.is_playing():
+		return;
+	var nr = randf();
+	if !onDark and nr <= 0.50:
 		_makeDark();
