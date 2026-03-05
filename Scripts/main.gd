@@ -142,27 +142,27 @@ func apply_spawn_phase(phase:int):
 		1:
 			$BoxTimer.wait_time = 1;
 			prob_apagon = 0.05;
-			AnimacionesStart($CintasArriba,3.0);
-			AnimacionesStart($CintasAbajo,3.0);
+			AnimacionesStart($CintasArriba,4.0);
+			AnimacionesStart($CintasAbajo,4.0);
 			player1.fuerzaEmpujeCinta = -3000;
 			player2.fuerzaEmpujeCinta = -3000;
 			BaseBox.speed = 100;
 		2:
 			$BoxTimer.wait_time = 0.75;
 			prob_apagon = 0.10;
-			AnimacionesStart($CintasArriba,5.0);
-			AnimacionesStart($CintasAbajo,5.0);
+			AnimacionesStart($CintasArriba,6.0);
+			AnimacionesStart($CintasAbajo,6.0);
 			player1.fuerzaEmpujeCinta = -5000;
 			player2.fuerzaEmpujeCinta = -5000;
-			BaseBox.speed = 110;
+			BaseBox.speed = 115;
 		3:
-			$BoxTimer.wait_time = 0.6;
+			$BoxTimer.wait_time = 0.5;
 			prob_apagon = 0.15;
 			AnimacionesStart($CintasArriba,7.0);
 			AnimacionesStart($CintasAbajo,7.0);
 			player1.fuerzaEmpujeCinta = -7000;
 			player2.fuerzaEmpujeCinta = -7000;
-			BaseBox.speed = 120;
+			BaseBox.speed = 130;
 			
 	print("Wait_time: ",$BoxTimer.wait_time);
 	print("Prob_apagon: ",prob_apagon);

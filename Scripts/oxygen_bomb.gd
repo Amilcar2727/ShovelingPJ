@@ -60,4 +60,7 @@ func _on_impact(_body):
 	_body.hit.emit();
 
 func _on_explosion(_body):
+	if exploting:
+		return
+	await get_tree().create_timer(0.08,false).timeout;
 	explote();
