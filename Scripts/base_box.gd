@@ -1,7 +1,7 @@
 extends RigidBody2D
 class_name BaseBox
 
-var speed = 100;
+static var speed = 100;
 var hitted = false;
 var last_hitter = 0;
 var actual_modulate = "normal";
@@ -50,20 +50,38 @@ func _setup_physics():
 	max_contacts_reported = 1;
 	connect("body_entered",Callable(self,"_on_body_entered"));
 	
-static func elegirCajaType():
+static func elegirCajaType(t):
 	var random = randf();
-	const cajas = [
-		{"tipo": 1, "prob": 0.60}, ##Caja
-		{"tipo": 2, "prob": 0.10}, ##Basura
-		{"tipo": 3, "prob": 0.10}, ##BalonOxigeno 0.07
-		{"tipo": 4, "prob": 0.20}, ##Nada
-	]
+	var cajas:Array
+	match t:
+		1:
+			cajas = [
+				{"tipo": 1, "prob": 0.75}, ##Caja
+				{"tipo": 2, "prob": 0.10}, ##Basura
+				{"tipo": 3, "prob": 0.05}, ##BalonOxigeno 0.07
+				{"tipo": 4, "prob": 0.10}, ##Nada
+			]
+		2:
+			cajas = [
+				{"tipo": 1, "prob": 0.65}, ##Caja
+				{"tipo": 2, "prob": 0.15}, ##Basura
+				{"tipo": 3, "prob": 0.10}, ##BalonOxigeno 0.07
+				{"tipo": 4, "prob": 0.10}, ##Nada
+			]
+		_:
+			cajas = [
+				{"tipo": 1, "prob": 0.50}, ##Caja
+				{"tipo": 2, "prob": 0.20}, ##Basura
+				{"tipo": 3, "prob": 0.15}, ##BalonOxigeno 0.07
+				{"tipo": 4, "prob": 0.10}, ##Nada
+			]
+	print(cajas);
 	var acumulado = 0.0
 	for op in cajas:
 		acumulado += op["prob"]
 		if(random <= acumulado):
 			return op["tipo"];
-	return null;
+	return 4;
 
 ## Colores
 func ChangeColor(player_id):

@@ -4,6 +4,8 @@ extends Node
 @export var garbage_scene: PackedScene;
 @export var oxygenbomb_scene : PackedScene;
 @export var anim_camera_manager:Node;
+@export var prob_apagon:=0.15;
+var spawn_phase := 0
 const Initialtime:int = 60;
 var deathTime:int = Initialtime;
 var rondaN = 1;
@@ -76,6 +78,9 @@ func new_game():
 	$BackgroundScn1.show();
 	$CintasAbajo.show();
 	$CintasArriba.show();
+	#Cintas animacion
+	AnimacionesStop($CintasAbajo);
+	AnimacionesStop($CintasArriba);
 	HUD.show();
 	HUD.update_time(deathTime);
 	#HUD.show_message("Get Ready!");
@@ -99,11 +104,13 @@ func new_game():
 	player2.can_move = false;
 	await HUD.getReady(rondaN);
 	#Cintas animacion
-	AnimacionesStart($CintasAbajo);
-	AnimacionesStart($CintasArriba);
+	AnimacionesStart($CintasAbajo,3);
+	AnimacionesStart($CintasArriba,3);
 	#Movimiento
 	player1.can_move = true;
 	player2.can_move = true;
+	refresh_phase();
+	print(spawn_phase);
 	$BoxTimer.start();
 	$DeathTimer.start();
 	$LightningTimer.start();
@@ -112,15 +119,58 @@ func new_game():
 		#antena_instancia.queue_free();
 		#palanca_instancia.queue_free();
 
-func AnimacionesStart(nodoPadre:Node2D):
+func AnimacionesStart(nodoPadre:Node2D, speed:float=1.0):
 	for child in nodoPadre.get_children():
 		if child is AnimatedSprite2D:
+			child.speed_scale = speed;
 			child.play();
 
+func AnimacionesStop(nodoPadre:Node2D):
+	for child in nodoPadre.get_children():
+		if child is AnimatedSprite2D:
+			child.stop();
+
+func calculate_spawn_phase(time_left:int) -> int:
+	if time_left > 40:
+		return 1;
+	elif time_left > 20:
+		return 2;
+	else:
+		return 3;
+func apply_spawn_phase(phase:int):
+	match phase:
+		1:
+			$BoxTimer.wait_time = 1;
+			prob_apagon = 0.05;
+			AnimacionesStart($CintasArriba,3.0);
+			AnimacionesStart($CintasAbajo,3.0);
+			player1.fuerzaEmpujeCinta = -3000;
+			player2.fuerzaEmpujeCinta = -3000;
+			BaseBox.speed = 100;
+		2:
+			$BoxTimer.wait_time = 0.75;
+			prob_apagon = 0.10;
+			AnimacionesStart($CintasArriba,5.0);
+			AnimacionesStart($CintasAbajo,5.0);
+			player1.fuerzaEmpujeCinta = -5000;
+			player2.fuerzaEmpujeCinta = -5000;
+			BaseBox.speed = 110;
+		3:
+			$BoxTimer.wait_time = 0.6;
+			prob_apagon = 0.15;
+			AnimacionesStart($CintasArriba,7.0);
+			AnimacionesStart($CintasAbajo,7.0);
+			player1.fuerzaEmpujeCinta = -7000;
+			player2.fuerzaEmpujeCinta = -7000;
+			BaseBox.speed = 120;
+			
+	print("Wait_time: ",$BoxTimer.wait_time);
+	print("Prob_apagon: ",prob_apagon);
+			
 func _on_box_timer_timeout():
 	#Creamos una instancia de caja o basura
 	var throwable;
-	var type = BaseBox.elegirCajaType();
+	var type = BaseBox.elegirCajaType(spawn_phase);
 	var spawn = randi_range(0,1);
 	var diferencia;
 	if type == 1:
@@ -157,9 +207,19 @@ func _makeDark():
 	player2._on_dark(true);
 	$DarkTimer.start();
 
+func refresh_phase():
+	var new_phase = calculate_spawn_phase(deathTime);
+	if new_phase != spawn_phase:
+		spawn_phase = new_phase;
+		apply_spawn_phase(spawn_phase);
+		print("===================");
+		print("Fase: ",spawn_phase);
+		print("===================");
+	
 func _on_death_timer_timeout():
 	deathTime -= 1;
 	HUD.update_time(deathTime);
+	refresh_phase();
 	if(deathTime == 0):	#SuddenDeath
 		HUD.show_sudden_death();
 		$DeathTimer.stop();
@@ -254,5 +314,5 @@ func _on_lightning_timer_timeout() -> void:
 	if $Background/AnimationPlayer.is_playing():
 		return;
 	var nr = randf();
-	if !onDark and nr <= 0.50:
+	if !onDark and nr <= prob_apagon:
 		_makeDark();
