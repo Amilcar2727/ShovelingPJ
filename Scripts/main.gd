@@ -5,6 +5,12 @@ extends Node
 @export var oxygenbomb_scene : PackedScene;
 @export var anim_camera_manager:Node;
 @export var prob_apagon:=0.15;
+##Para cambio de direccion de las cintas
+@export var cambio_dir_prob:=0.20;
+var cinta_dir := 1;
+var cinta_vel := 7;
+var cambiando_cinta := false;
+
 var spawn_phase := 0
 const Initialtime:int = 60;
 var deathTime:int = Initialtime;
@@ -104,8 +110,7 @@ func new_game():
 	player2.can_move = false;
 	await HUD.getReady(rondaN);
 	#Cintas animacion
-	AnimacionesStart($CintasAbajo,3);
-	AnimacionesStart($CintasArriba,3);
+	DirectionCintas(7);
 	#Movimiento
 	player1.can_move = true;
 	player2.can_move = true;
@@ -118,6 +123,44 @@ func new_game():
 	#if antena_instancia != null:
 		#antena_instancia.queue_free();
 		#palanca_instancia.queue_free();
+
+## Cambiar direccion de las cintas transportadoras
+func swap_cintas_direction():
+	if cambiando_cinta:
+		return;
+	if deathTime > 55: #Para no iniciar a cambiar desde el inicio
+		return;
+	var ran = randf();
+	if ran > cambio_dir_prob:
+		return;
+	
+	cambiando_cinta = true;
+	print("Cambiando direccion!")
+	## 1. Dado q ya estamos moviendonos, detenemos
+	AnimacionesStop($CintasArriba);
+	AnimacionesStop($CintasAbajo);
+	BaseBox.direction = 0;
+	var temp = Vector2(player1.fuerzaEmpujeCinta, player2.fuerzaEmpujeCinta);
+	player1.fuerzaEmpujeCinta = 0;
+	player2.fuerzaEmpujeCinta = 0;
+	await get_tree().create_timer(0.6,false).timeout;
+	## 2. Invertimos direccion
+	cinta_dir *= -1
+	## 3. Reactivamos
+	DirectionCintas(cinta_vel, cinta_dir);
+	## Ajustamos tambien fuerza de jugadores
+	player1.fuerzaEmpujeCinta = -temp.x;
+	player2.fuerzaEmpujeCinta = -temp.y;
+	cambiando_cinta = false
+	
+
+func DirectionCintas(vel=7, dir=1):
+	cinta_vel = vel;
+	cinta_dir = dir;
+	print("Direccion Cintas:",cinta_dir);
+	AnimacionesStart($CintasArriba,vel * dir);
+	AnimacionesStart($CintasAbajo,vel * dir);
+	BaseBox.direction = -1*dir;
 
 func AnimacionesStart(nodoPadre:Node2D, speed:float=1.0):
 	for child in nodoPadre.get_children():
@@ -142,26 +185,23 @@ func apply_spawn_phase(phase:int):
 		1:
 			$BoxTimer.wait_time = 1;
 			prob_apagon = 0.05;
-			AnimacionesStart($CintasArriba,4.0);
-			AnimacionesStart($CintasAbajo,4.0);
-			player1.fuerzaEmpujeCinta = -3000;
-			player2.fuerzaEmpujeCinta = -3000;
+			#DirectionCintas(7);
+			player1.fuerzaEmpujeCinta = -120*cinta_dir;
+			player2.fuerzaEmpujeCinta = -120*cinta_dir;
 			BaseBox.speed = 100;
 		2:
 			$BoxTimer.wait_time = 0.75;
 			prob_apagon = 0.10;
-			AnimacionesStart($CintasArriba,6.0);
-			AnimacionesStart($CintasAbajo,6.0);
-			player1.fuerzaEmpujeCinta = -5000;
-			player2.fuerzaEmpujeCinta = -5000;
+			DirectionCintas(8.5,cinta_dir);
+			player1.fuerzaEmpujeCinta = -160*cinta_dir;
+			player2.fuerzaEmpujeCinta = -160*cinta_dir;
 			BaseBox.speed = 115;
 		3:
 			$BoxTimer.wait_time = 0.5;
 			prob_apagon = 0.15;
-			AnimacionesStart($CintasArriba,7.0);
-			AnimacionesStart($CintasAbajo,7.0);
-			player1.fuerzaEmpujeCinta = -7000;
-			player2.fuerzaEmpujeCinta = -7000;
+			DirectionCintas(10,cinta_dir);
+			player1.fuerzaEmpujeCinta = -200*cinta_dir;
+			player2.fuerzaEmpujeCinta = -200*cinta_dir;
 			BaseBox.speed = 130;
 			
 	print("Wait_time: ",$BoxTimer.wait_time);
@@ -219,6 +259,7 @@ func refresh_phase():
 func _on_death_timer_timeout():
 	deathTime -= 1;
 	HUD.update_time(deathTime);
+	# Fases de ronda
 	refresh_phase();
 	if(deathTime == 0):	#SuddenDeath
 		HUD.show_sudden_death();
@@ -310,6 +351,8 @@ func _on_dark_timer_timeout() -> void:
 	onDark = false;
 
 func _on_lightning_timer_timeout() -> void:
+	## Cintas
+	swap_cintas_direction();
 	#Probabilidad
 	if $Background/AnimationPlayer.is_playing():
 		return;

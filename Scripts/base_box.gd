@@ -1,6 +1,7 @@
 extends RigidBody2D
 class_name BaseBox
 
+static var direction := -1;
 static var speed = 100;
 var hitted = false;
 var last_hitter = 0;
@@ -17,7 +18,7 @@ func _ready():
 
 func _process(_delta):
 	if not hitted:
-		linear_velocity = Vector2(-speed, 0);
+		linear_velocity = Vector2(speed * direction, 0);
 		
 #Obtenemos la ultima velocidad pre impacto
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
@@ -75,7 +76,6 @@ static func elegirCajaType(t):
 				{"tipo": 3, "prob": 0.15}, ##BalonOxigeno 0.07
 				{"tipo": 4, "prob": 0.10}, ##Nada
 			]
-	print(cajas);
 	var acumulado = 0.0
 	for op in cajas:
 		acumulado += op["prob"]

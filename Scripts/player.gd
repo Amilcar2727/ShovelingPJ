@@ -8,7 +8,7 @@ var score = 0;
 #Movement
 var left_action = "";
 var right_action = "";
-@export var fuerzaEmpujeCinta = -3000;
+@export var fuerzaEmpujeCinta := -120;
 #Orientation
 var orientation = "right";
 #Powers
@@ -16,7 +16,7 @@ var shovel_action := "";
 var shovel_up_action := "";
 #var shovel_ready := false;
 var current_boxes := [];
-var impulso_fuerza = 600;
+var impulso_fuerza = 500;
 var can_launch_box = true; #Timer
 # Animation y more
 var can_move := false;
@@ -60,8 +60,9 @@ func _process(delta):
 	else:
 		$AnimatedSprite2D.stop();
 	#Fuerza Cintas Transportadoras
-	var left_push_force = Vector2(fuerzaEmpujeCinta, 0);
-	velocity += left_push_force * delta
+	var cinta_push = Vector2(fuerzaEmpujeCinta, 0);
+	velocity += cinta_push;
+		
 	#Flip
 	leftOrRight(orientation);
 	position += velocity * delta;
