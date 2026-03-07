@@ -23,10 +23,6 @@ func _process(_delta):
 #Obtenemos la ultima velocidad pre impacto
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	ultima_velocidad = state.get_linear_velocity();
-	
-func _on_visible_on_screen_notifier_2d_screen_exited():
-	await get_tree().create_timer(1,false).timeout; #Esperamos 1 segundo para eliminarlo
-	queue_free();
 
 func _on_body_entered(_body):
 	hitted = true;

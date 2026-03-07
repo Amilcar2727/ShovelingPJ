@@ -39,8 +39,6 @@ animation = &"idle"
 position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_jdfon")
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-
 [node name="ExplosionArea" type="Area2D" parent="."]
 visible = false
 collision_layer = 0
@@ -65,5 +63,3 @@ texture = ExtResource("4_73x72")
 color = Color(0.713726, 0, 0.0156863, 1)
 energy = 10.0
 texture = ExtResource("4_73x72")
-
-[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

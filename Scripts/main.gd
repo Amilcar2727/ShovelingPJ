@@ -6,7 +6,7 @@ extends Node
 @export var anim_camera_manager:Node;
 @export var prob_apagon:=0.15;
 ##Para cambio de direccion de las cintas
-@export var cambio_dir_prob:=0.20;
+@export var cambio_dir_prob:=0.15;
 var cinta_dir := 1;
 var cinta_vel := 7;
 var cambiando_cinta := false;
@@ -109,16 +109,19 @@ func new_game():
 	player1.can_move = false;
 	player2.can_move = false;
 	await HUD.getReady(rondaN);
+	cinta_dir = 1;
 	#Cintas animacion
-	DirectionCintas(7);
+	DirectionCintas(7,1);
 	#Movimiento
 	player1.can_move = true;
 	player2.can_move = true;
 	refresh_phase();
+	
 	print(spawn_phase);
 	$BoxTimer.start();
 	$DeathTimer.start();
 	$LightningTimer.start();
+	$Camera2D.zoom = Vector2(0.5, 0.5);
 	#empezarAntena = false;
 	#if antena_instancia != null:
 		#antena_instancia.queue_free();
@@ -151,6 +154,7 @@ func swap_cintas_direction():
 	## Ajustamos tambien fuerza de jugadores
 	player1.fuerzaEmpujeCinta = -temp.x;
 	player2.fuerzaEmpujeCinta = -temp.y;
+	
 	cambiando_cinta = false
 	
 
@@ -209,6 +213,8 @@ func apply_spawn_phase(phase:int):
 			
 func _on_box_timer_timeout():
 	#Creamos una instancia de caja o basura
+	if BaseBox.direction == 0:
+		return;
 	var throwable;
 	var type = BaseBox.elegirCajaType(spawn_phase);
 	var spawn = randi_range(0,1);
@@ -225,9 +231,15 @@ func _on_box_timer_timeout():
 	else:
 		return;
 	if spawn == 0:
-		throwable.position = $SpawnBoxesP1.position + diferencia;
+		if cinta_dir == 1:
+			throwable.position = $SpawnBoxesRP1.position + diferencia;
+		else:
+			throwable.position = $SpawnBoxesLP1.position + diferencia;
 	elif spawn == 1:
-		throwable.position = $SpawnBoxesP2.position - diferencia;
+		if cinta_dir == 1:
+			throwable.position = $SpawnBoxesRP2.position - diferencia;
+		else:
+			throwable.position = $SpawnBoxesLP2.position - diferencia;
 	## == Spawneamos la caja agregandolo a la escena:
 	add_child(throwable);
 	
