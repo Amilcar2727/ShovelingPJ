@@ -6,7 +6,7 @@ extends Node
 @export var anim_camera_manager:Node;
 @export var prob_apagon:=0.15;
 ##Para cambio de direccion de las cintas
-@export var cambio_dir_prob:=0.15;
+@export var cambio_dir_prob:=0.14;
 var cinta_dir := 1;
 var cinta_vel := 7;
 var cambiando_cinta := false;
@@ -51,6 +51,9 @@ func _ready():
 	$BackgroundScn1.show();
 	$CintasAbajo.show();
 	$CintasArriba.show();
+	$BombasSD/BombasSDArriba.hide();
+	$BombasSD/BombasSDAbajo.hide();
+	$BombasSD.hide();
 	#Nro ronda
 	rondaN = 1;
 	#SuddenDeath
@@ -84,6 +87,9 @@ func new_game():
 	$BackgroundScn1.show();
 	$CintasAbajo.show();
 	$CintasArriba.show();
+	$BombasSD/BombasSDAbajo.show();
+	$BombasSD/BombasSDArriba.show();
+	$BombasSD.hide();
 	#Cintas animacion
 	AnimacionesStop($CintasAbajo);
 	AnimacionesStop($CintasArriba);
@@ -111,17 +117,14 @@ func new_game():
 	await HUD.getReady(rondaN);
 	cinta_dir = 1;
 	#Cintas animacion
-	DirectionCintas(7,1);
+	DirectionCintas(7,cinta_dir);
+	refresh_phase();
 	#Movimiento
 	player1.can_move = true;
 	player2.can_move = true;
-	refresh_phase();
-	
-	print(spawn_phase);
 	$BoxTimer.start();
 	$DeathTimer.start();
 	$LightningTimer.start();
-	$Camera2D.zoom = Vector2(0.5, 0.5);
 	#empezarAntena = false;
 	#if antena_instancia != null:
 		#antena_instancia.queue_free();
@@ -140,8 +143,8 @@ func swap_cintas_direction():
 	cambiando_cinta = true;
 	print("Cambiando direccion!")
 	## 1. Dado q ya estamos moviendonos, detenemos
-	AnimacionesStop($CintasArriba);
-	AnimacionesStop($CintasAbajo);
+	AnimacionesPause($CintasArriba);
+	AnimacionesPause($CintasAbajo);
 	BaseBox.direction = 0;
 	var temp = Vector2(player1.fuerzaEmpujeCinta, player2.fuerzaEmpujeCinta);
 	player1.fuerzaEmpujeCinta = 0;
@@ -177,6 +180,11 @@ func AnimacionesStop(nodoPadre:Node2D):
 		if child is AnimatedSprite2D:
 			child.stop();
 
+func AnimacionesPause(nodoPadre:Node2D):
+	for child in nodoPadre.get_children():
+		if child is AnimatedSprite2D:
+			child.pause();
+			
 func calculate_spawn_phase(time_left:int) -> int:
 	if time_left > 40:
 		return 1;
@@ -190,8 +198,8 @@ func apply_spawn_phase(phase:int):
 			$BoxTimer.wait_time = 1;
 			prob_apagon = 0.05;
 			#DirectionCintas(7);
-			player1.fuerzaEmpujeCinta = -120*cinta_dir;
-			player2.fuerzaEmpujeCinta = -120*cinta_dir;
+			player1.fuerzaEmpujeCinta = -110*cinta_dir;
+			player2.fuerzaEmpujeCinta = -110*cinta_dir;
 			BaseBox.speed = 100;
 		2:
 			$BoxTimer.wait_time = 0.75;
@@ -203,7 +211,7 @@ func apply_spawn_phase(phase:int):
 		3:
 			$BoxTimer.wait_time = 0.5;
 			prob_apagon = 0.15;
-			DirectionCintas(10,cinta_dir);
+			DirectionCintas(11,cinta_dir);
 			player1.fuerzaEmpujeCinta = -200*cinta_dir;
 			player2.fuerzaEmpujeCinta = -200*cinta_dir;
 			BaseBox.speed = 130;
@@ -274,6 +282,8 @@ func _on_death_timer_timeout():
 	# Fases de ronda
 	refresh_phase();
 	if(deathTime == 0):	#SuddenDeath
+		$BombasSD.show();
+		$BombasSD/AnimationPlayer.play("BombasSD");
 		HUD.show_sudden_death();
 		$DeathTimer.stop();
 		$BoxTimer.stop();
@@ -323,6 +333,7 @@ func on_win(player):
 	#Aumenta en 1 a las rondas
 	if player1.score != 3 && player2.score != 3:
 		rondaN += 1;
+		spawn_phase = 0
 		new_game();
 	else:
 		finishGame();
@@ -330,10 +341,12 @@ func on_win(player):
 func _on_player_1_hit():
 	#P1 died
 	player1._on_dead();
+	$BombasSD/BombasSDAbajo.hide();
 	on_win(player2);
 func _on_player_2_hit():
 	#P2 died
 	player2._on_dead();
+	$BombasSD/BombasSDArriba.hide();
 	on_win(player1);
 
 func _on_sdFinish(last_hitter):

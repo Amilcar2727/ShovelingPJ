@@ -51,6 +51,7 @@ func explote():
 	$AnimatedSprite2D.visible = false;
 	$ExplosionSprite.visible = true;
 	$Luces.visible = true;
+	self.linear_velocity = Vector2.ZERO;
 	await get_tree().create_timer(0.5,false).timeout; #Simula animacion
 	queue_free();
 	

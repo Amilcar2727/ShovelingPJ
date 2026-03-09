@@ -8,7 +8,7 @@ var score = 0;
 #Movement
 var left_action = "";
 var right_action = "";
-@export var fuerzaEmpujeCinta := -120;
+@export var fuerzaEmpujeCinta := -110;
 #Orientation
 var orientation = "right";
 #Powers
@@ -139,7 +139,7 @@ func before_launch_box(player_id, mode:String):
 		if orientation == "right":
 			launch_box(impulso_fuerza,-60*player);
 		elif orientation == "left":
-			launch_box(impulso_fuerza,-120*player);
+			launch_box(impulso_fuerza,-110*player);
 	
 func set_launch(mode:String):
 	if len(current_boxes)!=0 and can_launch_box:
