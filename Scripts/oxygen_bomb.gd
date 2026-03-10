@@ -52,7 +52,10 @@ func explote():
 	$ExplosionSprite.visible = true;
 	$Luces.visible = true;
 	self.linear_velocity = Vector2.ZERO;
+	$BoomSound.play();
 	await get_tree().create_timer(0.5,false).timeout; #Simula animacion
+	self.hide();
+	await $BoomSound.finished;
 	queue_free();
 	
 func _on_impact(_body):

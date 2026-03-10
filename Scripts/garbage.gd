@@ -5,7 +5,10 @@ func _ready():
 	super()
 	
 func _on_impact(_body):
+	$BananaSound.play();
 	_body.onBanana = true;
+	self.hide();
+	await $BananaSound.finished;
 	queue_free();
 	
 func ChangeColorRed():

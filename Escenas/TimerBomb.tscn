@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dq71x3kfsmduk"]
+[gd_scene load_steps=7 format=3 uid="uid://dq71x3kfsmduk"]
 
 [ext_resource type="Texture2D" uid="uid://b58dbviqvb1n3" path="res://art/BombTimer.png" id="1_kqbtq"]
 [ext_resource type="Script" path="res://Scripts/timer_bomb.gd" id="1_s4nei"]
+[ext_resource type="AudioStream" uid="uid://cmeqmis7jtlcj" path="res://Sounds/ExplosionSD.wav" id="3_g4cnc"]
+[ext_resource type="AudioStream" uid="uid://bh2a4414i4bxv" path="res://Sounds/Clock2.wav" id="4_rkebu"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_350ks"]
 animations = [{
@@ -52,6 +54,15 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="ExplosionSDSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_g4cnc")
+volume_db = -10.0
+
+[node name="Clock" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_rkebu")
+volume_db = -15.0
+autoplay = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

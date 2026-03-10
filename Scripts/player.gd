@@ -49,7 +49,6 @@ func _process(delta):
 		orientation = "right";
 	# MOVEMENT
 	if onBanana:
-		$BananaSound.play();
 		speed = 200;
 		$Banana.show();
 		$TimerBanana.start();
@@ -162,6 +161,7 @@ func launch_box(impulso:float, angulo:float):
 	var anguloF = deg_to_rad(angulo);
 	var vector_fuerza = Vector2(cos(anguloF),sin(anguloF)) * impulso;
 	current_box.apply_impulse(vector_fuerza);
+	$ShovelSound.play();
 			
 func _on_timer_timeout():
 	can_launch_box = true;

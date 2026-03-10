@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://cov3gytt0xnlx"]
+[gd_scene load_steps=9 format=3 uid="uid://cov3gytt0xnlx"]
 
 [ext_resource type="Script" path="res://Scripts/oxygen_bomb.gd" id="1_j5142"]
 [ext_resource type="Texture2D" uid="uid://cep35tpbxrnjt" path="res://art/OxygenBomb.png" id="2_5k88f"]
 [ext_resource type="Texture2D" uid="uid://dc0oqistqab7t" path="res://art/ripple.png" id="3_4h13d"]
 [ext_resource type="Texture2D" uid="uid://dw7q5f5y5v48o" path="res://art/2d_lights_and_shadows_neutral_point_light.webp" id="4_73x72"]
+[ext_resource type="AudioStream" uid="uid://dt63cyelyd3su" path="res://Sounds/ExplosionOB.wav" id="5_pijio"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
 animations = [{
@@ -62,3 +63,7 @@ texture = ExtResource("4_73x72")
 color = Color(0.713726, 0, 0.0156863, 1)
 energy = 10.0
 texture = ExtResource("4_73x72")
+
+[node name="BoomSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_pijio")
+volume_db = -13.0

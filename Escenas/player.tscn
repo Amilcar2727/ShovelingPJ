@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_gmbs1"]
 [ext_resource type="Texture2D" uid="uid://bfd451a8jrajb" path="res://art/CastorWalking3.png" id="2_bx6sm"]
 [ext_resource type="Texture2D" uid="uid://dhurkqw4wwk7c" path="res://art/BananaPeel.png" id="3_r1ocp"]
-[ext_resource type="AudioStream" uid="uid://bwjyvfbesq7tx" path="res://art/Squish Sound Effect.wav" id="4_u32a3"]
 [ext_resource type="Texture2D" uid="uid://dw7q5f5y5v48o" path="res://art/2d_lights_and_shadows_neutral_point_light.webp" id="5_fluyg"]
+[ext_resource type="AudioStream" uid="uid://b70xfxybd85ck" path="res://Sounds/Throwing.wav" id="5_w2nf4"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rjb5n"]
 animations = [{
@@ -65,13 +65,13 @@ texture = ExtResource("3_r1ocp")
 wait_time = 2.0
 one_shot = true
 
-[node name="BananaSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_u32a3")
-volume_db = -10.0
-
 [node name="PointLight2D" type="PointLight2D" parent="."]
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("5_fluyg")
+
+[node name="ShovelSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_w2nf4")
+volume_db = -20.0
 
 [connection signal="body_entered" from="CollisionArea" to="." method="_on_collision_area_body_entered"]
 [connection signal="body_entered" from="ShovelingArea" to="." method="_on_shoveling_area_body_entered"]

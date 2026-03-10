@@ -10,8 +10,10 @@ func _ready() -> void:
 func _on_body_entered(_body: Node2D) -> void:
 	scale.y = -scale.y;
 	if antena.apunta_jugador == 1:
-		$SonidoCambio.play();
+		#$SonidoCambio.play();
+		pass;
 	else:
-		$SonidoCambio2.play();
+		#$SonidoCambio2.play();
+		pass;
 	if antena!=null:
 		antena.scale.y *= -1;

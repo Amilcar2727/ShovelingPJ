@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://286trt08qrj5"]
+[gd_scene load_steps=22 format=3 uid="uid://286trt08qrj5"]
 
 [ext_resource type="Texture2D" uid="uid://cep35tpbxrnjt" path="res://art/OxygenBomb.png" id="1_e43q8"]
 [ext_resource type="Script" path="res://Scripts/victory_screen.gd" id="1_m0o6h"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dhbeaskuslhtj" path="res://art/GarbageBin.png" id="4_xyisv"]
 [ext_resource type="Texture2D" uid="uid://d0ilwrxkc5b2y" path="res://art/Rubble2.png" id="5_wkmsc"]
 [ext_resource type="FontFile" uid="uid://b3t7t64bu3bwr" path="res://art/Xolonium-Regular.ttf" id="12_l8kcf"]
+[ext_resource type="AudioStream" uid="uid://d4gq2o3blnbu8" path="res://Sounds/Tchaikovsky- Vals de las flores.wav" id="13_lgbs1"]
 
 [sub_resource type="Animation" id="Animation_yrkpq"]
 resource_name = "Floating"
@@ -479,6 +480,11 @@ position = Vector2(112, 472)
 
 [node name="Marker2D2" type="Marker2D" parent="Control/Node2D"]
 position = Vector2(222, 472)
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_lgbs1")
+volume_db = -15.0
+autoplay = true
 
 [connection signal="pressed" from="Control/Buttons/BtnRematch" to="." method="_on_btn_rematch_pressed"]
 [connection signal="pressed" from="Control/Buttons/BtnMaps" to="." method="_on_btn_maps_pressed"]

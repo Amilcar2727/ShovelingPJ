@@ -25,4 +25,7 @@ func stop():
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	emit_signal("whos_last_hitter",last_hitter);
+	$ExplosionSDSound.play();
+	self.hide();
+	await $ExplosionSDSound.finished;
 	queue_free();

@@ -6,7 +6,7 @@ extends Node
 @export var anim_camera_manager:Node;
 @export var prob_apagon:=0.15;
 ##Para cambio de direccion de las cintas
-@export var cambio_dir_prob:=0.14;
+@export var cambio_dir_prob:=0.10;
 var cinta_dir := 1;
 var cinta_vel := 7;
 var cambiando_cinta := false;
@@ -103,7 +103,8 @@ func new_game():
 	player2.rotation = deg_to_rad(180);
 	player2.scale.x = -1;
 	player2.orientation = "right";
-	#$Music.play();
+	if !$Music.playing:
+		$Music.play();
 	get_tree().call_group("box","queue_free");
 	onSDEvent = false;
 	suddenManager.stop_timer();
@@ -119,6 +120,7 @@ func new_game():
 	#Cintas animacion
 	DirectionCintas(7,cinta_dir);
 	refresh_phase();
+	$Conveyor.play();
 	#Movimiento
 	player1.can_move = true;
 	player2.can_move = true;
@@ -326,7 +328,6 @@ func on_win(player):
 	$LightningTimer.stop();
 	player.score += 1;
 	await game_show_win("Player "+str(player.player_id));
-	$Music.stop();
 	if onSDEvent:
 		suddenManager.stop_timer();
 		onSDEvent = false;
@@ -334,8 +335,10 @@ func on_win(player):
 	if player1.score != 3 && player2.score != 3:
 		rondaN += 1;
 		spawn_phase = 0
+		$Conveyor.stop();
 		new_game();
 	else:
+		$Music.stop();
 		finishGame();
 		
 func _on_player_1_hit():

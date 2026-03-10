@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bl4ujwa2pvekk"]
+[gd_scene load_steps=6 format=3 uid="uid://bl4ujwa2pvekk"]
 
 [ext_resource type="Texture2D" uid="uid://dhn54rhprve1b" path="res://art/box.png" id="1_0x7jw"]
 [ext_resource type="Script" path="res://Scripts/box.gd" id="1_4t1a3"]
+[ext_resource type="AudioStream" uid="uid://1vj7fc5ouo2v" path="res://Sounds/[YT2mp3.info] - GolpeBonk - Sonido (320kbps).wav" id="3_ud076"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
 animations = [{
@@ -33,3 +34,7 @@ animation = &"idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_jdfon")
+
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ud076")
+volume_db = -10.0
