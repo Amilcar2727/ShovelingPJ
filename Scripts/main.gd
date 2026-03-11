@@ -6,7 +6,11 @@ extends Node
 @export var anim_camera_manager:Node;
 @export var prob_apagon:=0.15;
 ##Para cambio de direccion de las cintas
-@export var cambio_dir_prob:=0.10;
+@export var cambio_dir_prob := 0.15;
+var cambio_dir_prob_actual := 0.15;
+var prob_min:=0.03;
+var prob_incremento :=0.01;
+
 var cinta_dir := 1;
 var cinta_vel := 7;
 var cambiando_cinta := false;
@@ -139,10 +143,13 @@ func swap_cintas_direction():
 	if deathTime > 55: #Para no iniciar a cambiar desde el inicio
 		return;
 	var ran = randf();
-	if ran > cambio_dir_prob:
+	if ran > cambio_dir_prob_actual:
+		cambio_dir_prob_actual = min(cambio_dir_prob_actual + prob_incremento, cambio_dir_prob)
+		print(cambio_dir_prob_actual);
 		return;
 	
 	cambiando_cinta = true;
+	cambio_dir_prob_actual = prob_min;
 	print("Cambiando direccion!")
 	## 1. Dado q ya estamos moviendonos, detenemos
 	AnimacionesPause($CintasArriba);
@@ -206,14 +213,14 @@ func apply_spawn_phase(phase:int):
 		2:
 			$BoxTimer.wait_time = 0.75;
 			prob_apagon = 0.10;
-			DirectionCintas(8.5,cinta_dir);
+			DirectionCintas(9,cinta_dir);
 			player1.fuerzaEmpujeCinta = -160*cinta_dir;
 			player2.fuerzaEmpujeCinta = -160*cinta_dir;
 			BaseBox.speed = 115;
 		3:
 			$BoxTimer.wait_time = 0.5;
 			prob_apagon = 0.15;
-			DirectionCintas(11,cinta_dir);
+			DirectionCintas(12,cinta_dir);
 			player1.fuerzaEmpujeCinta = -200*cinta_dir;
 			player2.fuerzaEmpujeCinta = -200*cinta_dir;
 			BaseBox.speed = 130;
