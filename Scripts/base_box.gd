@@ -1,8 +1,13 @@
 extends RigidBody2D
 class_name BaseBox
 
-static var direction := -1;
-static var speed = 100;
+static var direction_all := -1; ##Usado en 1er mapa
+static var speed_all = 100; ##Usado en 1er mapa
+var direction_local := -1; ##Usado en 2do
+var speed_local := 100; ##Usado en 2do
+
+var use_local_direction := false; ##Flag para usar local o global
+
 var hitted = false;
 var last_hitter = 0;
 var actual_modulate = "normal";
@@ -18,8 +23,11 @@ func _ready():
 
 func _process(_delta):
 	if not hitted:
-		linear_velocity = Vector2(speed * direction, 0);
-		
+		if use_local_direction:
+			linear_velocity = Vector2(speed_local * direction_local, 0);
+		else:
+			linear_velocity = Vector2(speed_all * direction_all, 0);
+			
 #Obtenemos la ultima velocidad pre impacto
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	ultima_velocidad = state.get_linear_velocity();

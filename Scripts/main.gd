@@ -23,16 +23,12 @@ var rondaT := false;
 @onready var player1 := $Player1;
 @onready var player2 := $Player2;
 @onready var HUD = $HUD;
-@onready var pauseMenu = $MenuPause; #ElPeneDeDavidCHEstuvoAqui
+@onready var pauseMenu = $MenuPause; 
+#ElPeneDeDavidCHEstuvoAqui
 #Yonieskbro:awawa
 #rAnatieneelanoasibiengrande- anton
 #antonesunhomosexualLamecaca- eylleen
-# Antena
-@export var antena_scene:PackedScene;
-@export var palanca_scene:PackedScene;
-var antena_instancia;
-var palanca_instancia;
-var empezarAntena;
+
 # SuddenDeath
 signal suddenDSignal;
 @onready var suddenManager:Node = $"SuddenDeathManager";
@@ -63,7 +59,6 @@ func _ready():
 	#SuddenDeath
 	suddenManager.sdFinish.connect(_on_sdFinish);
 	onSDEvent = false;
-	#empezarAntena = false;
 	
 	##Empezar animacion inicial
 	on_animation();
@@ -131,10 +126,6 @@ func new_game():
 	$BoxTimer.start();
 	$DeathTimer.start();
 	$LightningTimer.start();
-	#empezarAntena = false;
-	#if antena_instancia != null:
-		#antena_instancia.queue_free();
-		#palanca_instancia.queue_free();
 
 ## Cambiar direccion de las cintas transportadoras
 func swap_cintas_direction():
@@ -154,7 +145,7 @@ func swap_cintas_direction():
 	## 1. Dado q ya estamos moviendonos, detenemos
 	AnimacionesPause($CintasArriba);
 	AnimacionesPause($CintasAbajo);
-	BaseBox.direction = 0;
+	BaseBox.direction_all = 0;
 	var temp = Vector2(player1.fuerzaEmpujeCinta, player2.fuerzaEmpujeCinta);
 	player1.fuerzaEmpujeCinta = 0;
 	player2.fuerzaEmpujeCinta = 0;
@@ -176,7 +167,7 @@ func DirectionCintas(vel=7, dir=1):
 	print("Direccion Cintas:",cinta_dir);
 	AnimacionesStart($CintasArriba,vel * dir);
 	AnimacionesStart($CintasAbajo,vel * dir);
-	BaseBox.direction = -1*dir;
+	BaseBox.direction_all = -1*dir;
 
 func AnimacionesStart(nodoPadre:Node2D, speed:float=1.0):
 	for child in nodoPadre.get_children():
@@ -209,28 +200,27 @@ func apply_spawn_phase(phase:int):
 			#DirectionCintas(7);
 			player1.fuerzaEmpujeCinta = -110*cinta_dir;
 			player2.fuerzaEmpujeCinta = -110*cinta_dir;
-			BaseBox.speed = 100;
+			BaseBox.speed_all = 100;
 		2:
 			$BoxTimer.wait_time = 0.75;
 			prob_apagon = 0.10;
 			DirectionCintas(9,cinta_dir);
 			player1.fuerzaEmpujeCinta = -160*cinta_dir;
 			player2.fuerzaEmpujeCinta = -160*cinta_dir;
-			BaseBox.speed = 115;
+			BaseBox.speed_all = 115;
 		3:
 			$BoxTimer.wait_time = 0.5;
 			prob_apagon = 0.15;
 			DirectionCintas(12,cinta_dir);
 			player1.fuerzaEmpujeCinta = -200*cinta_dir;
 			player2.fuerzaEmpujeCinta = -200*cinta_dir;
-			BaseBox.speed = 130;
+			BaseBox.speed_all = 130;
 			
 	print("Wait_time: ",$BoxTimer.wait_time);
 	print("Prob_apagon: ",prob_apagon);
 			
 func _on_box_timer_timeout():
-	#Creamos una instancia de caja o basura
-	if BaseBox.direction == 0:
+	if BaseBox.direction_all == 0:
 		return;
 	var throwable;
 	var type = BaseBox.elegirCajaType(spawn_phase);
@@ -261,11 +251,9 @@ func _on_box_timer_timeout():
 	add_child(throwable);
 	
 func game_over_by_time():
-	#AnimacionAntenaImpacto();
 	HUD.show_game_over();
 	$BoxTimer.stop();
 	$Music.stop();
-	#$LaserSound.play();
 
 func _makeDark():
 	onDark = true;
@@ -299,32 +287,10 @@ func _on_death_timer_timeout():
 		get_tree().call_group("box","queue_free");
 		onSDEvent = true;
 		suddenDSignal.emit();
-		#palanca_instancia.get_node("CollisionShape2D").disabled = true;
-		#if antena_instancia.apunta_jugador == 1:
-			#player2.score += 1;
-			#player1.hide();
-			#player1.position = Vector2(0,0);
-		#else:
-			#player1.score += 1;
-			#player2.hide();
-			#player2.position = Vector2(0,0);
-	# ==== ANTENA ==== #
-	#if(deathTime <= 10 and not empezarAntena):
-		#spawnObject(antena_instancia, antena_scene, Vector2(-120, 370));
-		#spawnObject(palanca_instancia, palanca_scene, Vector2(1250, 384));
-		#empezarAntena = true;
-		
-func spawnObject(instancia,escena:PackedScene,pos:Vector2):
-	instancia = escena.instantiate();
-	instancia.position = pos;
-	add_child(instancia);
 	
 func game_show_win(winner:String):
 	await HUD.show_game_won(winner);
 	HUD.update_score(str($Player1.score),str($Player2.score));
-	#if antena_instancia != null:
-		#antena_instancia.alcanzoDestino = true;
-		#antena_instancia.get_node("Circulo").animating = false;
 
 func on_win(player):
 	if rondaT:
@@ -364,11 +330,6 @@ func _on_sdFinish(last_hitter):
 		_on_player_2_hit();
 	elif last_hitter == 2:
 		_on_player_1_hit();
-
-func AnimacionAntenaImpacto():
-	$HUD/AntenaPower.show();
-	await get_tree().create_timer(1.0,false).timeout;
-	$HUD/AntenaPower.hide();
 	
 func finishGame():
 	print("Terminando juego");
