@@ -48,7 +48,7 @@ func _play_random_animation():
 
 func _fix_orientation():
 	if(position.y<300):
-		$AnimatedSprite2D.scale.y = -0.08;
+		$AnimatedSprite2D.scale.y = -$AnimatedSprite2D.scale.y;
 		
 func _setup_physics():
 	contact_monitor = true;

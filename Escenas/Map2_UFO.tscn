@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/main2.gd" id="1_lp1t8"]
 [ext_resource type="PackedScene" uid="uid://dawdg1kralwsc" path="res://Escenas/box_ufo.tscn" id="2_1h0lo"]
 [ext_resource type="PackedScene" uid="uid://dhcx0qiyy28w2" path="res://Escenas/wall_bomb.tscn" id="2_vfrsr"]
-[ext_resource type="PackedScene" uid="uid://du0i6ep3smamj" path="res://Escenas/garbage.tscn" id="3_atg5g"]
+[ext_resource type="PackedScene" uid="uid://drvyj2fywl1yo" path="res://Escenas/garbage_ufo.tscn" id="3_b78f5"]
 [ext_resource type="PackedScene" uid="uid://cov3gytt0xnlx" path="res://Escenas/oxygenBomb.tscn" id="4_ib6wu"]
 [ext_resource type="AudioStream" uid="uid://bdm6y134kpke" path="res://Sounds/Conveyor.wav" id="4_il5q1"]
 [ext_resource type="PackedScene" uid="uid://cr5nto0v1cvtd" path="res://Escenas/player.tscn" id="5_p3kdm"]
@@ -371,7 +371,7 @@ size = Vector2(1080, 10)
 process_mode = 1
 script = ExtResource("1_lp1t8")
 box_scene = ExtResource("2_1h0lo")
-garbage_scene = ExtResource("3_atg5g")
+garbage_scene = ExtResource("3_b78f5")
 oxygenbomb_scene = ExtResource("4_ib6wu")
 anim_camera_manager = NodePath("AnimationManager")
 

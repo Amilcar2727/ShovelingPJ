@@ -1,6 +1,7 @@
 extends Node2D;
 signal hit;
-@export var speed=500;	#How fast the player will move (pixel/sec)
+const initial_speed := 500;
+@export var speed=initial_speed; #How fast the player will move (pixel/sec)
 @export var player_id = 1;
 var screen_size;	#Size of the game window
 #Score
@@ -23,12 +24,19 @@ var can_move := false;
 # Banana
 var enviado = false; ##  Debug
 var onBanana:bool;
+# Electro
+var onShock:= false;
+var nrosShock := 0;
+
 func _ready():
 	can_move = false;
 	onBanana = false;
+	onShock = false;
+	nrosShock = 0;
 	screen_size = get_viewport_rect().size;
 	orientation = "right";
 	$Banana.hide();
+	$ShockElec.hide();
 	$PointLight2D.hide();
 	hide();
 
@@ -173,11 +181,45 @@ func _on_explosion(_body):
 func _on_dead():
 	if self.visible == true:
 		self.visible = false;
+	_finish_asyncs();
 	self.position = Vector2(0,0);
+
+func _finish_asyncs():
+	onShock = false;
+	$ShockElec.hide();
+	if !$TimerShockElec.is_stopped():
+		$TimerShockElec.stop();
 
 func _on_dark(v=true):
 	$PointLight2D.visible = v;
 	
+func _on_shock():
+	# Eliminamos movimiento y mostramos elect
+	$ShockSound.play();
+	$ShockElec.modulate = Color(1,1,1,1);
+	self.can_move = false;
+	await get_tree().create_timer(0.5,false).timeout;
+	# Regresamos a la normalidad
+	$ShockElec.modulate = Color(1,1,1,0.4);
+	self.can_move = true;
+	nrosShock+=1;
+	if nrosShock >= 4 or !onShock:
+		$TimerShockElec.stop();
+		$ShockElec.hide();
+		onShock = false;
+		return;
+	
+func _electric_shock():
+	nrosShock = 0;
+	onShock = true;
+	$ShockElec.show();
+	_on_shock();
+	$TimerShockElec.start();
+	
 func _on_timer_banana_timeout():
 	speed = 500;
 	$Banana.hide();
+
+func _on_timer_shock_elec_timeout() -> void:
+	if onShock:
+		_on_shock();

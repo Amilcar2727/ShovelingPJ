@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://dawdg1kralwsc"]
+
+[ext_resource type="Script" path="res://Scripts/box.gd" id="1_c7dtq"]
+[ext_resource type="Texture2D" uid="uid://cjunarrto7l8y" path="res://art/Map2_UFO/Box_UFO.png" id="2_l01ch"]
+[ext_resource type="AudioStream" uid="uid://1vj7fc5ouo2v" path="res://Sounds/[YT2mp3.info] - GolpeBonk - Sonido (320kbps).wav" id="3_8mawp"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_l01ch")
+}],
+"loop": false,
+"name": &"idle",
+"speed": 0.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
+size = Vector2(35, 37)
+
+[node name="Box" type="RigidBody2D"]
+z_index = 2
+collision_layer = 4
+collision_mask = 15
+gravity_scale = 0.0
+script = ExtResource("1_c7dtq")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.06, 0.06)
+sprite_frames = SubResource("SpriteFrames_gf44t")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_jdfon")
+
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_8mawp")
+volume_db = -10.0

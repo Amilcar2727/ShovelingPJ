@@ -102,6 +102,8 @@ func new_game():
 		suddenManager.SDObject_instance.queue_free();
 	#Start game
 	# Momento entre rondas
+	player1._finish_asyncs();
+	player2._finish_asyncs();
 	#Movimiento
 	player1.can_move = false;
 	player2.can_move = false;
@@ -121,8 +123,8 @@ func DirectionCintas(vel=1, dir=1):
 	cinta_vel = vel;
 	cinta_dir = dir;
 	print("Direccion Cintas:",cinta_vel);
-	AnimacionesStart($CintasArriba,-vel * dir);
-	AnimacionesStart($CintasAbajo,vel * dir);
+	AnimacionesStart($CintasArriba,vel * dir);
+	AnimacionesStart($CintasAbajo,-vel * dir);
 
 func AnimacionesStart(nodoPadre:Node2D, speed:float=1.0):
 	for child in nodoPadre.get_children():
@@ -152,20 +154,20 @@ func apply_spawn_phase(phase:int):
 		1:
 			$BoxTimer.wait_time = 1;
 			#DirectionCintas(7);
-			player1.fuerzaEmpujeCinta = 110*cinta_dir;
-			player2.fuerzaEmpujeCinta = -110*cinta_dir;
+			player1.fuerzaEmpujeCinta = -110*cinta_dir;
+			player2.fuerzaEmpujeCinta = 110*cinta_dir;
 			#BaseBox.speed = -100;
 		2:
 			$BoxTimer.wait_time = 0.75;
 			DirectionCintas(2,cinta_dir);
-			player1.fuerzaEmpujeCinta = 160*cinta_dir;
-			player2.fuerzaEmpujeCinta = -160*cinta_dir;
+			player1.fuerzaEmpujeCinta = -160*cinta_dir;
+			player2.fuerzaEmpujeCinta = 160*cinta_dir;
 			#BaseBox.speed = -115;
 		3:
 			$BoxTimer.wait_time = 0.5;
 			DirectionCintas(3,cinta_dir);
-			player1.fuerzaEmpujeCinta = 200*cinta_dir;
-			player2.fuerzaEmpujeCinta = -200*cinta_dir;
+			player1.fuerzaEmpujeCinta = -200*cinta_dir;
+			player2.fuerzaEmpujeCinta = 200*cinta_dir;
 			#BaseBox.speed = -130;
 			
 	print("Wait_time: ",$BoxTimer.wait_time);
