@@ -28,6 +28,7 @@ func stop_timer() -> void:
 	suddenDTimer.stop();
 	if SDObject_instance != null:
 		SDObject_instance.stop();
+		
 func _on_death_timer_timeout() -> void:
 	suddenTime -= 1;
 	HUD.update_time(suddenTime);
