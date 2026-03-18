@@ -61,10 +61,12 @@ func _ready():
 	onSDEvent = false;
 	
 	##Empezar animacion inicial
-	on_animation();
+	on_animation(false,true);
+	player1.position = Vector2(0,0);
+	player2.position = Vector2(0,0);
 	player1.show();
 	player2.show();
-	await anim_camera_manager.animationCameraInitPlay()
+	#await anim_camera_manager.animationCameraInitPlay();
 	##Nuevo juego
 	new_game();
 
@@ -74,10 +76,12 @@ func _input(event: InputEvent) -> void:
 		if !get_tree().paused: #Si pausamos
 			pauseMenu.open();
 	
-func on_animation():
-	HUD.hide();
-	player1.can_move = false;
-	player2.can_move = false;
+func on_animation(move := false,hiddenHud:=true):
+	if hiddenHud: HUD.hide();
+	player1.can_move = move;
+	player2.can_move = move;
+	player1.cinta_activa = move;
+	player2.cinta_activa = move;
 	
 func new_game():
 	rondaT = false;
@@ -112,8 +116,7 @@ func new_game():
 	#Start game
 	# Momento entre rondas
 	#Movimiento
-	player1.can_move = false;
-	player2.can_move = false;
+	on_animation(false,false);
 	await HUD.getReady(rondaN);
 	cinta_dir = 1;
 	#Cintas animacion
@@ -121,8 +124,7 @@ func new_game():
 	refresh_phase();
 	$Conveyor.play();
 	#Movimiento
-	player1.can_move = true;
-	player2.can_move = true;
+	on_animation(true,false);
 	$BoxTimer.start();
 	$DeathTimer.start();
 	$LightningTimer.start();
@@ -228,25 +230,25 @@ func _on_box_timer_timeout():
 	var diferencia;
 	if type == 1:
 		throwable = box_scene.instantiate();
-		diferencia = Vector2.ZERO;
+		diferencia = Vector2(0,3);
 	elif type == 2:
 		throwable = garbage_scene.instantiate();
-		diferencia = Vector2(0,-17);
+		diferencia = Vector2(0,3);
 	elif type == 3:
 		throwable = oxygenbomb_scene.instantiate();
-		diferencia = Vector2(0,-20);
+		diferencia = Vector2(0,2);
 	else:
 		return;
 	if spawn == 0:
 		if cinta_dir == 1:
-			throwable.position = $SpawnBoxesRP1.position + diferencia;
+			throwable.position = $SpawnBoxesRP1.position# + diferencia;
 		else:
-			throwable.position = $SpawnBoxesLP1.position + diferencia;
+			throwable.position = $SpawnBoxesLP1.position# + diferencia;
 	elif spawn == 1:
 		if cinta_dir == 1:
-			throwable.position = $SpawnBoxesRP2.position - diferencia;
+			throwable.position = $SpawnBoxesRP2.position + diferencia;
 		else:
-			throwable.position = $SpawnBoxesLP2.position - diferencia;
+			throwable.position = $SpawnBoxesLP2.position + diferencia;
 	## == Spawneamos la caja agregandolo a la escena:
 	add_child(throwable);
 	

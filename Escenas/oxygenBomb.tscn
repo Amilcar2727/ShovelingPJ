@@ -32,15 +32,17 @@ gravity_scale = 0.0
 script = ExtResource("1_j5142")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -20)
 scale = Vector2(0.08, 0.08)
 sprite_frames = SubResource("SpriteFrames_gf44t")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 8)
+position = Vector2(0, -12)
 shape = SubResource("RectangleShape2D_jdfon")
 
 [node name="ExplosionArea" type="Area2D" parent="."]
+position = Vector2(0, -20)
 collision_layer = 0
 collision_mask = 37
 
@@ -48,10 +50,12 @@ collision_mask = 37
 shape = SubResource("CircleShape2D_oyfp7")
 
 [node name="ExplosionSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -20)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("3_4h13d")
 
 [node name="Luces" type="Node2D" parent="."]
+position = Vector2(0, -20)
 
 [node name="PointLight2D" type="PointLight2D" parent="Luces"]
 scale = Vector2(2.5, 2.5)

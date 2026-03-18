@@ -22,17 +22,19 @@ size = Vector2(35, 45)
 z_index = 2
 collision_layer = 4
 collision_mask = 15
+mass = 1.25
 gravity_scale = 0.0
 script = ExtResource("1_2s2lk")
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
 scale = Vector2(0.08, 0.08)
 sprite_frames = SubResource("SpriteFrames_gf44t")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 0)
+position = Vector2(0, -10)
 shape = SubResource("RectangleShape2D_jdfon")
 
 [node name="BananaSound" type="AudioStreamPlayer" parent="."]

@@ -21,6 +21,7 @@ var impulso_fuerza = 500;
 var can_launch_box = true; #Timer
 # Animation y more
 var can_move := false;
+var cinta_activa := false; 
 # Banana
 var enviado = false; ##  Debug
 var onBanana:bool;
@@ -42,41 +43,46 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if !can_move:
-		return;
-	var velocity = Vector2.ZERO;	#Player's movement vector
-	if Input.is_action_pressed(shovel_action):
-		set_launch("normal");
-	if Input.is_action_pressed(shovel_up_action):
-		set_launch("especial");
-	if Input.is_action_pressed(left_action):
-		velocity.x -= 1;
-		orientation = "left";
-	if Input.is_action_pressed(right_action):
-		velocity.x += 1;
-		orientation = "right";
-	# MOVEMENT
-	if onBanana:
-		speed = 200;
-		$Banana.show();
-		$TimerBanana.start();
-		onBanana = false;
-	if velocity.length() > 0:
-		velocity = velocity.normalized() * speed;
-		$AnimatedSprite2D.play();
-	else:
-		$AnimatedSprite2D.stop();
-	#Fuerza Cintas Transportadoras
-	var cinta_push = Vector2(fuerzaEmpujeCinta, 0);
-	velocity += cinta_push;
+	if cinta_activa:
+		#Fuerza Cintas Transportadoras
+		var cinta_push = Vector2(fuerzaEmpujeCinta, 0);
+		position += cinta_push * delta;
+			
+	if can_move:
+		var velocity = Vector2.ZERO;	#Player's movement vector
+		if Input.is_action_pressed(shovel_action):
+			set_launch("normal");
+		if Input.is_action_pressed(shovel_up_action):
+			set_launch("especial");
+		if Input.is_action_pressed(left_action):
+			velocity.x -= 1;
+			orientation = "left";
+		if Input.is_action_pressed(right_action):
+			velocity.x += 1;
+			orientation = "right";
+		# MOVEMENT
+		if onBanana:
+			speed = 200;
+			$Banana.show();
+			$TimerBanana.start();
+			onBanana = false;
+		if velocity.length() > 0:
+			velocity = velocity.normalized() * speed;
+			position += velocity * delta;
+			$AnimatedSprite2D.animation = "walk";
+			$AnimatedSprite2D.play();
+		else:
+			#$AnimatedSprite2D.animation = "idle";
+			$AnimatedSprite2D.stop();
 		
-	#Flip
-	leftOrRight(orientation);
-	position += velocity * delta;
-	position = position.clamp(Vector2.ZERO, screen_size);
+		#Flip
+		leftOrRight(orientation);
+		
+	else:
+		#$AnimatedSprite2D.animation = "idle";
+		$AnimatedSprite2D.stop();
 	
-	if velocity.x!=0:
-		$AnimatedSprite2D.animation = "walk";
+	position = position.clamp(Vector2.ZERO, screen_size);
 
 func start(pos):
 	position = pos;
@@ -101,15 +107,15 @@ func _on_collision_area_body_entered(body):
 	if body.is_in_group("box"):
 		if body.last_hitter != player_id and body.last_hitter != 0 and body.linear_velocity.length() > 300:
 			if body.typeName == "Box":
-				body._on_impact(self);
 				$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
 				$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
+				body._on_impact(self);
 			elif body.typeName == "Garbage":
 				body._on_impact(self);
 			elif body.typeName == "OxygenBomb":
-				body._on_impact(self);
 				$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
 				$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
+				body._on_impact(self);
 			else:
 				pass;
 				
