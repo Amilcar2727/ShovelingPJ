@@ -21,6 +21,10 @@ func _ready():
 	_setup_physics();
 	actual_modulate = "normal";
 
+func actualizar_velocidad(nueva_vel: int):
+	if use_local_direction:
+		speed_local = nueva_vel;
+
 func _process(_delta):
 	if not hitted:
 		if use_local_direction:
@@ -48,7 +52,7 @@ func _play_random_animation():
 
 func _fix_orientation():
 	if(position.y<300):
-		$AnimatedSprite2D.scale.y = -$AnimatedSprite2D.scale.y;
+		self.scale.x = -self.scale.x;
 		
 func _setup_physics():
 	contact_monitor = true;

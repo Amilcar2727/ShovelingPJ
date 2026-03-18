@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dawdg1kralwsc" path="res://Escenas/box_ufo.tscn" id="2_1h0lo"]
 [ext_resource type="PackedScene" uid="uid://dhcx0qiyy28w2" path="res://Escenas/wall_bomb.tscn" id="2_vfrsr"]
 [ext_resource type="PackedScene" uid="uid://drvyj2fywl1yo" path="res://Escenas/garbage_ufo.tscn" id="3_b78f5"]
-[ext_resource type="PackedScene" uid="uid://cov3gytt0xnlx" path="res://Escenas/oxygenBomb.tscn" id="4_ib6wu"]
+[ext_resource type="PackedScene" uid="uid://dkhyl6ifm0cwk" path="res://Escenas/oxygenBomb_UFO.tscn" id="4_hfph0"]
 [ext_resource type="AudioStream" uid="uid://bdm6y134kpke" path="res://Sounds/Conveyor.wav" id="4_il5q1"]
 [ext_resource type="PackedScene" uid="uid://cr5nto0v1cvtd" path="res://Escenas/player.tscn" id="5_p3kdm"]
 [ext_resource type="PackedScene" uid="uid://cegydit6x7onr" path="res://Escenas/hud.tscn" id="6_5u0yh"]
@@ -372,7 +372,7 @@ process_mode = 1
 script = ExtResource("1_lp1t8")
 box_scene = ExtResource("2_1h0lo")
 garbage_scene = ExtResource("3_b78f5")
-oxygenbomb_scene = ExtResource("4_ib6wu")
+oxygenbomb_scene = ExtResource("4_hfph0")
 anim_camera_manager = NodePath("AnimationManager")
 
 [node name="BackgroundScn1" type="TextureRect" parent="."]
@@ -409,19 +409,19 @@ position = Vector2(-20, 570)
 position = Vector2(-20, 193)
 
 [node name="Floor1" parent="." instance=ExtResource("2_vfrsr")]
-position = Vector2(640, 620)
+position = Vector2(640, 605)
 rotation = 1.5708
 scale = Vector2(1, 1.77)
 collision_layer = 32
-collision_mask = 4
+collision_mask = 64
 physics_material_override = null
 
 [node name="Floor2" parent="." instance=ExtResource("2_vfrsr")]
-position = Vector2(640, 149)
+position = Vector2(640, 163)
 rotation = 1.5708
 scale = Vector2(1, 1.77)
 collision_layer = 32
-collision_mask = 4
+collision_mask = 64
 physics_material_override = null
 
 [node name="CintasAbajo" type="Node2D" parent="."]

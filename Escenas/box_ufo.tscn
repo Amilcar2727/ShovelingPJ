@@ -27,12 +27,13 @@ script = ExtResource("1_c7dtq")
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 17)
 scale = Vector2(0.06, 0.06)
 sprite_frames = SubResource("SpriteFrames_gf44t")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, -0.5)
+position = Vector2(0, 16.5)
 shape = SubResource("RectangleShape2D_jdfon")
 
 [node name="HitSound" type="AudioStreamPlayer" parent="."]
