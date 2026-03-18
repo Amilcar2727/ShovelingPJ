@@ -1,0 +1,161 @@
+[gd_scene load_steps=13 format=3 uid="uid://dkhyl6ifm0cwk"]
+
+[ext_resource type="Script" path="res://Scripts/oxygen_bomb_ufo.gd" id="1_bnrsp"]
+[ext_resource type="Texture2D" uid="uid://bug2os1l5kpnr" path="res://art/Map2_UFO/BeaconBomba.png" id="2_t1qan"]
+[ext_resource type="Texture2D" uid="uid://dh5j8y3gcbvc8" path="res://art/Map2_UFO/BeaconLaser.png" id="3_p6klg"]
+[ext_resource type="AudioStream" uid="uid://bg0primpb4ybb" path="res://Sounds/Laser.wav" id="4_46adm"]
+[ext_resource type="AudioStream" uid="uid://eff7riha1qm6" path="res://Sounds/BeaconBeep.wav" id="5_37ufw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_t1qan")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 0.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
+size = Vector2(30, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fwj67"]
+size = Vector2(180, 1440)
+
+[sub_resource type="Animation" id="Animation_rhvfu"]
+resource_name = "laser_explosion_up_down"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape2D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -1500), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../ExplosionSprite:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -1500), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_urgqw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_4uqxi"]
+resource_name = "laser_explosion_down_up"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../ExplosionSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 1500)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Luces:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 2000)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5oheo"]
+_data = {
+"RESET": SubResource("Animation_urgqw"),
+"laser_explosion_down_up": SubResource("Animation_4uqxi"),
+"laser_explosion_up_down": SubResource("Animation_rhvfu")
+}
+
+[node name="OxygenBomb" type="RigidBody2D"]
+z_index = 2
+collision_layer = 68
+collision_mask = 47
+mass = 2.0
+gravity_scale = 0.0
+script = ExtResource("1_bnrsp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 10)
+scale = Vector2(0.05, 0.05)
+sprite_frames = SubResource("SpriteFrames_gf44t")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_jdfon")
+
+[node name="ExplosionSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -1500)
+scale = Vector2(2, 1.3)
+texture = ExtResource("3_p6klg")
+
+[node name="ExplosionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 37
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea"]
+shape = SubResource("RectangleShape2D_fwj67")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ExplosionArea"]
+libraries = {
+"": SubResource("AnimationLibrary_5oheo")
+}
+
+[node name="Luces" type="Node2D" parent="."]
+
+[node name="PointLight2D" type="PointLight2D" parent="Luces"]
+scale = Vector2(2.5, 2.5)
+color = Color(1, 1, 0.101961, 1)
+energy = 2.0
+texture = ExtResource("3_p6klg")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Luces"]
+color = Color(0.713726, 0, 0.0156863, 1)
+energy = 10.0
+texture = ExtResource("3_p6klg")
+
+[node name="BoomSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_46adm")
+volume_db = -13.0
+
+[node name="Call" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_37ufw")
+volume_db = -13.0
+
+[connection signal="area_entered" from="ExplosionArea" to="." method="_on_explosion_area_area_entered"]
+[connection signal="body_entered" from="ExplosionArea" to="." method="_on_explosion_area_body_entered"]
