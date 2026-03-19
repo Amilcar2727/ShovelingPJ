@@ -20,6 +20,11 @@ var rondaT := false;
 @onready var HUD = $HUD;
 @onready var pauseMenu = $MenuPause; 
 
+# Eventos aleatorios
+@export var cow_scene:PackedScene;
+var onCow := false;
+@export var prob_cow:=0.15;
+
 # Antena
 #@export var antena_scene:PackedScene;
 #@export var palanca_scene:PackedScene;
@@ -63,7 +68,7 @@ func _ready():
 	player2.show();
 	#await anim_camera_manager.animationCameraInitPlay()
 	##Nuevo juego
-	#$Camera2D.zoom = Vector2(0.8,0.8);
+	#$Camera2D.zoom = Vector2(0.6,0.6);
 	new_game();
 
 ##Input
@@ -107,9 +112,7 @@ func new_game():
 	if suddenManager.SDObject_instance != null:
 		suddenManager.SDObject_instance.queue_free();
 	#Start game
-	# Momento entre rondas
-	player1._finish_asyncs();
-	player2._finish_asyncs();
+	
 	#Movimiento
 	on_animation(false,false);
 	DirectionCintas(cinta_vel,cinta_dir);
@@ -122,6 +125,7 @@ func new_game():
 	on_animation(true,false);
 	$BoxTimer.start();
 	$DeathTimer.start();
+	$TimerRandomEvents.start();
 
 func DirectionCintas(vel=1, dir=1):
 	cinta_vel = vel;
@@ -176,7 +180,7 @@ func apply_spawn_phase(phase:int):
 	
 	var cajas = get_tree().get_nodes_in_group("box")
 	for caja in cajas:
-		if caja.has_method("actualizar_velocidad"):
+		if caja.has_method("actualizar_velocidad") and caja.typeName != "Cow":
 			caja.actualizar_velocidad(vel_cajas);
 			
 	print("Wait_time: ",$BoxTimer.wait_time);
@@ -278,6 +282,7 @@ func on_win(player):
 	rondaT = true;
 	$DeathTimer.stop();
 	$BoxTimer.stop();
+	$TimerRandomEvents.stop();
 	player.score += 1;
 	await game_show_win("Player "+str(player.player_id));
 	if onSDEvent:
@@ -288,6 +293,9 @@ func on_win(player):
 		rondaN += 1;
 		spawn_phase = 0
 		$Conveyor.stop();
+		# Momento entre rondas
+		player1._finish_asyncs();
+		player2._finish_asyncs();
 		new_game();
 	else:
 		$Music.stop();
@@ -314,3 +322,34 @@ func finishGame():
 	GameData.score_p2 = player2.score;
 	GameData.winner = int(player2.score > player1.score) + 1;
 	get_tree().change_scene_to_file("res://Escenas/VictoryScreen.tscn");
+
+func _throwCow():
+	if onCow:
+		return;
+	onCow = true;
+	var cow_instantiate = cow_scene.instantiate();
+	cow_instantiate.cow_died.connect(_on_cow_died);
+	var spawn = randi_range(0,1);
+	var PosX:float
+	var PosY = randf_range($SpawnBoxesLP2.position.y+50, $SpawnBoxesLP1.position.y-50);
+	print("Posicion: ",PosX, PosY);
+	cow_instantiate.use_local_direction = true;
+	cow_instantiate.actualizar_velocidad(vel_cajas * 2);
+	if spawn == 0:
+		cow_instantiate.direction_local = -cinta_dir;
+		PosX = $SpawnBoxesRP1.position.x + 50;
+	elif spawn == 1:
+		cow_instantiate.direction_local = cinta_dir;
+		PosX = $SpawnBoxesLP1.position.x - 50;
+
+	cow_instantiate.position = Vector2(PosX,PosY);
+	## == Spawneamos la caja agregandolo a la escena:
+	add_child(cow_instantiate);
+
+func _on_cow_died():
+	onCow = false
+	
+func _on_timer_random_events_timeout() -> void:
+	var nr = randf();
+	if !onCow and nr <= prob_cow:
+		_throwCow();

@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://br06py7fhalcl"]
+
+[ext_resource type="Script" path="res://Scripts/cow.gd" id="1_a8tq0"]
+[ext_resource type="AudioStream" uid="uid://18qj4mbwalrh" path="res://Sounds/CowMooing1.wav" id="3_p8pap"]
+[ext_resource type="AudioStream" uid="uid://64uw14epvgly" path="res://Sounds/CowMooing2.wav" id="4_l7wgb"]
+[ext_resource type="Texture2D" uid="uid://btl60akoyitd5" path="res://art/Map2_UFO/Cow.png" id="4_lj43u"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5q8u4"]
+friction = 0.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_lj43u")
+}],
+"loop": false,
+"name": &"idle",
+"speed": 0.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
+size = Vector2(104, 64)
+
+[node name="Cow" type="RigidBody2D"]
+z_index = 2
+collision_layer = 4
+collision_mask = 15
+mass = 1.5
+physics_material_override = SubResource("PhysicsMaterial_5q8u4")
+gravity_scale = 0.0
+script = ExtResource("1_a8tq0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.15, 0.15)
+sprite_frames = SubResource("SpriteFrames_gf44t")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-10, -2)
+shape = SubResource("RectangleShape2D_jdfon")
+
+[node name="CowSound1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_p8pap")
+volume_db = -15.0
+
+[node name="CowSound2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_l7wgb")
+volume_db = -10.0

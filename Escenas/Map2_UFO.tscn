@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://cum6t55pu5daf"]
+[gd_scene load_steps=51 format=3 uid="uid://cum6t55pu5daf"]
 
 [ext_resource type="Texture2D" uid="uid://dsvkxl7s5fpy5" path="res://art/SpaceshipBackGround.png" id="1_3f6vf"]
 [ext_resource type="Script" path="res://Scripts/main2.gd" id="1_lp1t8"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://drvyj2fywl1yo" path="res://Escenas/garbage_ufo.tscn" id="3_b78f5"]
 [ext_resource type="PackedScene" uid="uid://dkhyl6ifm0cwk" path="res://Escenas/oxygenBomb_UFO.tscn" id="4_hfph0"]
 [ext_resource type="AudioStream" uid="uid://bdm6y134kpke" path="res://Sounds/Conveyor.wav" id="4_il5q1"]
+[ext_resource type="PackedScene" uid="uid://br06py7fhalcl" path="res://Escenas/cow.tscn" id="5_nog7r"]
 [ext_resource type="PackedScene" uid="uid://cr5nto0v1cvtd" path="res://Escenas/player.tscn" id="5_p3kdm"]
 [ext_resource type="PackedScene" uid="uid://cegydit6x7onr" path="res://Escenas/hud.tscn" id="6_5u0yh"]
 [ext_resource type="Script" path="res://Scripts/sudden_death_manager.gd" id="7_2l2gg"]
@@ -374,6 +375,7 @@ box_scene = ExtResource("2_1h0lo")
 garbage_scene = ExtResource("3_b78f5")
 oxygenbomb_scene = ExtResource("4_hfph0")
 anim_camera_manager = NodePath("AnimationManager")
+cow_scene = ExtResource("5_nog7r")
 
 [node name="BackgroundScn1" type="TextureRect" parent="."]
 anchors_preset = 15
@@ -628,8 +630,11 @@ script = ExtResource("15_dbyo0")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BordesMundo/Area2D4"]
 shape = SubResource("RectangleShape2D_coxxd")
 
+[node name="TimerRandomEvents" type="Timer" parent="."]
+
 [connection signal="suddenDSignal" from="." to="SuddenDeathManager" method="_on_main_sudden_d_signal"]
 [connection signal="timeout" from="BoxTimer" to="." method="_on_box_timer_timeout"]
 [connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
 [connection signal="hit" from="Player1" to="." method="_on_player_1_hit"]
 [connection signal="hit" from="Player2" to="." method="_on_player_2_hit"]
+[connection signal="timeout" from="TimerRandomEvents" to="." method="_on_timer_random_events_timeout"]

@@ -73,6 +73,7 @@ func explote(piso:="Floor1"):
 	$ExplosionArea/AnimationPlayer.play("laser_explosion_up_down");
 	await get_tree().create_timer(1.6,false).timeout; #Simula animacion
 	$ExplosionArea/AnimationPlayer.play("laser_explosion_down_up");
+	await $ExplosionArea/AnimationPlayer.animation_finished;
 	on_laser = false;
 	# Apagamos area
 	await $BoomSound.finished;
