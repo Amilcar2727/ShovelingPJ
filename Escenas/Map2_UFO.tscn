@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://cum6t55pu5daf"]
+[gd_scene load_steps=53 format=3 uid="uid://cum6t55pu5daf"]
 
 [ext_resource type="Texture2D" uid="uid://dsvkxl7s5fpy5" path="res://art/SpaceshipBackGround.png" id="1_3f6vf"]
 [ext_resource type="Script" path="res://Scripts/main2.gd" id="1_lp1t8"]
@@ -43,6 +43,8 @@
 [ext_resource type="Texture2D" uid="uid://br3sncm1ekp6d" path="res://art/Cinta/Nuevo/CintasFrames@frame_089.png" id="29_7g6re"]
 [ext_resource type="Texture2D" uid="uid://twc6pp7nqfw0" path="res://art/Cinta/ConectorCinta.png" id="30_ihc57"]
 [ext_resource type="AudioStream" uid="uid://ras058g2av4j" path="res://Sounds/Richard Wagner - The ride of the Valkyries from 'Die Walküre'.wav" id="31_cqfml"]
+[ext_resource type="AudioStream" uid="uid://bg1uvxh72sl2q" path="res://Sounds/Tp1.wav" id="34_5ca2i"]
+[ext_resource type="AudioStream" uid="uid://d0lora80gurrn" path="res://Sounds/Tp2.wav" id="35_7mgj7"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_dmmgr"]
 animations = [{
@@ -413,7 +415,7 @@ position = Vector2(-20, 193)
 [node name="Floor1" parent="." instance=ExtResource("2_vfrsr")]
 position = Vector2(640, 605)
 rotation = 1.5708
-scale = Vector2(1, 1.77)
+scale = Vector2(1, 2)
 collision_layer = 32
 collision_mask = 64
 physics_material_override = null
@@ -421,7 +423,7 @@ physics_material_override = null
 [node name="Floor2" parent="." instance=ExtResource("2_vfrsr")]
 position = Vector2(640, 163)
 rotation = 1.5708
-scale = Vector2(1, 1.77)
+scale = Vector2(1, 2)
 collision_layer = 32
 collision_mask = 64
 physics_material_override = null
@@ -545,6 +547,14 @@ volume_db = -15.0
 
 [node name="Entrada2" type="AudioStreamPlayer" parent="."]
 volume_db = -15.0
+
+[node name="Tp1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("34_5ca2i")
+volume_db = -18.0
+
+[node name="Tp2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("35_7mgj7")
+volume_db = -18.0
 
 [node name="Player1" parent="." instance=ExtResource("5_p3kdm")]
 

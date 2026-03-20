@@ -133,6 +133,9 @@ func changeColorBody(mode = 'draw'):
 	
 func _on_shoveling_area_body_entered(body):
 	if body not in (current_boxes):
+		if body is BaseBox and body.tepeando:
+			current_boxes.push_back(body);
+			return;
 		changeColorBody('clear');
 		current_boxes.push_back(body);
 		changeColorBody('draw');
@@ -140,6 +143,9 @@ func _on_shoveling_area_body_entered(body):
 func _on_shoveling_area_body_exited(body):
 	var box_index = current_boxes.find(body);
 	if box_index != -1:
+		if body is BaseBox and body.tepeando:
+			current_boxes.pop_at(box_index);
+			return;
 		changeColorBody('clear')
 		current_boxes.pop_at(box_index);
 		changeColorBody('draw')
@@ -204,10 +210,12 @@ func _on_shock():
 	$ShockSound.play();
 	$ShockElec.modulate = Color(1,1,1,1);
 	self.can_move = false;
+	self.can_launch_box = false;
 	await get_tree().create_timer(0.5,false).timeout;
 	# Regresamos a la normalidad
 	$ShockElec.modulate = Color(1,1,1,0.4);
 	self.can_move = true;
+	self.can_launch_box = true;
 	nrosShock+=1;
 	if nrosShock >= 4 or !onShock:
 		$TimerShockElec.stop();

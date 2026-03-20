@@ -39,3 +39,6 @@ shape = SubResource("RectangleShape2D_jdfon")
 [node name="HitSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_8mawp")
 volume_db = -10.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0, 16)

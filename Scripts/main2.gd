@@ -23,10 +23,10 @@ var rondaT := false;
 # Eventos aleatorios
 @export var cow_scene:PackedScene;
 var onCow := false;
-@export var prob_cow:=0.5;
+@export var prob_cow:=0.15;
 
 var onTp := false;
-@export var prob_tp:=0.75;
+@export var prob_tp:=0.15;
 # Antena
 #@export var antena_scene:PackedScene;
 #@export var palanca_scene:PackedScene;
@@ -363,7 +363,9 @@ func _tpBoxes():
 	for caja in cajas:
 		if !is_instance_valid(caja):
 			continue;
-		if caja.tepeando or caja.position.x < $SpawnBoxesLP1.position.x + 300 or caja.position.x > $SpawnBoxesRP1.position.x - 300:
+		if caja.out_screen or caja.tepeando:
+			continue;
+		if caja.position.x < $SpawnBoxesLP1.position.x + 250 or caja.position.x > $SpawnBoxesRP1.position.x - 250:
 			continue;
 		cajas_validas.append(caja);
 	#Validamos nro de cajas
@@ -372,12 +374,13 @@ func _tpBoxes():
 		return;
 	## Hacemos shuffle
 	cajas_validas.shuffle();
-	var boxes_to_tp = cajas_validas.slice(0,1);
+	var boxes_to_tp = cajas_validas.slice(0,4);
 	var velocidades_guardadas = [];
 	#Congelar cajas
 	print("Tepeando!!");
 	for caja in boxes_to_tp:
 		if is_instance_valid(caja):
+			$Tp1.play();
 			caja.ChangeColorYellow();
 			#caja.hide();
 			##Guardamos velocidades
@@ -400,8 +403,8 @@ func _tpBoxes():
 		##Calcula x entre 2 rangos:
 		var pos_actual_x = caja.position.x;
 		##Limites de pantalla y spawns
-		var left_limit = $SpawnBoxesLP1.position.x+200;
-		var right_limit = $SpawnBoxesRP1.position.x-200;
+		var left_limit = $SpawnBoxesLP1.position.x+150;
+		var right_limit = $SpawnBoxesRP1.position.x-150;
 		#Var
 		var new_x = _calcular_nueva_x(pos_actual_x, left_limit, right_limit);
 		## Caso no hay opciones validas
@@ -426,12 +429,17 @@ func _tpBoxes():
 			caja.call_deferred("set_angular_velocity",velocidad_guardada["angular"]);
 		#Aplicar TP
 		caja.freeze = false;
-		caja.ChangeColorOrig();
+		$Tp2.play();
 		caja.swapCS(); ##Prendemos CollisionShape
-		caja.tepeando = false;
 		#caja.show();
+		await get_tree().create_timer(0.25,false).timeout;
+		if !is_instance_valid(caja):
+			continue;
+		caja.ChangeColorOrig();
+		caja.tepeando = false;
+		
 	onTp = false;
-
+	
 func _calcular_nueva_x(pos_actual_x:float, left_limit:float, right_limit:float):
 	#Opciones de tp
 	var opciones := [];

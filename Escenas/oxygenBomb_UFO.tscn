@@ -108,6 +108,7 @@ collision_mask = 47
 mass = 2.0
 gravity_scale = 0.0
 script = ExtResource("1_bnrsp")
+metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, 10)
@@ -150,11 +151,14 @@ texture = ExtResource("3_p6klg")
 
 [node name="BoomSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_46adm")
-volume_db = -20.0
+volume_db = -16.0
 
 [node name="Call" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_37ufw")
 volume_db = -13.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0, 8)
 
 [connection signal="area_entered" from="ExplosionArea" to="." method="_on_explosion_area_area_entered"]
 [connection signal="body_entered" from="ExplosionArea" to="." method="_on_explosion_area_body_entered"]

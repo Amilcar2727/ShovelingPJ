@@ -13,6 +13,7 @@ var last_hitter = 0;
 var actual_modulate = "normal";
 var typeName = "Box";
 var ultima_velocidad:Vector2;
+var out_screen := false;
 
 var tepeando := false;
 # Called when the node enters the scene tree for the first time.
@@ -22,6 +23,10 @@ func _ready():
 	_fix_orientation();
 	_setup_physics();
 	actual_modulate = "normal";
+	var notifier = find_child("VisibleOnScreenNotifier2D", true, false);
+	if notifier:
+		notifier.screen_exited.connect(_on_screen_exited)
+	out_screen = false;
 
 func actualizar_velocidad(nueva_vel: int):
 	if use_local_direction:
@@ -52,6 +57,9 @@ func _on_impact(_body):
 
 func _on_explosion(_body):
 	queue_free();
+	
+func _on_screen_exited():
+	out_screen = true;
 	
 ## Helpers
 func _play_random_animation():

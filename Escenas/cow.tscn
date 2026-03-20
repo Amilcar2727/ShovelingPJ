@@ -47,3 +47,6 @@ volume_db = -15.0
 [node name="CowSound2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_l7wgb")
 volume_db = -10.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-8, 0)
