@@ -23,8 +23,10 @@ var rondaT := false;
 # Eventos aleatorios
 @export var cow_scene:PackedScene;
 var onCow := false;
-@export var prob_cow:=0.15;
+@export var prob_cow:=0.5;
 
+var onTp := false;
+@export var prob_tp:=0.75;
 # Antena
 #@export var antena_scene:PackedScene;
 #@export var palanca_scene:PackedScene;
@@ -324,6 +326,8 @@ func finishGame():
 	get_tree().change_scene_to_file("res://Escenas/VictoryScreen.tscn");
 
 func _throwCow():
+	if deathTime > 55: #Para no arrojas vacas desde el inicio xd
+		return;
 	if onCow:
 		return;
 	onCow = true;
@@ -332,7 +336,6 @@ func _throwCow():
 	var spawn = randi_range(0,1);
 	var PosX:float
 	var PosY = randf_range($SpawnBoxesLP2.position.y+50, $SpawnBoxesLP1.position.y-50);
-	print("Posicion: ",PosX, PosY);
 	cow_instantiate.use_local_direction = true;
 	cow_instantiate.actualizar_velocidad(vel_cajas * 2);
 	if spawn == 0:
@@ -348,8 +351,113 @@ func _throwCow():
 
 func _on_cow_died():
 	onCow = false
+
+func _tpBoxes():
+	if deathTime > 55: #Para no empezar a tepear desde el inicio xd
+		return;
+	if onTp:
+		return;
+	onTp = true;
+	var cajas := get_tree().get_nodes_in_group("box")
+	var cajas_validas := [];
+	for caja in cajas:
+		if !is_instance_valid(caja):
+			continue;
+		if caja.tepeando or caja.position.x < $SpawnBoxesLP1.position.x + 300 or caja.position.x > $SpawnBoxesRP1.position.x - 300:
+			continue;
+		cajas_validas.append(caja);
+	#Validamos nro de cajas
+	if cajas_validas.is_empty():
+		onTp = false;
+		return;
+	## Hacemos shuffle
+	cajas_validas.shuffle();
+	var boxes_to_tp = cajas_validas.slice(0,1);
+	var velocidades_guardadas = [];
+	#Congelar cajas
+	print("Tepeando!!");
+	for caja in boxes_to_tp:
+		if is_instance_valid(caja):
+			caja.ChangeColorYellow();
+			#caja.hide();
+			##Guardamos velocidades
+			if caja.hitted or caja.typeName == "Cow":
+				velocidades_guardadas.append({
+					"caja":caja,
+					"velocidad":caja.linear_velocity,
+					"angular":caja.angular_velocity
+				})
+			caja.freeze = true; ##Congelamos caja durante tp
+			caja.tepeando = true;
+			caja.swapCS(); ##Apagamos CollisionShape
+			
+	await get_tree().create_timer(0.5,false).timeout;
+	
+	#Tepear
+	for caja in boxes_to_tp:
+		if !is_instance_valid(caja):
+			continue;
+		##Calcula x entre 2 rangos:
+		var pos_actual_x = caja.position.x;
+		##Limites de pantalla y spawns
+		var left_limit = $SpawnBoxesLP1.position.x+200;
+		var right_limit = $SpawnBoxesRP1.position.x-200;
+		#Var
+		var new_x = _calcular_nueva_x(pos_actual_x, left_limit, right_limit);
+		## Caso no hay opciones validas
+		if new_x == null:
+			print("No hay opciones validas");
+			new_x = ($SpawnBoxesLP1.position.x + $SpawnBoxesRP1.position.x)/2;
+		
+		##Buscamos velocidades guardadas
+		var velocidad_guardada = null;
+		if caja.hitted or caja.typeName == "Cow":
+			for v in velocidades_guardadas:
+				if v["caja"] == caja:
+					velocidad_guardada = v
+					break;
+		
+		caja.tepeando = true;
+		var new_pos = Vector2(new_x, caja.global_position.y);
+		caja.call_deferred("set_global_position", new_pos);
+		##Restauramos vel
+		if velocidad_guardada and (caja.hitted or caja.typeName == "Cow"):
+			caja.call_deferred("set_linear_velocity",velocidad_guardada["velocidad"]);
+			caja.call_deferred("set_angular_velocity",velocidad_guardada["angular"]);
+		#Aplicar TP
+		caja.freeze = false;
+		caja.ChangeColorOrig();
+		caja.swapCS(); ##Prendemos CollisionShape
+		caja.tepeando = false;
+		#caja.show();
+	onTp = false;
+
+func _calcular_nueva_x(pos_actual_x:float, left_limit:float, right_limit:float):
+	#Opciones de tp
+	var opciones := [];
+	## Opciones izquierda
+	var left_min = left_limit;
+	var left_max = pos_actual_x - 100;
+	if left_max > left_min:
+		opciones.append(randf_range(left_min, left_max));
+	## Opciones derecha
+	var right_min = pos_actual_x + 100;
+	var right_max = right_limit;
+	if right_max > right_min:
+		opciones.append(randf_range(right_min, right_max));
+
+	## Caso no hay opciones validas
+	if opciones.is_empty():
+		return null;
+		
+	return opciones[randi() % opciones.size()];
 	
 func _on_timer_random_events_timeout() -> void:
-	var nr = randf();
-	if !onCow and nr <= prob_cow:
-		_throwCow();
+	if !onCow:
+		var nr = randf();
+		if nr <= prob_cow:
+			_throwCow();
+	if !onTp:
+		var nr = randf();
+		if nr <= prob_tp:
+			_tpBoxes();

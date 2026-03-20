@@ -13,6 +13,8 @@ var last_hitter = 0;
 var actual_modulate = "normal";
 var typeName = "Box";
 var ultima_velocidad:Vector2;
+
+var tepeando := false;
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_to_group("box");
@@ -39,9 +41,15 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 func _on_body_entered(_body):
 	hitted = true;
 	
+func swapCS():
+	if $CollisionShape2D.disabled == true:
+		$CollisionShape2D.call_deferred("set_disabled",false);
+	else:
+		$CollisionShape2D.call_deferred("set_disabled",true);
+	
 func _on_impact(_body):
 	pass;
-	
+
 func _on_explosion(_body):
 	queue_free();
 	
@@ -109,4 +117,7 @@ func ChangeColorRed():
 func ChangeColorBlue():
 	$AnimatedSprite2D.modulate = Color(0, 0, 0.75, 1);
 	actual_modulate = "blue";
+func ChangeColorYellow():
+	$AnimatedSprite2D.modulate = Color(1, 1, 0.15, 1);
+	actual_modulate = "normal";
 	

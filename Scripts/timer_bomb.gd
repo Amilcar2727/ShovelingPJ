@@ -7,6 +7,7 @@ var last_hitter = 0;
 var hitted = false;
 var typeName = "TimeBomb";
 signal whos_last_hitter(last_hitter);
+var tepeando = false;
 
 func _on_timer_timeout() -> void:
 	time_left-=1;

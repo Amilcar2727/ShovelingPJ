@@ -21,11 +21,9 @@ func ChangeColorBlue():
 	actual_modulate = "blue";
 
 func _on_body_entered(_body):
-	print("_on_body_entered:", _body);
 	##Si el cuerpo choca con el jugador, hiteable, o piso, explota
 	if (_body.name in ["Floor1", "Floor2"]) and _body != self:
 		var piso = _body.name;
-		print("Impacto en ",piso);
 		if hitted:
 			explote(piso);
 		else:
@@ -36,7 +34,6 @@ func explote(piso:="Floor1"):
 	if exploting:
 		return;
 	exploting = true;
-	print("EXPLOTANDO!!");
 	# Apagamos el area de una vez para evitar fuerzas adicionales
 	$CollisionShape2D.call_deferred("set_disabled",true);
 	set_deferred("linear_velocity",Vector2.ZERO); #Lo detenemos
