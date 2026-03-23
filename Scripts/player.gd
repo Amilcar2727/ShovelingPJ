@@ -172,6 +172,9 @@ func set_launch(mode:String):
 func launch_box(impulso:float, angulo:float):
 	## Caja por lanzar
 	var current_box = current_boxes[len(current_boxes)-1];
+	if current_box.has_method("explote"):
+		if current_box.exploting:
+			return;
 	## Este hiteado o no
 	current_box.hitted = true;
 
@@ -180,7 +183,11 @@ func launch_box(impulso:float, angulo:float):
 	var anguloF = deg_to_rad(angulo);
 	var vector_fuerza = Vector2(cos(anguloF),sin(anguloF)) * impulso;
 	if current_box.has_method("aplicar_impulso_custom"):
-		current_box.aplicar_impulso_custom(vector_fuerza);
+		if current_box.inmortal:
+			current_box.aplicar_impulso_custom(vector_fuerza * 5);
+		else:
+			current_box.linear_velocity = Vector2.ZERO;
+			current_box.apply_impulse(vector_fuerza);
 	else:
 		current_box.linear_velocity = Vector2.ZERO;
 		current_box.apply_impulse(vector_fuerza);

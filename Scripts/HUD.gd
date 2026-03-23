@@ -37,15 +37,6 @@ func show_sudden_death():
 	await get_tree().create_timer(1.5,false).timeout;
 	messageLabel.hide();
 	
-func show_game_over():
-	show_message("Time-Out!");
-	# Wait until the MessageTimer has counted down.
-	await $MessageTimer.timeout;
-	messageLabel.text = "Shoveling Project!";
-	# Make a one-shot timer and wait for it to finish.
-	await get_tree().create_timer(3.0,false).timeout;
-	start_game.emit();
-	
 func show_game_won(player:String):
 	messageLabel.show();
 	var msgWinner = str(player) + " has won!";

@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8kj4rc65x5tm"]
+[gd_scene load_steps=13 format=3 uid="uid://c8kj4rc65x5tm"]
 
 [ext_resource type="Script" path="res://Scripts/cow.gd" id="1_phibi"]
 [ext_resource type="Texture2D" uid="uid://b3wry6n0a2fr4" path="res://art/Map2_UFO/Cyborg_cow.png" id="2_823vd"]
 [ext_resource type="AudioStream" uid="uid://18qj4mbwalrh" path="res://Sounds/CowMooing1.wav" id="3_umwau"]
 [ext_resource type="AudioStream" uid="uid://64uw14epvgly" path="res://Sounds/CowMooing2.wav" id="4_l0dg5"]
+[ext_resource type="AudioStream" uid="uid://bxmmfilgw7ram" path="res://Sounds/PortalCowSound.wav" id="5_102qw"]
+[ext_resource type="Texture2D" uid="uid://3qjubqhn3mwe" path="res://art/Map2_UFO/PortalCyborgCow.png" id="5_wvo75"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5q8u4"]
 friction = 0.0
@@ -23,14 +25,140 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
 size = Vector2(104, 64)
 
+[sub_resource type="Animation" id="Animation_jx2xf"]
+resource_name = "Spawn_Cyborg"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Portal:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Portal:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0.3, 0.4), Vector2(0.3, 0.4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Portal:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.633333, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimatedSprite2D:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.633333, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "audio"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PortalSound")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("5_102qw")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/4/use_blend = true
+
+[sub_resource type="Animation" id="Animation_lg1gm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Portal:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Portal:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.3, 0.4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Portal:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimatedSprite2D:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pqbx6"]
+_data = {
+"RESET": SubResource("Animation_lg1gm"),
+"Spawn_Cyborg": SubResource("Animation_jx2xf")
+}
+
 [node name="Cyborg_Cow" type="RigidBody2D"]
 z_index = 2
+position = Vector2(202, 117)
 collision_layer = 4
 collision_mask = 63
 mass = 1.5
 physics_material_override = SubResource("PhysicsMaterial_5q8u4")
 gravity_scale = 0.0
 script = ExtResource("1_phibi")
+metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
@@ -49,5 +177,18 @@ volume_db = -15.0
 stream = ExtResource("4_l0dg5")
 volume_db = -10.0
 
+[node name="PortalSound" type="AudioStreamPlayer" parent="."]
+volume_db = -15.0
+
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(-8, 0)
+
+[node name="Portal" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(0.3, 0.4)
+texture = ExtResource("5_wvo75")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_pqbx6")
+}

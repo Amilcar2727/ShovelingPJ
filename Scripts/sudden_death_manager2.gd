@@ -4,7 +4,7 @@ extends Node
 @onready var HUD:CanvasLayer = $"../HUD";
 @onready var WallBomb1:StaticBody2D = $"../WallBomb1";
 @onready var WallBomb2:StaticBody2D = $"../WallBomb2";
-const timeC :int = 20;
+const timeC :int = 30;
 var suddenTime := timeC;
 
 @export var SDObject_scene:PackedScene;
@@ -27,7 +27,11 @@ func delete()->void:
 		
 func _on_death_timer_timeout() -> void:
 	suddenTime -= 1;
-	HUD.update_time(suddenTime);
+	if(suddenTime == 10):
+		if get_parent().has_method("_throwCow"):
+			vaca_mutante = get_parent()._throwCow(true);
+		if SDObject_instance.has_method("changeWaitTime"):
+			SDObject_instance.changeWaitTime(0.5);
 	if(suddenTime == 0):
 		suddenDTimer.stop();
 		print("Terminó el SD");
@@ -35,7 +39,7 @@ func _on_death_timer_timeout() -> void:
 ## Aqui llega la señal del main
 func _on_main_sudden_d_signal() -> void:
 	suddenTime = timeC;
-	HUD.update_time(suddenTime);
+	HUD.update_time("First On Die!");
 	# Aparecemos portal
 	SDObject_instance = spawnObject(SDObject_scene, Vector2(0,0));
 	get_tree().current_scene.add_child(SDObject_instance);

@@ -251,11 +251,6 @@ func _on_box_timer_timeout():
 			throwable.position = $SpawnBoxesLP2.position + diferencia;
 	## == Spawneamos la caja agregandolo a la escena:
 	add_child(throwable);
-	
-func game_over_by_time():
-	HUD.show_game_over();
-	$BoxTimer.stop();
-	$Music.stop();
 
 func _makeDark():
 	onDark = true;

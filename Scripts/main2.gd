@@ -223,13 +223,6 @@ func _on_box_timer_timeout():
 	
 	## == Spawneamos la caja agregandolo a la escena:
 	add_child(throwable);
-	
-func game_over_by_time():
-	#AnimacionAntenaImpacto();
-	HUD.show_game_over();
-	$BoxTimer.stop();
-	$Music.stop();
-	#$LaserSound.play();
 
 func refresh_phase():
 	var new_phase = calculate_spawn_phase(deathTime);
@@ -246,6 +239,8 @@ func _on_death_timer_timeout():
 	# Fases de ronda
 	refresh_phase();
 	if(deathTime == 0):	#SuddenDeath
+		player1.fuerzaEmpujeCinta = -250*cinta_dir;
+		player2.fuerzaEmpujeCinta = 250*cinta_dir;
 		HUD.show_sudden_death();
 		$DeathTimer.stop();
 		$BoxTimer.stop();
@@ -325,7 +320,7 @@ func finishGame():
 func _throwCow(mutant:=false):
 	if deathTime > 55: #Para no arrojas vacas desde el inicio xd
 		return;
-	if onCow:
+	if onCow and !mutant:
 		return;
 	onCow = true;
 	var cow_instantiate;
@@ -359,16 +354,16 @@ func _throwCow(mutant:=false):
 	if mutant:
 		PosX = $SpawnBoxesRP1.position.x/2;
 	cow_instantiate.position = Vector2(PosX,PosY);
-	if mutant:
-		var anguloF;
-		var vector_fuerza;
-		if spawn == 0:
-			anguloF = deg_to_rad(145);
-			vector_fuerza = Vector2(sin(anguloF),cos(anguloF)).normalized() * 800;
-		else:
-			anguloF = deg_to_rad(45);
-			vector_fuerza = Vector2(sin(anguloF),cos(anguloF)).normalized() * 800;
-		cow_instantiate.aplicar_impulso_custom(vector_fuerza);
+	#if mutant:
+		#var anguloF;
+		#var vector_fuerza;
+		#if spawn == 0:
+			#anguloF = deg_to_rad(145);
+			#vector_fuerza = Vector2(sin(anguloF),cos(anguloF)).normalized() * 800;
+		#else:
+			#anguloF = deg_to_rad(45);
+			#vector_fuerza = Vector2(sin(anguloF),cos(anguloF)).normalized() * 800;
+		#cow_instantiate.aplicar_impulso_custom(vector_fuerza);
 	## == Spawneamos la caja agregandolo a la escena:
 	add_child(cow_instantiate);
 	return cow_instantiate;
@@ -393,6 +388,9 @@ func _tpBoxes():
 			continue;
 		if caja.has_method("explote"):
 			if caja.exploting:
+				continue;
+		if caja.typeName == "Cow":
+			if caja.on_animation:
 				continue;
 		cajas_validas.append(caja);
 	#Validamos nro de cajas
@@ -490,7 +488,7 @@ func _calcular_nueva_x(pos_actual_x:float, left_limit:float, right_limit:float):
 func _on_timer_random_events_timeout() -> void:
 	if !onCow:
 		var nr = randf();
-		if nr <= prob_cow and deathTime > 1:
+		if nr <= prob_cow and deathTime > 2:
 			_throwCow();
 	if !onTp:
 		var nr = randf();

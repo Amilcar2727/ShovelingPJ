@@ -5,18 +5,28 @@ var _ultimo_rebote := 0.0
 var _cooldown_rebote := 0.1  # segundos
 var vel_objetivo: Vector2
 var impulso_extra := Vector2.ZERO
+var on_animation:=false;
 
 func _ready():
 	typeName = "Cow"
 	super()
+	if inmortal:
+		freeze = true;
+		on_animation = true;
+		$AnimationPlayer.play("Spawn_Cyborg");
+		await $AnimationPlayer.animation_finished;
+		freeze = false;
+		on_animation = false;
 	use_local_direction = true;
 	angular_velocity = 3;
 	angular_damp = 0;
 	angular_damp_mode = RigidBody2D.DAMP_MODE_REPLACE
 	vel_objetivo = Vector2(randf_range(-200,200), randf_range(-200,200))
 	tree_exiting.connect(_on_tree_exiting);
-	$CowSound1.play();
-	
+	if inmortal:
+		$CowSound2.play();
+	else:
+		$CowSound1.play();
 func _process(delta):
 	if inmortal:
 		return
@@ -50,7 +60,7 @@ func _integrate_forces(state: PhysicsDirectBodyState2D):
 		# 💥 rebote basado en TU velocidad, no la del motor
 		vel_objetivo = vel_objetivo.bounce(normal)
 		# mantener intensidad constante
-		vel_objetivo = vel_objetivo.normalized() * 800
+		vel_objetivo = vel_objetivo.normalized() * 900
 		# Aplicar la nueva velocidad
 		state.linear_velocity = vel_objetivo
 		# Pequeño efecto angular para más caos
