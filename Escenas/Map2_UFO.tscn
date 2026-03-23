@@ -10,12 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://br06py7fhalcl" path="res://Escenas/cow.tscn" id="5_nog7r"]
 [ext_resource type="PackedScene" uid="uid://cr5nto0v1cvtd" path="res://Escenas/player.tscn" id="5_p3kdm"]
 [ext_resource type="PackedScene" uid="uid://cegydit6x7onr" path="res://Escenas/hud.tscn" id="6_5u0yh"]
-[ext_resource type="Script" path="res://Scripts/sudden_death_manager.gd" id="7_2l2gg"]
+[ext_resource type="PackedScene" uid="uid://c8kj4rc65x5tm" path="res://Escenas/Cyborg_cow.tscn" id="6_ol4to"]
 [ext_resource type="Texture2D" uid="uid://dx32iyeartnn5" path="res://art/Cinta/Nuevo/CintasFrames@frame_001.png" id="7_od33j"]
-[ext_resource type="PackedScene" uid="uid://dq71x3kfsmduk" path="res://Escenas/TimerBomb.tscn" id="8_ev33h"]
 [ext_resource type="Texture2D" uid="uid://dedkbuadhs8yn" path="res://art/Cinta/Nuevo/CintasFrames@frame_005.png" id="8_xhjrt"]
 [ext_resource type="Texture2D" uid="uid://dh7dh0c3kq4si" path="res://art/Cinta/Nuevo/CintasFrames@frame_009.png" id="9_ar2ay"]
-[ext_resource type="PackedScene" uid="uid://bm6sgbkj7eu12" path="res://Escenas/DivisorBomb.tscn" id="9_h2wy7"]
 [ext_resource type="AudioStream" uid="uid://claiwdfhckttv" path="res://Sounds/fighting.wav" id="10_kvv1c"]
 [ext_resource type="Texture2D" uid="uid://carx07cr00662" path="res://art/Cinta/Nuevo/CintasFrames@frame_013.png" id="10_rbgi3"]
 [ext_resource type="Texture2D" uid="uid://ccpyojg0fxmc1" path="res://art/Cinta/Nuevo/CintasFrames@frame_017.png" id="11_r788f"]
@@ -45,6 +43,8 @@
 [ext_resource type="AudioStream" uid="uid://ras058g2av4j" path="res://Sounds/Richard Wagner - The ride of the Valkyries from 'Die Walküre'.wav" id="31_cqfml"]
 [ext_resource type="AudioStream" uid="uid://bg1uvxh72sl2q" path="res://Sounds/Tp1.wav" id="34_5ca2i"]
 [ext_resource type="AudioStream" uid="uid://d0lora80gurrn" path="res://Sounds/Tp2.wav" id="35_7mgj7"]
+[ext_resource type="Script" path="res://Scripts/sudden_death_manager2.gd" id="38_jnmya"]
+[ext_resource type="PackedScene" uid="uid://b4bgrygy1um2p" path="res://Escenas/PortalBeacons.tscn" id="39_4ceel"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_dmmgr"]
 animations = [{
@@ -378,6 +378,7 @@ garbage_scene = ExtResource("3_b78f5")
 oxygenbomb_scene = ExtResource("4_hfph0")
 anim_camera_manager = NodePath("AnimationManager")
 cow_scene = ExtResource("5_nog7r")
+cyborg_cow_scene = ExtResource("6_ol4to")
 
 [node name="BackgroundScn1" type="TextureRect" parent="."]
 anchors_preset = 15
@@ -565,8 +566,8 @@ player_id = 2
 [node name="HUD" parent="." instance=ExtResource("6_5u0yh")]
 
 [node name="SuddenDeathManager" type="Node" parent="."]
-script = ExtResource("7_2l2gg")
-SDObject_scene = ExtResource("8_ev33h")
+script = ExtResource("38_jnmya")
+SDObject_scene = ExtResource("39_4ceel")
 
 [node name="SuddenDeathTimer" type="Timer" parent="."]
 
@@ -575,10 +576,6 @@ position = Vector2(-9, 360)
 
 [node name="WallBomb2" parent="." instance=ExtResource("2_vfrsr")]
 position = Vector2(1289, 360)
-
-[node name="Divisor" parent="." instance=ExtResource("9_h2wy7")]
-position = Vector2(640, 384)
-collision_mask = 8
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(640, 360)

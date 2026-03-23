@@ -1,32 +1,52 @@
-extends StaticBody2D
+extends Node2D
 
-@export var tiempo=10;
+@export var tiempo:=10;
+@export var punto_init := Vector2(0,0);
+@export var punto_final := Vector2(120,0);
+@export var rotar:=false;
+
 var velocidad:float;
+var path:Path2D;
+var path_follow:PathFollow2D;
+var sprite:Sprite2D;
 var alcanzoDestino = false;
-var camino:PathFollow2D;
-var apunta_jugador:int;
+var distanciaT:float;
+signal finished;
+
 func _ready():
-	apunta_jugador = randi_range(1,2);
-	if apunta_jugador == 1:
-		scale.y = 1;
-	else:
-		scale.y = -1;
-	var path = $Path2D.curve;
-	path.set_point_position(0,Vector2(position.x,position.y));
-	path.set_point_position(1,Vector2(position.x+240,position.y));
-	camino = $Path2D/PathFollow2D;
-	velocidad = $Path2D.curve.get_baked_length()/tiempo;
+	path = $Path2D
+	path_follow = $Path2D/PathFollow2D;
+	sprite = $Path2D/PathFollow2D/Sprite2D;
+	_set_path();
 	hide();
+	
+func _set_path():
+	var new_curve = Curve2D.new();
+	new_curve.add_point(punto_init);
+	new_curve.add_point(punto_final);
+	path.curve = new_curve;
+	distanciaT = new_curve.get_baked_length();
+	velocidad = distanciaT/tiempo;
+	path_follow.progress = 0;
+	path_follow.rotates = rotar;
+	
+	if punto_final.x < punto_init.x:
+		sprite.flip_h = true;
+	else:
+		sprite.flip_h = false;
+	
 func _process(delta):
 	if not alcanzoDestino:
-		DeathLaser(delta);
-func DeathLaser(delta):
-	camino.progress_ratio += velocidad*delta/$Path2D.curve.get_baked_length();
-	position = camino.position
+		mover(delta);
+		
+func mover(delta):
+	path_follow.progress += velocidad * delta;
 	show();
-	if camino.progress_ratio >= 0.98:
+	if path_follow.progress_ratio >= 0.99:
 		alcanzoDestino = true;
-		var circulo = $Circulo
-		circulo.iniciar_circulo(12);
-func rotar():
-	scale.y = -scale.y;
+		finished.emit();
+		
+func resetear():
+	alcanzoDestino = false;
+	path_follow.progress = 0;
+	hide();

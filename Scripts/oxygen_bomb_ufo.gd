@@ -2,6 +2,7 @@ extends BaseBox
 
 var exploting := false;
 var on_laser := false;
+var on_SD := false;
 
 func _ready():
 	typeName = "OxygenBomb"
@@ -12,6 +13,8 @@ func _ready():
 	on_laser = false;
 	$Luces.visible = false;
 	super()
+	if on_SD:
+		self.set_collision_mask_value(5,true);
 	
 func ChangeColorRed():
 	$AnimatedSprite2D.modulate = Color(1, 0.1, 0.1, 1);
@@ -99,4 +102,3 @@ func _on_explosion_area_area_entered(area: Area2D) -> void:
 	var rootNode = area.get_parent();
 	if rootNode.has_method("_on_explosion") and rootNode != self:
 		rootNode._on_explosion(self);
-	

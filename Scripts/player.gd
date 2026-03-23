@@ -177,10 +177,13 @@ func launch_box(impulso:float, angulo:float):
 
 	current_box.last_hitter = player_id;
 	current_box.set_collision_mask_value(1,true);
-	current_box.linear_velocity = Vector2.ZERO;
 	var anguloF = deg_to_rad(angulo);
 	var vector_fuerza = Vector2(cos(anguloF),sin(anguloF)) * impulso;
-	current_box.apply_impulse(vector_fuerza);
+	if current_box.has_method("aplicar_impulso_custom"):
+		current_box.aplicar_impulso_custom(vector_fuerza);
+	else:
+		current_box.linear_velocity = Vector2.ZERO;
+		current_box.apply_impulse(vector_fuerza);
 	$ShovelSound.play();
 			
 func _on_timer_timeout():

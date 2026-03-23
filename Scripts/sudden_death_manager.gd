@@ -62,7 +62,6 @@ func _on_main_sudden_d_signal() -> void:
 
 func a_little_push():
 	var objeto = spawnObject(SDObject_instance,SDObject_scene,Vector2(1290, 384));
-	add_child(objeto);
 	SDObject_instance = objeto;
 	objeto.whos_last_hitter.connect(on_bomba_boom);
 	if objeto is RigidBody2D:
@@ -78,6 +77,7 @@ func a_little_push():
 		objeto.last_hitter = ultimo_hitter; #Actualizamos la bomba con la info
 		
 		objeto.apply_impulse(Vector2(vector_fuerza));
+		add_child(objeto);
 
 func on_bomba_boom(last_hitter):
 	ultimo_hitter = last_hitter;

@@ -6,10 +6,10 @@ extends Node
 @export var anim_camera_manager:Node;
 @export var prob_apagon:=0.15;
 ##Para cambio de direccion de las cintas
-@export var cambio_dir_prob := 0.15;
-var cambio_dir_prob_actual := 0.15;
+@export var cambio_dir_prob := 0.12;
+var cambio_dir_prob_actual := 0.12;
 var prob_min:=0.03;
-var prob_incremento :=0.01;
+var prob_incremento :=0.005;
 
 var cinta_dir := 1;
 var cinta_vel := 7;
@@ -202,21 +202,21 @@ func apply_spawn_phase(phase:int):
 			#DirectionCintas(7);
 			player1.fuerzaEmpujeCinta = -110*cinta_dir;
 			player2.fuerzaEmpujeCinta = -110*cinta_dir;
-			BaseBox.speed_all = 100;
+			BaseBox.speed_all = 110;
 		2:
 			$BoxTimer.wait_time = 0.75;
 			prob_apagon = 0.10;
 			DirectionCintas(9,cinta_dir);
 			player1.fuerzaEmpujeCinta = -160*cinta_dir;
 			player2.fuerzaEmpujeCinta = -160*cinta_dir;
-			BaseBox.speed_all = 115;
+			BaseBox.speed_all = 125;
 		3:
 			$BoxTimer.wait_time = 0.5;
 			prob_apagon = 0.15;
 			DirectionCintas(12,cinta_dir);
 			player1.fuerzaEmpujeCinta = -200*cinta_dir;
 			player2.fuerzaEmpujeCinta = -200*cinta_dir;
-			BaseBox.speed_all = 130;
+			BaseBox.speed_all = 140;
 			
 	print("Wait_time: ",$BoxTimer.wait_time);
 	print("Prob_apagon: ",prob_apagon);
@@ -264,6 +264,7 @@ func _makeDark():
 	await $Background/AnimationPlayer.animation_finished;
 	player1._on_dark(true);
 	player2._on_dark(true);
+	$DarkTimer.wait_time = randi_range(2,4);
 	$DarkTimer.start();
 
 func refresh_phase():
@@ -302,10 +303,10 @@ func on_win(player):
 	$BoxTimer.stop();
 	$LightningTimer.stop();
 	player.score += 1;
-	await game_show_win("Player "+str(player.player_id));
 	if onSDEvent:
 		suddenManager.stop_timer();
 		onSDEvent = false;
+	await game_show_win("Player "+str(player.player_id));
 	#Aumenta en 1 a las rondas
 	if player1.score != 3 && player2.score != 3:
 		rondaN += 1;

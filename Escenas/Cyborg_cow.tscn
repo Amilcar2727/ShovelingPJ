@@ -1,15 +1,19 @@
-[gd_scene load_steps=7 format=3 uid="uid://br06py7fhalcl"]
+[gd_scene load_steps=8 format=3 uid="uid://c8kj4rc65x5tm"]
 
-[ext_resource type="Script" path="res://Scripts/cow.gd" id="1_a8tq0"]
-[ext_resource type="AudioStream" uid="uid://18qj4mbwalrh" path="res://Sounds/CowMooing1.wav" id="3_p8pap"]
-[ext_resource type="AudioStream" uid="uid://64uw14epvgly" path="res://Sounds/CowMooing2.wav" id="4_l7wgb"]
-[ext_resource type="Texture2D" uid="uid://btl60akoyitd5" path="res://art/Map2_UFO/Cow.png" id="4_lj43u"]
+[ext_resource type="Script" path="res://Scripts/cow.gd" id="1_phibi"]
+[ext_resource type="Texture2D" uid="uid://b3wry6n0a2fr4" path="res://art/Map2_UFO/Cyborg_cow.png" id="2_823vd"]
+[ext_resource type="AudioStream" uid="uid://18qj4mbwalrh" path="res://Sounds/CowMooing1.wav" id="3_umwau"]
+[ext_resource type="AudioStream" uid="uid://64uw14epvgly" path="res://Sounds/CowMooing2.wav" id="4_l0dg5"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5q8u4"]
+friction = 0.0
+bounce = 1.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_lj43u")
+"texture": ExtResource("2_823vd")
 }],
 "loop": false,
 "name": &"idle",
@@ -19,13 +23,14 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
 size = Vector2(104, 64)
 
-[node name="Cow" type="RigidBody2D"]
+[node name="Cyborg_Cow" type="RigidBody2D"]
 z_index = 2
 collision_layer = 4
-collision_mask = 15
+collision_mask = 63
 mass = 1.5
+physics_material_override = SubResource("PhysicsMaterial_5q8u4")
 gravity_scale = 0.0
-script = ExtResource("1_a8tq0")
+script = ExtResource("1_phibi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.15, 0.15)
@@ -37,11 +42,11 @@ position = Vector2(-10, -2)
 shape = SubResource("RectangleShape2D_jdfon")
 
 [node name="CowSound1" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_p8pap")
+stream = ExtResource("3_umwau")
 volume_db = -15.0
 
 [node name="CowSound2" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_l7wgb")
+stream = ExtResource("4_l0dg5")
 volume_db = -10.0
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

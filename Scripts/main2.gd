@@ -22,6 +22,7 @@ var rondaT := false;
 
 # Eventos aleatorios
 @export var cow_scene:PackedScene;
+@export var cyborg_cow_scene:PackedScene;
 var onCow := false;
 @export var prob_cow:=0.15;
 
@@ -58,7 +59,6 @@ func _ready():
 	#Nro ronda
 	rondaN = 1;
 	#SuddenDeath
-	suddenManager.sdFinish.connect(_on_sdFinish);
 	onSDEvent = false;
 	#empezarAntena = false;
 	DirectionCintas(cinta_vel,cinta_dir);
@@ -112,7 +112,8 @@ func new_game():
 	onSDEvent = false;
 	suddenManager.stop_timer();
 	if suddenManager.SDObject_instance != null:
-		suddenManager.SDObject_instance.queue_free();
+		get_tree().call_group("box","queue_free");
+		suddenManager.delete();
 	#Start game
 	
 	#Movimiento
@@ -249,6 +250,7 @@ func _on_death_timer_timeout():
 		$DeathTimer.stop();
 		$BoxTimer.stop();
 		get_tree().call_group("box","queue_free");
+		await get_tree().process_frame;
 		onSDEvent = true;
 		suddenDSignal.emit();
 		#palanca_instancia.get_node("CollisionShape2D").disabled = true;
@@ -286,10 +288,11 @@ func on_win(player):
 	$BoxTimer.stop();
 	$TimerRandomEvents.stop();
 	player.score += 1;
-	await game_show_win("Player "+str(player.player_id));
 	if onSDEvent:
 		suddenManager.stop_timer();
 		onSDEvent = false;
+		
+	await game_show_win("Player "+str(player.player_id));
 	#Aumenta en 1 a las rondas
 	if player1.score != 3 && player2.score != 3:
 		rondaN += 1;
@@ -311,12 +314,6 @@ func _on_player_2_hit():
 	#P2 died
 	player2._on_dead();
 	on_win(player1);
-
-func _on_sdFinish(last_hitter):
-	if last_hitter == 1:
-		_on_player_2_hit();
-	elif last_hitter == 2:
-		_on_player_1_hit();
 	
 func finishGame():
 	print("Terminando juego");
@@ -325,29 +322,56 @@ func finishGame():
 	GameData.winner = int(player2.score > player1.score) + 1;
 	get_tree().change_scene_to_file("res://Escenas/VictoryScreen.tscn");
 
-func _throwCow():
+func _throwCow(mutant:=false):
 	if deathTime > 55: #Para no arrojas vacas desde el inicio xd
 		return;
 	if onCow:
 		return;
 	onCow = true;
-	var cow_instantiate = cow_scene.instantiate();
+	var cow_instantiate;
+	if mutant:
+		cow_instantiate = cyborg_cow_scene.instantiate();
+		cow_instantiate.inmortal = true;
+		print("Instanciando vaca cyborg");
+	else:
+		cow_instantiate = cow_scene.instantiate();
+		print("Instanciando vaca normal");
 	cow_instantiate.cow_died.connect(_on_cow_died);
 	var spawn = randi_range(0,1);
 	var PosX:float
-	var PosY = randf_range($SpawnBoxesLP2.position.y+50, $SpawnBoxesLP1.position.y-50);
+	var PosY:float
+	
+	PosY = randf_range($SpawnBoxesLP2.position.y+50, $SpawnBoxesLP1.position.y-50);
+		
 	cow_instantiate.use_local_direction = true;
-	cow_instantiate.actualizar_velocidad(vel_cajas * 2);
+	if mutant:
+		cow_instantiate.hitted = true;
+	else:
+		cow_instantiate.actualizar_velocidad(vel_cajas * 2);
 	if spawn == 0:
-		cow_instantiate.direction_local = -cinta_dir;
-		PosX = $SpawnBoxesRP1.position.x + 50;
+		if not mutant:
+			cow_instantiate.direction_local = -cinta_dir;
+			PosX = $SpawnBoxesRP1.position.x + 50;
 	elif spawn == 1:
-		cow_instantiate.direction_local = cinta_dir;
-		PosX = $SpawnBoxesLP1.position.x - 50;
-
+		if not mutant:
+			cow_instantiate.direction_local = cinta_dir;
+			PosX = $SpawnBoxesLP1.position.x - 50;
+	if mutant:
+		PosX = $SpawnBoxesRP1.position.x/2;
 	cow_instantiate.position = Vector2(PosX,PosY);
+	if mutant:
+		var anguloF;
+		var vector_fuerza;
+		if spawn == 0:
+			anguloF = deg_to_rad(145);
+			vector_fuerza = Vector2(sin(anguloF),cos(anguloF)).normalized() * 800;
+		else:
+			anguloF = deg_to_rad(45);
+			vector_fuerza = Vector2(sin(anguloF),cos(anguloF)).normalized() * 800;
+		cow_instantiate.aplicar_impulso_custom(vector_fuerza);
 	## == Spawneamos la caja agregandolo a la escena:
 	add_child(cow_instantiate);
+	return cow_instantiate;
 
 func _on_cow_died():
 	onCow = false
@@ -367,6 +391,9 @@ func _tpBoxes():
 			continue;
 		if caja.position.x < $SpawnBoxesLP1.position.x + 250 or caja.position.x > $SpawnBoxesRP1.position.x - 250:
 			continue;
+		if caja.has_method("explote"):
+			if caja.exploting:
+				continue;
 		cajas_validas.append(caja);
 	#Validamos nro de cajas
 	if cajas_validas.is_empty():
@@ -463,7 +490,7 @@ func _calcular_nueva_x(pos_actual_x:float, left_limit:float, right_limit:float):
 func _on_timer_random_events_timeout() -> void:
 	if !onCow:
 		var nr = randf();
-		if nr <= prob_cow:
+		if nr <= prob_cow and deathTime > 1:
 			_throwCow();
 	if !onTp:
 		var nr = randf();
