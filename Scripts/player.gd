@@ -107,14 +107,10 @@ func _on_collision_area_body_entered(body):
 	if body.is_in_group("box"):
 		if body.last_hitter != player_id and body.last_hitter != 0 and body.linear_velocity.length() > 300:
 			if body.typeName == "Box":
-				$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
-				$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
 				body._on_impact(self);
 			elif body.typeName == "Garbage":
 				body._on_impact(self);
 			elif body.typeName == "OxygenBomb":
-				$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
-				$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
 				body._on_impact(self);
 			else:
 				pass;
@@ -201,6 +197,8 @@ func _on_explosion(_body):
 	hit.emit();
 
 func _on_dead():
+	$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
+	$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
 	if self.visible == true:
 		self.visible = false;
 	_finish_asyncs();

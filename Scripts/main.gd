@@ -28,6 +28,7 @@ var rondaT := false;
 #Yonieskbro:awawa
 #rAnatieneelanoasibiengrande- anton
 #antonesunhomosexualLamecaca- eylleen
+#labbcdekurtestuvoaqui - kurt
 
 # SuddenDeath
 signal suddenDSignal;
@@ -68,6 +69,7 @@ func _ready():
 	player2.show();
 	#await anim_camera_manager.animationCameraInitPlay();
 	##Nuevo juego
+	#$Camera2D.zoom = Vector2(0.6,0.6);
 	new_game();
 
 ##Input
@@ -138,7 +140,6 @@ func swap_cintas_direction():
 	var ran = randf();
 	if ran > cambio_dir_prob_actual:
 		cambio_dir_prob_actual = min(cambio_dir_prob_actual + prob_incremento, cambio_dir_prob)
-		print(cambio_dir_prob_actual);
 		return;
 	
 	cambiando_cinta = true;
