@@ -1,0 +1,515 @@
+[gd_scene load_steps=30 format=3 uid="uid://gakltdbohxpe"]
+
+[ext_resource type="Script" path="res://Scripts/main2.gd" id="1_aagr6"]
+[ext_resource type="PackedScene" uid="uid://b1pm8ib6rmkie" path="res://Escenas/box_sf.tscn" id="2_er38h"]
+[ext_resource type="PackedScene" uid="uid://drvyj2fywl1yo" path="res://Escenas/garbage_ufo.tscn" id="3_cjvcl"]
+[ext_resource type="PackedScene" uid="uid://dkhyl6ifm0cwk" path="res://Escenas/oxygenBomb_UFO.tscn" id="4_ttxrw"]
+[ext_resource type="PackedScene" uid="uid://br06py7fhalcl" path="res://Escenas/cow.tscn" id="5_houhy"]
+[ext_resource type="PackedScene" uid="uid://c8kj4rc65x5tm" path="res://Escenas/Cyborg_cow.tscn" id="6_r1u25"]
+[ext_resource type="Texture2D" uid="uid://pe8pttaaaqpo" path="res://art/WhiteForestBackGround.png" id="7_qnrn8"]
+[ext_resource type="PackedScene" uid="uid://dhcx0qiyy28w2" path="res://Escenas/wall_bomb.tscn" id="8_jllo6"]
+[ext_resource type="Texture2D" uid="uid://cpxovtrfcg5mj" path="res://art/Map3_SF/Platform.png" id="9_fmwet"]
+[ext_resource type="AudioStream" uid="uid://c31g3ab8l345a" path="res://Sounds/The 4 Seasons, Op. 84, RV 297, Winter.wav" id="10_8v6eo"]
+[ext_resource type="AudioStream" uid="uid://bdm6y134kpke" path="res://Sounds/Conveyor.wav" id="34_ghjtr"]
+[ext_resource type="AudioStream" uid="uid://bg1uvxh72sl2q" path="res://Sounds/Tp1.wav" id="35_5d78r"]
+[ext_resource type="AudioStream" uid="uid://d0lora80gurrn" path="res://Sounds/Tp2.wav" id="36_7wyfv"]
+[ext_resource type="PackedScene" uid="uid://cr5nto0v1cvtd" path="res://Escenas/player.tscn" id="37_3172w"]
+[ext_resource type="PackedScene" uid="uid://cegydit6x7onr" path="res://Escenas/hud.tscn" id="38_dvppm"]
+[ext_resource type="Script" path="res://Scripts/sudden_death_manager2.gd" id="39_5nwa1"]
+[ext_resource type="PackedScene" uid="uid://b4bgrygy1um2p" path="res://Escenas/PortalBeacons.tscn" id="40_vixnj"]
+[ext_resource type="AudioStream" uid="uid://claiwdfhckttv" path="res://Sounds/fighting.wav" id="41_r5r5t"]
+[ext_resource type="AudioStream" uid="uid://csifcv3w0jpms" path="res://Sounds/falling.wav" id="42_2sk68"]
+[ext_resource type="Script" path="res://Scripts/animation_manager.gd" id="43_jfpw1"]
+[ext_resource type="PackedScene" uid="uid://bh5ixu7ybodg1" path="res://Escenas/menu_pause.tscn" id="44_c4rvp"]
+[ext_resource type="Script" path="res://Escenas/borderWorld.gd" id="45_tkdqp"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dmmgr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_fmwet")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_j2ku6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(640, 360)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera2D:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Player1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Player2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1700, 360)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player1:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Player2:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Player2:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_rcqsv"]
+resource_name = "camera_movement"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5, 1.53333, 1.6, 1.7, 1.8, 1.9, 2.1, 2.3, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1280, 360), Vector2(1280, 360), Vector2(1260, 335), Vector2(1335, 376), Vector2(1310, 420), Vector2(1265, 354.32), Vector2(1328, 372.375), Vector2(1285, 400), Vector2(1285.77, 320), Vector2(1280, 360)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera2D:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(2, 2)]
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Entrada")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.09,
+"start_offset": 0.0,
+"stream": ExtResource("41_r5r5t")
+}],
+"times": PackedFloat32Array(1.43333)
+}
+tracks/2/use_blend = true
+
+[sub_resource type="Animation" id="Animation_8a1l8"]
+resource_name = "camera_movement_2"
+length = 2.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.9, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1280, 360), Vector2(900, 360), Vector2(640, 360)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera2D:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.9, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Player1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.75, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1700, 360), Vector2(250, 565), Vector2(250, 565)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Player2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.75, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1700, 360), Vector2(250, 205), Vector2(250, 205)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player1:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.75, 2.25, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -15.708, -15.708, -12.5664]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Player2:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.75, 2.25, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 12.5664, 12.5664, 9.42478]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Player2:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1, 1)]
+}
+tracks/7/type = "audio"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Entrada2")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("42_2sk68")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/7/use_blend = true
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6fk1c"]
+_data = {
+"RESET": SubResource("Animation_j2ku6"),
+"camera_movement_1": SubResource("Animation_rcqsv"),
+"camera_movement_2": SubResource("Animation_8a1l8")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_anuap"]
+size = Vector2(1920, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_coxxd"]
+size = Vector2(1080, 10)
+
+[node name="main" type="Node" node_paths=PackedStringArray("anim_camera_manager")]
+process_mode = 1
+script = ExtResource("1_aagr6")
+box_scene = ExtResource("2_er38h")
+garbage_scene = ExtResource("3_cjvcl")
+oxygenbomb_scene = ExtResource("4_ttxrw")
+anim_camera_manager = NodePath("AnimationManager")
+cow_scene = ExtResource("5_houhy")
+cyborg_cow_scene = ExtResource("6_r1u25")
+
+[node name="BackgroundScn1" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_qnrn8")
+expand_mode = 1
+
+[node name="BoxTimer" type="Timer" parent="."]
+wait_time = 0.75
+
+[node name="DeathTimer" type="Timer" parent="."]
+
+[node name="StartPositionP1" type="Marker2D" parent="."]
+z_index = 2
+position = Vector2(250, 575)
+
+[node name="StartPositionP2" type="Marker2D" parent="."]
+position = Vector2(250, 195)
+
+[node name="SpawnBoxesRP1" type="Marker2D" parent="."]
+position = Vector2(1300, 570)
+
+[node name="SpawnBoxesRP2" type="Marker2D" parent="."]
+position = Vector2(1300, 193)
+
+[node name="SpawnBoxesLP1" type="Marker2D" parent="."]
+position = Vector2(-20, 570)
+
+[node name="SpawnBoxesLP2" type="Marker2D" parent="."]
+position = Vector2(-20, 193)
+
+[node name="Floor1" parent="." instance=ExtResource("8_jllo6")]
+position = Vector2(640, 605)
+rotation = 1.5708
+scale = Vector2(1, 2)
+collision_layer = 32
+collision_mask = 64
+physics_material_override = null
+
+[node name="Floor2" parent="." instance=ExtResource("8_jllo6")]
+position = Vector2(640, 163)
+rotation = 1.5708
+scale = Vector2(1, 2)
+collision_layer = 32
+collision_mask = 64
+physics_material_override = null
+
+[node name="CintasAbajo" type="Node2D" parent="."]
+position = Vector2(1221, 583)
+
+[node name="AnimatedSprite2D4" type="AnimatedSprite2D" parent="CintasAbajo"]
+z_index = 1
+position = Vector2(-1206, 48)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_dmmgr")
+
+[node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="CintasAbajo"]
+z_index = 1
+position = Vector2(-786, 48)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_dmmgr")
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="CintasAbajo"]
+z_index = 1
+position = Vector2(-366, 48)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_dmmgr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CintasAbajo"]
+z_index = 1
+position = Vector2(54, 48)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_dmmgr")
+
+[node name="CintasArriba" type="Node2D" parent="."]
+position = Vector2(43, 150)
+rotation = -3.14159
+scale = Vector2(1, -1)
+
+[node name="AnimatedSprite2D6" type="AnimatedSprite2D" parent="CintasArriba"]
+z_index = 1
+position = Vector2(28, -14.5)
+rotation = -3.14159
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_dmmgr")
+
+[node name="AnimatedSprite2D7" type="AnimatedSprite2D" parent="CintasArriba"]
+z_index = 1
+position = Vector2(-392, -14.5)
+rotation = -3.14159
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_dmmgr")
+
+[node name="AnimatedSprite2D8" type="AnimatedSprite2D" parent="CintasArriba"]
+z_index = 1
+position = Vector2(-812, -14.5)
+rotation = -3.14159
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_dmmgr")
+
+[node name="AnimatedSprite2D5" type="AnimatedSprite2D" parent="CintasArriba"]
+z_index = 1
+position = Vector2(-1232, -14.5)
+rotation = 3.14159
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_dmmgr")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_8v6eo")
+volume_db = -15.0
+
+[node name="LightsOn" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
+
+[node name="Conveyor" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("34_ghjtr")
+volume_db = -30.0
+
+[node name="Entrada" type="AudioStreamPlayer" parent="."]
+volume_db = -15.0
+
+[node name="Entrada2" type="AudioStreamPlayer" parent="."]
+volume_db = -15.0
+
+[node name="Tp1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("35_5d78r")
+volume_db = -18.0
+
+[node name="Tp2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("36_7wyfv")
+volume_db = -18.0
+
+[node name="Player1" parent="." instance=ExtResource("37_3172w")]
+
+[node name="Player2" parent="." instance=ExtResource("37_3172w")]
+position = Vector2(1700, 360)
+player_id = 2
+
+[node name="HUD" parent="." instance=ExtResource("38_dvppm")]
+
+[node name="SuddenDeathManager" type="Node" parent="."]
+script = ExtResource("39_5nwa1")
+SDObject_scene = ExtResource("40_vixnj")
+
+[node name="SuddenDeathTimer" type="Timer" parent="."]
+
+[node name="WallBomb1" parent="." instance=ExtResource("8_jllo6")]
+position = Vector2(-9, 360)
+
+[node name="WallBomb2" parent="." instance=ExtResource("8_jllo6")]
+position = Vector2(1289, 360)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(640, 360)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Camera2D"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_6fk1c")
+}
+
+[node name="AnimationManager" type="Node" parent="." node_paths=PackedStringArray("animCamera")]
+script = ExtResource("43_jfpw1")
+animCamera = NodePath("../Camera2D/AnimationPlayer")
+
+[node name="MenuPause" parent="." instance=ExtResource("44_c4rvp")]
+visible = false
+
+[node name="Background" type="CanvasModulate" parent="."]
+z_index = 4
+color = Color(0.913044, 0.777103, 0.999427, 1)
+
+[node name="BordesMundo" type="Node2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="BordesMundo"]
+position = Vector2(640, 900)
+collision_layer = 32
+collision_mask = 4
+script = ExtResource("45_tkdqp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BordesMundo/Area2D"]
+shape = SubResource("RectangleShape2D_anuap")
+
+[node name="Area2D2" type="Area2D" parent="BordesMundo"]
+position = Vector2(640, -180)
+collision_layer = 32
+collision_mask = 4
+script = ExtResource("45_tkdqp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BordesMundo/Area2D2"]
+shape = SubResource("RectangleShape2D_anuap")
+
+[node name="Area2D3" type="Area2D" parent="BordesMundo"]
+position = Vector2(-325, 360)
+rotation = 1.5708
+collision_layer = 32
+collision_mask = 4
+script = ExtResource("45_tkdqp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BordesMundo/Area2D3"]
+shape = SubResource("RectangleShape2D_coxxd")
+
+[node name="Area2D4" type="Area2D" parent="BordesMundo"]
+position = Vector2(1605, 360)
+rotation = 1.5708
+collision_layer = 32
+collision_mask = 4
+script = ExtResource("45_tkdqp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BordesMundo/Area2D4"]
+shape = SubResource("RectangleShape2D_coxxd")
+
+[node name="TimerRandomEvents" type="Timer" parent="."]
+
+[connection signal="suddenDSignal" from="." to="SuddenDeathManager" method="_on_main_sudden_d_signal"]
+[connection signal="timeout" from="BoxTimer" to="." method="_on_box_timer_timeout"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
+[connection signal="hit" from="Player1" to="." method="_on_player_1_hit"]
+[connection signal="hit" from="Player2" to="." method="_on_player_2_hit"]
+[connection signal="timeout" from="TimerRandomEvents" to="." method="_on_timer_random_events_timeout"]
