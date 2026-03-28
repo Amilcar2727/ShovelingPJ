@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://befm5mmvqeo3f"]
+
+[ext_resource type="Script" path="res://Scripts/garbage_sf.gd" id="1_rcqj0"]
+[ext_resource type="Texture2D" uid="uid://dt6tvw4vd6xfd" path="res://art/Map3_SF/Garbage_sf.png" id="2_28o2o"]
+[ext_resource type="Texture2D" uid="uid://darlifaoaiilf" path="res://art/Map2_UFO/Garbage_UFO.png" id="2_smhdj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_28o2o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_smhdj")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 0.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
+size = Vector2(35, 45)
+
+[node name="GarbageBin" type="RigidBody2D"]
+z_index = 2
+collision_layer = 4
+collision_mask = 15
+mass = 1.25
+gravity_scale = 0.0
+script = ExtResource("1_rcqj0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 3)
+scale = Vector2(0.15, 0.16)
+sprite_frames = SubResource("SpriteFrames_gf44t")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_jdfon")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0, 8)

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/main2.gd" id="1_aagr6"]
 [ext_resource type="PackedScene" uid="uid://b1pm8ib6rmkie" path="res://Escenas/box_sf.tscn" id="2_er38h"]
-[ext_resource type="PackedScene" uid="uid://drvyj2fywl1yo" path="res://Escenas/garbage_ufo.tscn" id="3_cjvcl"]
+[ext_resource type="PackedScene" uid="uid://befm5mmvqeo3f" path="res://Escenas/garbage_sf.tscn" id="3_8uun6"]
 [ext_resource type="PackedScene" uid="uid://dkhyl6ifm0cwk" path="res://Escenas/oxygenBomb_UFO.tscn" id="4_ttxrw"]
 [ext_resource type="PackedScene" uid="uid://br06py7fhalcl" path="res://Escenas/cow.tscn" id="5_houhy"]
 [ext_resource type="PackedScene" uid="uid://c8kj4rc65x5tm" path="res://Escenas/Cyborg_cow.tscn" id="6_r1u25"]
@@ -285,7 +285,7 @@ size = Vector2(1080, 10)
 process_mode = 1
 script = ExtResource("1_aagr6")
 box_scene = ExtResource("2_er38h")
-garbage_scene = ExtResource("3_cjvcl")
+garbage_scene = ExtResource("3_8uun6")
 oxygenbomb_scene = ExtResource("4_ttxrw")
 anim_camera_manager = NodePath("AnimationManager")
 cow_scene = ExtResource("5_houhy")
@@ -345,26 +345,26 @@ position = Vector2(1221, 583)
 
 [node name="AnimatedSprite2D4" type="AnimatedSprite2D" parent="CintasAbajo"]
 z_index = 1
-position = Vector2(-1206, 48)
-scale = Vector2(0.5, 0.5)
+position = Vector2(-1206, 44)
+scale = Vector2(0.5, 0.4)
 sprite_frames = SubResource("SpriteFrames_dmmgr")
 
 [node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="CintasAbajo"]
 z_index = 1
-position = Vector2(-786, 48)
-scale = Vector2(0.5, 0.5)
+position = Vector2(-786, 44)
+scale = Vector2(0.5, 0.4)
 sprite_frames = SubResource("SpriteFrames_dmmgr")
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="CintasAbajo"]
 z_index = 1
-position = Vector2(-366, 48)
-scale = Vector2(0.5, 0.5)
+position = Vector2(-366, 44)
+scale = Vector2(0.5, 0.4)
 sprite_frames = SubResource("SpriteFrames_dmmgr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CintasAbajo"]
 z_index = 1
-position = Vector2(54, 48)
-scale = Vector2(0.5, 0.5)
+position = Vector2(54, 44)
+scale = Vector2(0.5, 0.4)
 sprite_frames = SubResource("SpriteFrames_dmmgr")
 
 [node name="CintasArriba" type="Node2D" parent="."]
@@ -374,30 +374,30 @@ scale = Vector2(1, -1)
 
 [node name="AnimatedSprite2D6" type="AnimatedSprite2D" parent="CintasArriba"]
 z_index = 1
-position = Vector2(28, -14.5)
+position = Vector2(28, -10.5)
 rotation = -3.14159
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.5, 0.4)
 sprite_frames = SubResource("SpriteFrames_dmmgr")
 
 [node name="AnimatedSprite2D7" type="AnimatedSprite2D" parent="CintasArriba"]
 z_index = 1
-position = Vector2(-392, -14.5)
+position = Vector2(-392, -10.5)
 rotation = -3.14159
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.5, 0.4)
 sprite_frames = SubResource("SpriteFrames_dmmgr")
 
 [node name="AnimatedSprite2D8" type="AnimatedSprite2D" parent="CintasArriba"]
 z_index = 1
-position = Vector2(-812, -14.5)
+position = Vector2(-812, -10.5)
 rotation = -3.14159
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.5, 0.4)
 sprite_frames = SubResource("SpriteFrames_dmmgr")
 
 [node name="AnimatedSprite2D5" type="AnimatedSprite2D" parent="CintasArriba"]
 z_index = 1
-position = Vector2(-1232, -14.5)
+position = Vector2(-1232, -10.5)
 rotation = 3.14159
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.5, 0.4)
 sprite_frames = SubResource("SpriteFrames_dmmgr")
 
 [node name="Music" type="AudioStreamPlayer" parent="."]

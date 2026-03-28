@@ -28,17 +28,22 @@ var onBanana:bool;
 # Electro
 var onShock:= false;
 var nrosShock := 0;
+# Congelando
+var onFreeze:= false;
 
 func _ready():
 	can_move = false;
 	onBanana = false;
 	onShock = false;
+	onFreeze = false;
 	nrosShock = 0;
 	screen_size = get_viewport_rect().size;
 	orientation = "right";
 	$Banana.hide();
 	$ShockElec.hide();
+	$Frozen.hide();
 	$PointLight2D.hide();
+	$LightFrozzen.hide();
 	hide();
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -206,10 +211,15 @@ func _on_dead():
 
 func _finish_asyncs():
 	onShock = false;
+	onFreeze = false;
 	$ShockElec.hide();
+	$Frozen.hide();
+	$LightFrozzen.hide();
 	if !$TimerShockElec.is_stopped():
 		$TimerShockElec.stop();
-
+	if !$TimerFrozen.is_stopped():
+		$TimerFrozen.stop();
+		
 func _on_dark(v=true):
 	$PointLight2D.visible = v;
 	
@@ -237,6 +247,21 @@ func _electric_shock():
 	$ShockElec.show();
 	_on_shock();
 	$TimerShockElec.start();
+
+### Congelando
+func _freezing():
+	if onFreeze:
+		$TimerFrozen.start();
+		if !$FrozeSound.playing:
+			$FrozeSound.play();
+		return;
+	onFreeze = true;
+	$FrozeSound.play();
+	$Frozen.show();
+	$LightFrozzen.show();
+	self.can_move = false;
+	self.can_launch_box = false;
+	$TimerFrozen.start();
 	
 func _on_timer_banana_timeout():
 	speed = 500;
@@ -245,3 +270,11 @@ func _on_timer_banana_timeout():
 func _on_timer_shock_elec_timeout() -> void:
 	if onShock:
 		_on_shock();
+
+func _on_timer_frozen_timeout() -> void:
+	$FrozeSound2.play();
+	self.can_move = true;
+	self.can_launch_box = true;
+	$Frozen.hide();
+	$LightFrozzen.hide();
+	onFreeze = false;

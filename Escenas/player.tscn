@@ -1,12 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://cr5nto0v1cvtd"]
+[gd_scene load_steps=14 format=3 uid="uid://cr5nto0v1cvtd"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_gmbs1"]
 [ext_resource type="Texture2D" uid="uid://bfd451a8jrajb" path="res://art/CastorWalking3.png" id="2_bx6sm"]
 [ext_resource type="Texture2D" uid="uid://dhurkqw4wwk7c" path="res://art/BananaPeel.png" id="3_r1ocp"]
 [ext_resource type="Texture2D" uid="uid://dlpp8ggccrrop" path="res://art/Map2_UFO/ShockElectricidad.png" id="4_0g2h2"]
 [ext_resource type="Texture2D" uid="uid://dw7q5f5y5v48o" path="res://art/2d_lights_and_shadows_neutral_point_light.webp" id="5_fluyg"]
+[ext_resource type="Texture2D" uid="uid://miow88qrgltg" path="res://art/Map3_SF/Frozen.png" id="5_t41c7"]
 [ext_resource type="AudioStream" uid="uid://b70xfxybd85ck" path="res://Sounds/Throwing.wav" id="5_w2nf4"]
 [ext_resource type="AudioStream" uid="uid://0q88458wj2io" path="res://Sounds/Shock.wav" id="7_j1fu4"]
+[ext_resource type="AudioStream" uid="uid://dr411uifs87vc" path="res://Sounds/Froze1.wav" id="8_71ogr"]
+[ext_resource type="AudioStream" uid="uid://c08ovgcbagg7w" path="res://Sounds/Froze2.wav" id="9_pox3b"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rjb5n"]
 animations = [{
@@ -34,7 +37,15 @@ size = Vector2(77.0001, 37)
 z_index = 3
 script = ExtResource("1_gmbs1")
 
+[node name="Frozen" type="Sprite2D" parent="."]
+light_mask = 4
+position = Vector2(-3, -20)
+scale = Vector2(0.3, 0.2)
+texture = ExtResource("5_t41c7")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(0.8, 0.901961, 1, 1)
+light_mask = 5
 scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_rjb5n")
 animation = &"walk"
@@ -63,6 +74,7 @@ scale = Vector2(0.07, 0.07)
 texture = ExtResource("3_r1ocp")
 
 [node name="ShockElec" type="Sprite2D" parent="."]
+visible = false
 scale = Vector2(0.07, 0.07)
 texture = ExtResource("4_0g2h2")
 
@@ -74,8 +86,22 @@ one_shot = true
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("5_fluyg")
 
+[node name="LightFrozzen" type="PointLight2D" parent="."]
+scale = Vector2(0.75, 0.75)
+color = Color(0, 0.854902, 1, 0.796078)
+range_item_cull_mask = 4
+texture = ExtResource("5_fluyg")
+
 [node name="ShovelSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_w2nf4")
+volume_db = -20.0
+
+[node name="FrozeSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_71ogr")
+volume_db = -20.0
+
+[node name="FrozeSound2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_pox3b")
 volume_db = -20.0
 
 [node name="TimerShockElec" type="Timer" parent="."]
@@ -85,9 +111,14 @@ wait_time = 2.0
 stream = ExtResource("7_j1fu4")
 volume_db = -5.0
 
+[node name="TimerFrozen" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
 [connection signal="body_entered" from="CollisionArea" to="." method="_on_collision_area_body_entered"]
 [connection signal="body_entered" from="ShovelingArea" to="." method="_on_shoveling_area_body_entered"]
 [connection signal="body_exited" from="ShovelingArea" to="." method="_on_shoveling_area_body_exited"]
 [connection signal="timeout" from="TimerShovel" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="TimerBanana" to="." method="_on_timer_banana_timeout"]
 [connection signal="timeout" from="TimerShockElec" to="." method="_on_timer_shock_elec_timeout"]
+[connection signal="timeout" from="TimerFrozen" to="." method="_on_timer_frozen_timeout"]

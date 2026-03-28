@@ -81,8 +81,8 @@ static func elegirCajaType(t):
 	match t:
 		1:
 			cajas = [
-				{"tipo": 1, "prob": 0.75}, ##Caja
-				{"tipo": 2, "prob": 0.10}, ##Basura
+				{"tipo": 1, "prob": 0.15}, ##Caja
+				{"tipo": 2, "prob": 0.50}, ##Basura
 				{"tipo": 3, "prob": 0.05}, ##BalonOxigeno 0.07
 				{"tipo": 4, "prob": 0.10}, ##Nada
 			]
