@@ -67,7 +67,7 @@ func _ready():
 	player2.position = Vector2(0,0);
 	player1.show();
 	player2.show();
-	#await anim_camera_manager.animationCameraInitPlay();
+	await anim_camera_manager.animationCameraInitPlay();
 	##Nuevo juego
 	#$Camera2D.zoom = Vector2(0.6,0.6);
 	new_game();

@@ -89,5 +89,5 @@ func _on_explosion(_body):
 		queue_free();
 	else:
 		pass;
-func ChangeColor(player_id):
+func ChangeColor(_player_id):
 	pass;

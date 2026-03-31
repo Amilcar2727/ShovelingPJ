@@ -128,7 +128,7 @@ func new_game():
 	on_animation(true,false);
 	$BoxTimer.start();
 	$DeathTimer.start();
-	$TimerRandomEvents.start();
+	#$TimerRandomEvents.start();
 
 func DirectionCintas(vel=1, dir=1):
 	cinta_vel = vel;

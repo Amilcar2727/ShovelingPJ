@@ -8,7 +8,7 @@ extends Node2D
 var objetos_adentro:=[];
 
 func _ready() -> void:
-	var rayo1 = _instanciar_rayo(Vector2(-72,384),
+	var _rayo1 = _instanciar_rayo(Vector2(-72,384),
 					Vector2(0,-5),
 					Vector2(100,-5),
 					2);

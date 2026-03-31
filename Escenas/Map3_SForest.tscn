@@ -1,11 +1,9 @@
-[gd_scene load_steps=30 format=3 uid="uid://gakltdbohxpe"]
+[gd_scene load_steps=28 format=3 uid="uid://gakltdbohxpe"]
 
-[ext_resource type="Script" path="res://Scripts/main2.gd" id="1_aagr6"]
+[ext_resource type="Script" path="res://Scripts/main3.gd" id="1_ah630"]
 [ext_resource type="PackedScene" uid="uid://b1pm8ib6rmkie" path="res://Escenas/box_sf.tscn" id="2_er38h"]
 [ext_resource type="PackedScene" uid="uid://befm5mmvqeo3f" path="res://Escenas/garbage_sf.tscn" id="3_8uun6"]
-[ext_resource type="PackedScene" uid="uid://dkhyl6ifm0cwk" path="res://Escenas/oxygenBomb_UFO.tscn" id="4_ttxrw"]
-[ext_resource type="PackedScene" uid="uid://br06py7fhalcl" path="res://Escenas/cow.tscn" id="5_houhy"]
-[ext_resource type="PackedScene" uid="uid://c8kj4rc65x5tm" path="res://Escenas/Cyborg_cow.tscn" id="6_r1u25"]
+[ext_resource type="PackedScene" uid="uid://ger4lk6hd2bv" path="res://Escenas/oxygenBomb_sf.tscn" id="4_tv14g"]
 [ext_resource type="Texture2D" uid="uid://pe8pttaaaqpo" path="res://art/WhiteForestBackGround.png" id="7_qnrn8"]
 [ext_resource type="PackedScene" uid="uid://dhcx0qiyy28w2" path="res://Escenas/wall_bomb.tscn" id="8_jllo6"]
 [ext_resource type="Texture2D" uid="uid://cpxovtrfcg5mj" path="res://art/Map3_SF/Platform.png" id="9_fmwet"]
@@ -283,15 +281,14 @@ size = Vector2(1080, 10)
 
 [node name="main" type="Node" node_paths=PackedStringArray("anim_camera_manager")]
 process_mode = 1
-script = ExtResource("1_aagr6")
+script = ExtResource("1_ah630")
 box_scene = ExtResource("2_er38h")
 garbage_scene = ExtResource("3_8uun6")
-oxygenbomb_scene = ExtResource("4_ttxrw")
+oxygenbomb_scene = ExtResource("4_tv14g")
 anim_camera_manager = NodePath("AnimationManager")
-cow_scene = ExtResource("5_houhy")
-cyborg_cow_scene = ExtResource("6_r1u25")
 
 [node name="BackgroundScn1" type="TextureRect" parent="."]
+z_index = -1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
