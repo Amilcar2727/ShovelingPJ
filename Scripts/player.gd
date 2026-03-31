@@ -10,6 +10,7 @@ var score = 0;
 var left_action = "";
 var right_action = "";
 @export var fuerzaEmpujeCinta := -110;
+var fuerzaExterna:float;
 #Orientation
 var orientation = "right";
 #Powers
@@ -50,7 +51,7 @@ func _ready():
 func _process(delta):
 	if cinta_activa:
 		#Fuerza Cintas Transportadoras
-		var cinta_push = Vector2(fuerzaEmpujeCinta, 0);
+		var cinta_push = Vector2(fuerzaEmpujeCinta + fuerzaExterna, 0);
 		position += cinta_push * delta;
 			
 	if can_move:
@@ -88,6 +89,7 @@ func _process(delta):
 		$AnimatedSprite2D.stop();
 	
 	position = position.clamp(Vector2.ZERO, screen_size);
+	fuerzaExterna = 0;
 
 func start(pos):
 	position = pos;

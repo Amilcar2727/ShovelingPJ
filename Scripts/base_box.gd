@@ -32,6 +32,9 @@ func actualizar_velocidad(nueva_vel: int):
 	if use_local_direction:
 		speed_local = nueva_vel;
 
+func _physics_process(_delta: float) -> void:
+	pass;
+
 func _process(_delta):
 	if not hitted:
 		if use_local_direction:
@@ -81,8 +84,8 @@ static func elegirCajaType(t):
 	match t:
 		1:
 			cajas = [
-				{"tipo": 1, "prob": 0.15}, ##Caja
-				{"tipo": 2, "prob": 0.50}, ##Basura
+				{"tipo": 1, "prob": 0.75}, ##Caja
+				{"tipo": 2, "prob": 0.10}, ##Basura
 				{"tipo": 3, "prob": 0.05}, ##BalonOxigeno 0.07
 				{"tipo": 4, "prob": 0.10}, ##Nada
 			]

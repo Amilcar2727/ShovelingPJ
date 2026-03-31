@@ -1,0 +1,113 @@
+[gd_scene load_steps=11 format=3 uid="uid://ger4lk6hd2bv"]
+
+[ext_resource type="Script" path="res://Scripts/oxygen_bomb_sf.gd" id="1_mvsum"]
+[ext_resource type="Texture2D" uid="uid://y1ss2rpxnpaf" path="res://art/Map3_SF/OrbBomb_SF.png" id="2_3yw3p"]
+[ext_resource type="Texture2D" uid="uid://b4tk1e1dm6xcb" path="res://art/Map3_SF/MiniBlackHole.png" id="4_fqvyg"]
+[ext_resource type="AudioStream" uid="uid://wjfynlxt4qvn" path="res://Sounds/BlackHoly.wav" id="4_tlkld"]
+[ext_resource type="AudioStream" uid="uid://ckll4ht2iytmm" path="res://Sounds/OrbeRoto.wav" id="5_e3jcj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_3yw3p")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 0.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
+size = Vector2(30, 30)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iyd65"]
+radius = 13.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n7htw"]
+radius = 130.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sh8e0"]
+radius = 260.0
+
+[node name="OxygenBomb" type="RigidBody2D"]
+z_index = 2
+collision_layer = 68
+collision_mask = 47
+mass = 2.0
+gravity_scale = 0.0
+script = ExtResource("1_mvsum")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 10)
+scale = Vector2(0.08, 0.08)
+sprite_frames = SubResource("SpriteFrames_gf44t")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_jdfon")
+
+[node name="ExplosionSprite" type="Sprite2D" parent="."]
+light_mask = 2
+z_index = -1
+position = Vector2(0, 10)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_fqvyg")
+
+[node name="ExplosionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea"]
+position = Vector2(0, 10)
+shape = SubResource("CircleShape2D_iyd65")
+
+[node name="MidArea2" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MidArea2"]
+position = Vector2(0, 10)
+shape = SubResource("CircleShape2D_n7htw")
+
+[node name="OuterArea3" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OuterArea3"]
+position = Vector2(0, 10)
+shape = SubResource("CircleShape2D_sh8e0")
+
+[node name="Luces" type="Node2D" parent="."]
+visible = false
+
+[node name="PointLight2D" type="PointLight2D" parent="Luces"]
+scale = Vector2(0.3, 0.3)
+color = Color(0.415686, 0, 1, 0.635294)
+energy = 2.0
+range_item_cull_mask = 2
+texture = ExtResource("4_fqvyg")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Luces"]
+scale = Vector2(0.4, 0.4)
+color = Color(0, 0.898039, 1, 0.721569)
+energy = 2.5
+range_item_cull_mask = 2
+texture = ExtResource("4_fqvyg")
+
+[node name="BoomSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_tlkld")
+volume_db = -5.0
+
+[node name="Call" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_e3jcj")
+volume_db = -13.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0, 8)
+
+[connection signal="area_entered" from="ExplosionArea" to="." method="_on_explosion_area_area_entered"]
+[connection signal="body_entered" from="ExplosionArea" to="." method="_on_explosion_area_body_entered"]
+[connection signal="body_entered" from="OuterArea3" to="." method="_on_outer_area_3_body_entered"]
+[connection signal="body_exited" from="OuterArea3" to="." method="_on_outer_area_3_body_exited"]
