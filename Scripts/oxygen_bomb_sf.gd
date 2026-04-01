@@ -28,7 +28,7 @@ func ChangeColorBlue():
 func _physics_process(_delta: float) -> void:
 	if !on_blackh:
 		return;
-	_apply_force($OuterArea3, 300);
+	_apply_force($OuterArea3, 350);
 	_apply_force($MidArea2, 500);
 
 func _apply_force(area:Area2D, fuerza:float):
@@ -47,8 +47,8 @@ func _apply_force(area:Area2D, fuerza:float):
 			fuerzas_guardadas[rootNode] = rootNode.fuerzaEmpujeCinta;
 		# Direccion del agujero negro al objeto
 		var dir = (self.global_position - rootNode.global_position).normalized();
-		var force_vector = fuerza/2;
-		rootNode.fuerzaEmpujeCinta = force_vector * sign(dir.x);
+		var fuerza_aplicada = fuerza * 0.36;
+		rootNode.fuerzaExterna = fuerza_aplicada * sign(dir.x);
 
 func _on_body_entered(_body):
 	##Si el cuerpo choca con el jugador, hiteable, o piso, explota

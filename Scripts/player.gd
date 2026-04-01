@@ -3,6 +3,7 @@ signal hit;
 const initial_speed := 500;
 @export var speed=initial_speed; #How fast the player will move (pixel/sec)
 @export var player_id = 1;
+
 var screen_size;	#Size of the game window
 #Score
 var score = 0;
@@ -32,6 +33,10 @@ var nrosShock := 0;
 # Congelando
 var onFreeze:= false;
 
+##3er mapa
+@export var friction = speed * 2 #Frenado
+var vel_actual := Vector2.ZERO;
+
 func _ready():
 	can_move = false;
 	onBanana = false;
@@ -50,10 +55,17 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if cinta_activa:
-		#Fuerza Cintas Transportadoras
-		var cinta_push = Vector2(fuerzaEmpujeCinta + fuerzaExterna, 0);
-		position += cinta_push * delta;
-			
+		_process_cinta(delta);
+		position = position.clamp(Vector2.ZERO, screen_size);
+	else:
+		_process_resbala(delta);
+		fuerzaExterna = 0;
+	
+
+func _process_cinta(delta):
+	#Fuerza Cintas Transportadoras
+	var cinta_push = Vector2(fuerzaEmpujeCinta, 0);
+	position += cinta_push * delta;
 	if can_move:
 		var velocity = Vector2.ZERO;	#Player's movement vector
 		if Input.is_action_pressed(shovel_action):
@@ -80,17 +92,60 @@ func _process(delta):
 		else:
 			#$AnimatedSprite2D.animation = "idle";
 			$AnimatedSprite2D.stop();
-		
 		#Flip
 		leftOrRight(orientation);
 		
 	else:
 		#$AnimatedSprite2D.animation = "idle";
 		$AnimatedSprite2D.stop();
-	
-	position = position.clamp(Vector2.ZERO, screen_size);
-	fuerzaExterna = 0;
 
+func _process_resbala(delta): ##Para 3er mapa
+	#Fuerza BlackHole
+	var bh_pull = Vector2(fuerzaExterna, 0);
+	position += bh_pull * delta;
+	var velocity = Vector2.ZERO;	#Player's movement vector
+	if can_move:
+		if Input.is_action_pressed(shovel_action):
+			set_launch("normal");
+		if Input.is_action_pressed(shovel_up_action):
+			set_launch("especial");
+		if Input.is_action_pressed(left_action):
+			velocity.x -= 1;
+			orientation = "left";
+		if Input.is_action_pressed(right_action):
+			velocity.x += 1;
+			orientation = "right";
+	else:
+		#$AnimatedSprite2D.animation = "idle";
+		$AnimatedSprite2D.stop();
+	
+	# MOVEMENT
+	if onBanana:
+		speed = 200;
+		$Banana.show();
+		$TimerBanana.start();
+		onBanana = false;
+	if velocity.length() > 0:
+		velocity = velocity.normalized() * speed;
+		vel_actual = vel_actual.move_toward(velocity, speed * delta);
+		$AnimatedSprite2D.animation = "walk";
+		$AnimatedSprite2D.play();
+	else:
+		vel_actual = vel_actual.move_toward(Vector2.ZERO, friction *delta);
+		#$AnimatedSprite2D.animation = "idle";
+		$AnimatedSprite2D.stop();
+	#Clamp
+	var new_pos = position + vel_actual * delta;
+	if new_pos.x < 0:
+		new_pos.x = 0;
+		vel_actual.x = 0;
+	elif new_pos.x > screen_size.x:
+		new_pos.x = screen_size.x;
+		vel_actual.x = 0;
+	position = new_pos;
+	#Flip
+	leftOrRight(orientation);
+		
 func start(pos):
 	position = pos;
 	onBanana = false;
@@ -209,11 +264,11 @@ func _on_dead():
 	if self.visible == true:
 		self.visible = false;
 	_finish_asyncs();
-	self.position = Vector2(0,0);
 
 func _finish_asyncs():
-	onShock = false;
-	onFreeze = false;
+	self.onShock = false;
+	self.onFreeze = false;
+	self.friction = 700.0;
 	$ShockElec.hide();
 	$Frozen.hide();
 	$LightFrozzen.hide();
@@ -263,6 +318,7 @@ func _freezing():
 	$LightFrozzen.show();
 	self.can_move = false;
 	self.can_launch_box = false;
+	self.friction *= 0.40;
 	$TimerFrozen.start();
 	
 func _on_timer_banana_timeout():
@@ -277,6 +333,7 @@ func _on_timer_frozen_timeout() -> void:
 	$FrozeSound2.play();
 	self.can_move = true;
 	self.can_launch_box = true;
+	self.friction = 700;
 	$Frozen.hide();
 	$LightFrozzen.hide();
 	onFreeze = false;

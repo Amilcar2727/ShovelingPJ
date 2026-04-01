@@ -5,7 +5,7 @@ extends Node
 @export var oxygenbomb_scene : PackedScene;
 @export var anim_camera_manager:Node;
 
-var cinta_dir := 1;
+var cinta_dir := -1;
 var cinta_vel := 1;
 var cambiando_cinta := false;
 var vel_cajas := 100;
@@ -64,6 +64,8 @@ func _ready():
 	DirectionCintas(cinta_vel,cinta_dir);
 	##Empezar animacion inicial
 	on_animation(false,true);
+	player1.cinta_activa = false;
+	player2.cinta_activa = false;
 	player1.position = Vector2(0,0);
 	player2.position = Vector2(0,0);
 	player1.show();
@@ -83,8 +85,8 @@ func on_animation(move := false,hiddenHud:=true):
 	if hiddenHud: HUD.hide();
 	player1.can_move = move;
 	player2.can_move = move;
-	player1.cinta_activa = move;
-	player2.cinta_activa = move;
+	#player1.cinta_activa = move;
+	#player2.cinta_activa = move;
 	
 func new_game():
 	rondaT = false;
@@ -117,10 +119,12 @@ func new_game():
 	#Start game
 	
 	#Movimiento
+	player1.cinta_activa = false;
+	player2.cinta_activa = false;
 	on_animation(false,false);
 	DirectionCintas(cinta_vel,cinta_dir);
 	await HUD.getReady(rondaN);
-	cinta_dir = 1;
+	cinta_dir = -1;
 	#Cintas animacion
 	refresh_phase();
 	$Conveyor.play();
@@ -135,7 +139,7 @@ func DirectionCintas(vel=1, dir=1):
 	cinta_dir = dir;
 	print("Direccion Cintas:",cinta_vel);
 	AnimacionesStart($CintasArriba,vel * dir);
-	AnimacionesStart($CintasAbajo,-vel * dir);
+	AnimacionesStart($CintasAbajo,vel * dir);
 
 func AnimacionesStart(nodoPadre:Node2D, speed:float=1.0):
 	for child in nodoPadre.get_children():
@@ -165,19 +169,19 @@ func apply_spawn_phase(phase:int):
 		1:
 			$BoxTimer.wait_time = 1;
 			#DirectionCintas(7);
-			player1.fuerzaEmpujeCinta = -110*cinta_dir;
+			player1.fuerzaEmpujeCinta = 110*cinta_dir;
 			player2.fuerzaEmpujeCinta = 110*cinta_dir;
 			vel_cajas = 100;
 		2:
 			$BoxTimer.wait_time = 0.75;
 			DirectionCintas(2,cinta_dir);
-			player1.fuerzaEmpujeCinta = -160*cinta_dir;
+			player1.fuerzaEmpujeCinta = 160*cinta_dir;
 			player2.fuerzaEmpujeCinta = 160*cinta_dir;
 			vel_cajas = 115;
 		3:
 			$BoxTimer.wait_time = 0.5;
 			DirectionCintas(3,cinta_dir);
-			player1.fuerzaEmpujeCinta = -200*cinta_dir;
+			player1.fuerzaEmpujeCinta = 200*cinta_dir;
 			player2.fuerzaEmpujeCinta = 200*cinta_dir;
 			vel_cajas = 140;
 	
@@ -201,21 +205,20 @@ func _on_box_timer_timeout():
 		diferencia = Vector2(0,3);
 	elif type == 3:
 		throwable = oxygenbomb_scene.instantiate();
-		diferencia = Vector2(0,4);
+		diferencia = Vector2(0,5);
 	else:
 		return;
 	
 	# Configuramos caja para usar direccion local
 	throwable.use_local_direction = true;
 	throwable.actualizar_velocidad(vel_cajas);
+	throwable.direction_local = cinta_dir;
 	if spawn == 0:
-		throwable.direction_local = -cinta_dir;
 		if cinta_dir == 1:
-			throwable.position = $SpawnBoxesRP1.position# + diferencia;
-		else:
 			throwable.position = $SpawnBoxesLP1.position# + diferencia;
+		else:
+			throwable.position = $SpawnBoxesRP1.position# + diferencia;
 	elif spawn == 1:
-		throwable.direction_local = cinta_dir;
 		if cinta_dir == 1:
 			throwable.position = $SpawnBoxesLP2.position + diferencia;
 		else:
@@ -277,6 +280,8 @@ func on_win(player):
 		spawn_phase = 0
 		$Conveyor.stop();
 		# Momento entre rondas
+		player1.vel_actual = Vector2.ZERO;
+		player2.vel_actual = Vector2.ZERO;
 		player1._finish_asyncs();
 		player2._finish_asyncs();
 		new_game();

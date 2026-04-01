@@ -98,7 +98,7 @@ texture = ExtResource("4_fqvyg")
 
 [node name="BoomSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_tlkld")
-volume_db = -5.0
+volume_db = -7.0
 
 [node name="Call" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_e3jcj")
