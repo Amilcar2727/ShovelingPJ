@@ -101,10 +101,10 @@ func new_game():
 	#HUD.show_message("Get Ready!");
 	player1.start($StartPositionP1.position);
 	player1.orientation = "right";
-	player1.scale.x = 1;
+	player1.ToRotate.scale.x = 1;
 	player2.start($StartPositionP2.position);
-	player2.rotation = deg_to_rad(180);
-	player2.scale.x = -1;
+	player2.ToRotate.rotation = deg_to_rad(180);
+	player2.ToRotate.scale.x = -1;
 	player2.orientation = "right";
 	if !$Music.playing:
 		$Music.play();

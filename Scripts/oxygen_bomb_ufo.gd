@@ -99,6 +99,6 @@ func _on_explosion_area_body_entered(body: Node2D) -> void:
 func _on_explosion_area_area_entered(area: Area2D) -> void:
 	if !on_laser:
 		return;
-	var rootNode = area.get_parent();
+	var rootNode = area.get_owner();
 	if rootNode.has_method("_on_explosion") and rootNode != self:
 		rootNode._on_explosion(self);

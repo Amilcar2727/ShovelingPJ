@@ -4,6 +4,19 @@ const initial_speed := 500;
 @export var speed=initial_speed; #How fast the player will move (pixel/sec)
 @export var player_id = 1;
 
+##Variables de referencia a nodos
+@onready var ToRotate = $ToRotate;
+@onready var CastorSprite = $ToRotate/AnimatedSprite2D;
+@onready var AreaColision = $ToRotate/CollisionArea;
+@onready var AreaColisionShape = $ToRotate/CollisionArea/CollisionShape2D;
+@onready var AreaShovel = $ToRotate/ShovelingArea;
+@onready var AreaShovelShape = $ToRotate/ShovelingArea/ShovelingShape2D;
+@onready var Frozen = $ToRotate/Frozen;
+@onready var Banana = $ToRotate/Banana;
+@onready var ShockElec = $ToRotate/ShockElec;
+@onready var PointLight = $ToRotate/PointLight2D;
+@onready var LightFrozen = $ToRotate/LightFrozzen;
+
 var screen_size;	#Size of the game window
 #Score
 var score = 0;
@@ -32,6 +45,8 @@ var onShock:= false;
 var nrosShock := 0;
 # Congelando
 var onFreeze:= false;
+##Tp
+var direccion_shovel := 1;
 
 ##3er mapa
 @export var friction = speed * 2 #Frenado
@@ -42,14 +57,23 @@ func _ready():
 	onBanana = false;
 	onShock = false;
 	onFreeze = false;
+	direccion_shovel = 1;
 	nrosShock = 0;
 	screen_size = get_viewport_rect().size;
 	orientation = "right";
-	$Banana.hide();
-	$ShockElec.hide();
-	$Frozen.hide();
-	$PointLight2D.hide();
-	$LightFrozzen.hide();
+	#Nodos
+	Banana.hide();
+	ShockElec.hide();
+	Frozen.hide();
+	PointLight.hide();
+	LightFrozen.hide();
+	const P1Color = Color(1,0.36,0.3,1);
+	const P2Color = Color(0.35,0.61,1,1);
+	if player_id == 1:
+		$IndicadorPlayer.add_theme_color_override("font_color",P1Color);
+	else:
+		$IndicadorPlayer.add_theme_color_override("font_color",P2Color);
+	$IndicadorPlayer.text = "P"+str(player_id);
 	hide();
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -81,23 +105,23 @@ func _process_cinta(delta):
 		# MOVEMENT
 		if onBanana:
 			speed = 200;
-			$Banana.show();
+			Banana.show();
 			$TimerBanana.start();
 			onBanana = false;
 		if velocity.length() > 0:
 			velocity = velocity.normalized() * speed;
 			position += velocity * delta;
-			$AnimatedSprite2D.animation = "walk";
-			$AnimatedSprite2D.play();
+			CastorSprite.animation = "walk";
+			CastorSprite.play();
 		else:
-			#$AnimatedSprite2D.animation = "idle";
-			$AnimatedSprite2D.stop();
+			#CastorSprite.animation = "idle";
+			CastorSprite.stop();
 		#Flip
 		leftOrRight(orientation);
 		
 	else:
-		#$AnimatedSprite2D.animation = "idle";
-		$AnimatedSprite2D.stop();
+		#CastorSprite.animation = "idle";
+		CastorSprite.stop();
 
 func _process_resbala(delta): ##Para 3er mapa
 	#Fuerza BlackHole
@@ -116,24 +140,24 @@ func _process_resbala(delta): ##Para 3er mapa
 			velocity.x += 1;
 			orientation = "right";
 	else:
-		#$AnimatedSprite2D.animation = "idle";
-		$AnimatedSprite2D.stop();
+		#CastorSprite.animation = "idle";
+		CastorSprite.stop();
 	
 	# MOVEMENT
 	if onBanana:
 		speed = 200;
-		$Banana.show();
+		Banana.show();
 		$TimerBanana.start();
 		onBanana = false;
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed;
 		vel_actual = vel_actual.move_toward(velocity, speed * delta);
-		$AnimatedSprite2D.animation = "walk";
-		$AnimatedSprite2D.play();
+		CastorSprite.animation = "walk";
+		CastorSprite.play();
 	else:
 		vel_actual = vel_actual.move_toward(Vector2.ZERO, friction *delta);
-		#$AnimatedSprite2D.animation = "idle";
-		$AnimatedSprite2D.stop();
+		#CastorSprite.animation = "idle";
+		CastorSprite.stop();
 	#Clamp
 	var new_pos = position + vel_actual * delta;
 	if new_pos.x < 0:
@@ -149,22 +173,33 @@ func _process_resbala(delta): ##Para 3er mapa
 func start(pos):
 	position = pos;
 	onBanana = false;
-	$Banana.hide();
+	Banana.hide();
 	show();
-	$CollisionArea/CollisionShape2D.disabled = false;
-	$ShovelingArea/ShovelingShape2D.disabled = false;
+	AreaColisionShape.disabled = false;
+	AreaShovelShape.disabled = false;
 func leftOrRight(orientationA:String):
 	if(orientationA == "right"):
 		if(player_id == 1):
-			scale.x = 1;
+			$ToRotate.scale.x = 1;
 		elif(player_id == 2):
-			scale.x = -1;
+			$ToRotate.scale.x = -1;
 	elif(orientationA == "left"):
 		if(player_id == 1):
-			scale.x = -1;
+			$ToRotate.scale.x = -1;
 		elif(player_id == 2):
-			scale.x = 1;
-			
+			$ToRotate.scale.x = 1;
+
+func swapCS():
+	if AreaColisionShape.disabled == true:
+		AreaColisionShape.call_deferred("set_disabled",false);
+	else:
+		AreaColisionShape.call_deferred("set_disabled",true);
+	if AreaShovelShape.disabled == true:
+		AreaShovelShape.call_deferred("set_disabled",false);
+	else:
+		AreaShovelShape.call_deferred("set_disabled",true);
+		
+		
 func _on_collision_area_body_entered(body):
 	if body.is_in_group("box"):
 		if body.last_hitter != player_id and body.last_hitter != 0 and body.linear_velocity.length() > 300:
@@ -210,6 +245,7 @@ func _on_shoveling_area_body_exited(body):
 	
 func before_launch_box(player_id, mode:String):
 	var player = 1 if (player_id == 1) else -1;
+	player *= direccion_shovel;
 	if mode == "especial":
 		launch_box(impulso_fuerza,-90*player);
 	else:
@@ -259,8 +295,8 @@ func _on_explosion(_body):
 	hit.emit();
 
 func _on_dead():
-	$CollisionArea/CollisionShape2D.set_deferred("disabled",true);
-	$ShovelingArea/ShovelingShape2D.set_deferred("disabled",true);
+	AreaColisionShape.set_deferred("disabled",true);
+	AreaShovelShape.set_deferred("disabled",true);
 	if self.visible == true:
 		self.visible = false;
 	_finish_asyncs();
@@ -269,9 +305,9 @@ func _finish_asyncs():
 	self.onShock = false;
 	self.onFreeze = false;
 	self.friction = 700.0;
-	$ShockElec.hide();
-	$Frozen.hide();
-	$LightFrozzen.hide();
+	ShockElec.hide();
+	Frozen.hide();
+	LightFrozen.hide();
 	if !$TimerShockElec.is_stopped():
 		$TimerShockElec.stop();
 	if !$TimerFrozen.is_stopped():
@@ -283,25 +319,25 @@ func _on_dark(v=true):
 func _on_shock():
 	# Eliminamos movimiento y mostramos elect
 	$ShockSound.play();
-	$ShockElec.modulate = Color(1,1,1,1);
+	ShockElec.modulate = Color(1,1,1,1);
 	self.can_move = false;
 	self.can_launch_box = false;
 	await get_tree().create_timer(0.5,false).timeout;
 	# Regresamos a la normalidad
-	$ShockElec.modulate = Color(1,1,1,0.4);
+	ShockElec.modulate = Color(1,1,1,0.4);
 	self.can_move = true;
 	self.can_launch_box = true;
 	nrosShock+=1;
 	if nrosShock >= 4 or !onShock:
 		$TimerShockElec.stop();
-		$ShockElec.hide();
+		ShockElec.hide();
 		onShock = false;
 		return;
 	
 func _electric_shock():
 	nrosShock = 0;
 	onShock = true;
-	$ShockElec.show();
+	ShockElec.show();
 	_on_shock();
 	$TimerShockElec.start();
 
@@ -314,8 +350,8 @@ func _freezing():
 		return;
 	onFreeze = true;
 	$FrozeSound.play();
-	$Frozen.show();
-	$LightFrozzen.show();
+	Frozen.show();
+	LightFrozen.show();
 	self.can_move = false;
 	self.can_launch_box = false;
 	self.friction *= 0.40;
@@ -323,7 +359,7 @@ func _freezing():
 	
 func _on_timer_banana_timeout():
 	speed = 500;
-	$Banana.hide();
+	Banana.hide();
 
 func _on_timer_shock_elec_timeout() -> void:
 	if onShock:
@@ -334,6 +370,6 @@ func _on_timer_frozen_timeout() -> void:
 	self.can_move = true;
 	self.can_launch_box = true;
 	self.friction = 700;
-	$Frozen.hide();
-	$LightFrozzen.hide();
+	Frozen.hide();
+	LightFrozen.hide();
 	onFreeze = false;

@@ -29,7 +29,7 @@ func _physics_process(_delta: float) -> void:
 	if !on_blackh:
 		return;
 	_apply_force($OuterArea3, 350);
-	_apply_force($MidArea2, 500);
+	_apply_force($MidArea2, 525);
 
 func _apply_force(area:Area2D, fuerza:float):
 	for body in area.get_overlapping_bodies():
@@ -42,9 +42,10 @@ func _apply_force(area:Area2D, fuerza:float):
 			body.apply_central_force(force_vector);
 	##Players
 	for area_overlapped:Area2D in area.get_overlapping_areas():
-		var rootNode = area_overlapped.get_parent();
+		var rootNode = area_overlapped.get_owner();
 		if not fuerzas_guardadas.has(rootNode):
-			fuerzas_guardadas[rootNode] = rootNode.fuerzaEmpujeCinta;
+			print(rootNode, rootNode.name);
+			fuerzas_guardadas[rootNode] = rootNode.fuerzaExterna;
 		# Direccion del agujero negro al objeto
 		var dir = (self.global_position - rootNode.global_position).normalized();
 		var fuerza_aplicada = fuerza * 0.36;
@@ -97,7 +98,7 @@ func explote():
 			#print(body.name);
 			body._on_explosion(self);
 	for area in $ExplosionArea.get_overlapping_areas(): #Players
-		var rootNode = area.get_parent();
+		var rootNode = area.get_owner();
 		if rootNode.has_method("_on_explosion") and rootNode != self:
 			rootNode._on_explosion(self);
 	##Prendemos area
@@ -114,7 +115,7 @@ func explote():
 	on_blackh = false;
 	## Restaurar fuerzas
 	for jugador in fuerzas_guardadas.keys():
-		if jugador.get_parent().rondaT:
+		if jugador.get_owner().rondaT:
 			continue;
 		var fuerza_original = fuerzas_guardadas[jugador];
 		jugador.fuerzaEmpujeCinta = fuerza_original;
@@ -147,7 +148,7 @@ func _on_explosion_area_body_entered(body: Node2D) -> void:
 func _on_explosion_area_area_entered(area: Area2D) -> void:
 	if !on_blackh:
 		return;
-	var rootNode = area.get_parent();
+	var rootNode = area.get_owner();
 	if rootNode.has_method("_on_explosion") and rootNode != self:
 		rootNode._on_explosion(self);
 

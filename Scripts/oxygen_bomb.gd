@@ -42,7 +42,7 @@ func explote():
 			#print(body.name);
 			body._on_explosion(self);
 	for area in $ExplosionArea.get_overlapping_areas(): #Players
-		var rootNode = area.get_parent();
+		var rootNode = area.get_owner();
 		if rootNode.has_method("_on_explosion") and rootNode != self:
 			rootNode._on_explosion(self);
 	#Apagamos area
