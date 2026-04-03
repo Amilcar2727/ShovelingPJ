@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://gakltdbohxpe"]
+[gd_scene load_steps=32 format=3 uid="uid://gakltdbohxpe"]
 
 [ext_resource type="Script" path="res://Scripts/main3.gd" id="1_ah630"]
 [ext_resource type="PackedScene" uid="uid://b1pm8ib6rmkie" path="res://Escenas/box_sf.tscn" id="2_er38h"]
@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://dbko7aaww0b34" path="res://Sounds/Snowstorm2.wav" id="9_1mcuv"]
 [ext_resource type="Texture2D" uid="uid://cpxovtrfcg5mj" path="res://art/Map3_SF/Platform.png" id="9_fmwet"]
 [ext_resource type="AudioStream" uid="uid://c31g3ab8l345a" path="res://Sounds/The 4 Seasons, Op. 84, RV 297, Winter.wav" id="10_8v6eo"]
+[ext_resource type="AudioStream" uid="uid://bw6w7fpimnvf0" path="res://Sounds/SnowMan.wav" id="13_2f6mb"]
 [ext_resource type="Texture2D" uid="uid://ck8lcbwacg10u" path="res://art/Map3_SF/SnowStorm1.png" id="21_e52dd"]
 [ext_resource type="Texture2D" uid="uid://oklntkimksl3" path="res://art/Map3_SF/SnowStorm2.png" id="22_uhqvr"]
 [ext_resource type="AudioStream" uid="uid://bdm6y134kpke" path="res://Sounds/Conveyor.wav" id="34_ghjtr"]
@@ -425,6 +426,10 @@ volume_db = -18.0
 [node name="Tp2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("36_7wyfv")
 volume_db = -18.0
+
+[node name="SnowManSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_2f6mb")
+volume_db = -10.0
 
 [node name="Player1" parent="." instance=ExtResource("37_3172w")]
 

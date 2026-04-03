@@ -131,4 +131,7 @@ func ChangeColorBlue():
 func ChangeColorYellow():
 	$AnimatedSprite2D.modulate = Color(1, 1, 0.15, 1);
 	actual_modulate = "normal";
-	
+func ChangeSnowMan():
+	$AnimatedSprite2D.hide();
+	$SnowMan.show();
+	self.mass = 1.4;

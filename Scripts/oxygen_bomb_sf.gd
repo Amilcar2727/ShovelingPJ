@@ -105,6 +105,8 @@ func explote():
 	on_blackh = true;
 	#Apagamos area
 	$AnimatedSprite2D.visible = false;
+	if $SnowMan.visible:
+		$SnowMan.visible = false;
 	$ExplosionSprite.visible = true;
 	$Luces.visible = true;
 	$BoomSound.play();

@@ -344,6 +344,11 @@ func _StormEvent(mutant:=false):
 		.set_trans(Tween.TRANS_SINE)\
 		.set_ease(Tween.EASE_OUT); #curva suave y acelera
 	
+	## SnowMan para las cajas
+	tweenBG.tween_callback(func():
+		turn_boxes_snowman();
+	).set_delay(6);
+	
 	## Tormenta
 	tweenBG.tween_property($Tormenta,"position:x",-11500, 6)\
 		.set_delay(1.1)\
@@ -360,8 +365,36 @@ func _StormEvent(mutant:=false):
 	onStorm = false;
 
 func sonido_delay(sonido:AudioStreamPlayer):
-	await get_tree().create_timer(0.4).timeout;
+	await get_tree().create_timer(0.4,false).timeout;
 	sonido.play();
+
+func turn_boxes_snowman():
+	var cajas := get_tree().get_nodes_in_group("box");
+	var cajas_validas := [];
+	for caja in cajas:
+		if !is_instance_valid(caja):
+			continue;
+		if caja.out_screen:
+			continue;
+		if caja.position.x < $SpawnBoxesLP1.position.x + 250 or caja.position.x > $SpawnBoxesRP1.position.x - 250:
+			continue;
+		if caja.has_method("explote"):
+			if caja.exploting:
+				continue;
+		cajas_validas.append(caja);
+	#Validamos nro de cajas
+	if cajas_validas.is_empty():
+		return;
+	## Hacemos shuffle
+	cajas_validas.shuffle();
+	var boxes_to_snowman = cajas_validas.slice(0,5);
+	#Congelar cajas
+	print("Convirtiendo Muñecos!!");
+	for caja in boxes_to_snowman:
+		if is_instance_valid(caja):
+			caja.ChangeSnowMan();
+			$SnowManSound.play();
+			await get_tree().create_timer(0.1,false).timeout;
 
 func _tpPlayers():
 	if deathTime > 55: #Para no empezar a tepear desde el inicio xd

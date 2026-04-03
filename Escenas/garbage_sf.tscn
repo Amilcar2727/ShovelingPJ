@@ -1,17 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://befm5mmvqeo3f"]
+[gd_scene load_steps=7 format=3 uid="uid://befm5mmvqeo3f"]
 
 [ext_resource type="Script" path="res://Scripts/garbage_sf.gd" id="1_rcqj0"]
 [ext_resource type="Texture2D" uid="uid://dt6tvw4vd6xfd" path="res://art/Map3_SF/Garbage_sf.png" id="2_28o2o"]
-[ext_resource type="Texture2D" uid="uid://darlifaoaiilf" path="res://art/Map2_UFO/Garbage_UFO.png" id="2_smhdj"]
+[ext_resource type="Texture2D" uid="uid://dffjagymnvhow" path="res://art/Map3_SF/SnowMan.png" id="3_iomss"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
 animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("2_28o2o")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_smhdj")
 }],
 "loop": true,
 "name": &"idle",
@@ -20,6 +17,17 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
 size = Vector2(35, 45)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_81jh0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_iomss")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="GarbageBin" type="RigidBody2D"]
 z_index = 2
@@ -41,3 +49,9 @@ shape = SubResource("RectangleShape2D_jdfon")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(0, 8)
+
+[node name="SnowMan" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(0, 0.5)
+scale = Vector2(0.09, 0.09)
+sprite_frames = SubResource("SpriteFrames_81jh0")

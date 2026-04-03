@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1pm8ib6rmkie"]
+[gd_scene load_steps=8 format=3 uid="uid://b1pm8ib6rmkie"]
 
 [ext_resource type="Script" path="res://Scripts/box.gd" id="1_ja1ai"]
 [ext_resource type="Texture2D" uid="uid://d0eagbic7w4u2" path="res://art/Map3_SF/Box_sf.png" id="2_b4lqe"]
 [ext_resource type="AudioStream" uid="uid://1vj7fc5ouo2v" path="res://Sounds/[YT2mp3.info] - GolpeBonk - Sonido (320kbps).wav" id="3_5rk7q"]
+[ext_resource type="Texture2D" uid="uid://dffjagymnvhow" path="res://art/Map3_SF/SnowMan.png" id="4_yinpt"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
 animations = [{
@@ -17,6 +18,17 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
 size = Vector2(35, 37)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_giap6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_yinpt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Box" type="RigidBody2D"]
 z_index = 2
@@ -42,3 +54,9 @@ volume_db = -10.0
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(0, 16)
+
+[node name="SnowMan" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(0, 2)
+scale = Vector2(0.09, 0.09)
+sprite_frames = SubResource("SpriteFrames_giap6")

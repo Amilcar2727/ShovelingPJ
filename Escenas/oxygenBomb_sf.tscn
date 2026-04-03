@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://ger4lk6hd2bv"]
+[gd_scene load_steps=13 format=3 uid="uid://ger4lk6hd2bv"]
 
 [ext_resource type="Script" path="res://Scripts/oxygen_bomb_sf.gd" id="1_mvsum"]
 [ext_resource type="Texture2D" uid="uid://y1ss2rpxnpaf" path="res://art/Map3_SF/OrbBomb_SF.png" id="2_3yw3p"]
+[ext_resource type="Texture2D" uid="uid://dffjagymnvhow" path="res://art/Map3_SF/SnowMan.png" id="3_vmmv2"]
 [ext_resource type="Texture2D" uid="uid://b4tk1e1dm6xcb" path="res://art/Map3_SF/MiniBlackHole.png" id="4_fqvyg"]
 [ext_resource type="AudioStream" uid="uid://wjfynlxt4qvn" path="res://Sounds/BlackHoly.wav" id="4_tlkld"]
 [ext_resource type="AudioStream" uid="uid://ckll4ht2iytmm" path="res://Sounds/OrbeRoto.wav" id="5_e3jcj"]
@@ -15,6 +16,17 @@ animations = [{
 "loop": true,
 "name": &"idle",
 "speed": 0.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sfkhh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_vmmv2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
@@ -43,6 +55,12 @@ position = Vector2(0, 10)
 scale = Vector2(0.08, 0.08)
 sprite_frames = SubResource("SpriteFrames_gf44t")
 animation = &"idle"
+
+[node name="SnowMan" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(0, 2)
+scale = Vector2(0.09, 0.09)
+sprite_frames = SubResource("SpriteFrames_sfkhh")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 10)
@@ -80,6 +98,7 @@ position = Vector2(0, 10)
 shape = SubResource("CircleShape2D_sh8e0")
 
 [node name="Luces" type="Node2D" parent="."]
+visible = false
 position = Vector2(0, 8)
 
 [node name="PointLight2D" type="PointLight2D" parent="Luces"]
