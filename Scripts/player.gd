@@ -307,6 +307,8 @@ func _finish_asyncs():
 	self.friction = 700.0;
 	ShockElec.hide();
 	Frozen.hide();
+	if !self.can_launch_box:
+		self.can_launch_box = true;
 	LightFrozen.hide();
 	if !$TimerShockElec.is_stopped():
 		$TimerShockElec.stop();

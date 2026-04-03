@@ -4,6 +4,7 @@ extends Node
 @export var garbage_scene: PackedScene;
 @export var oxygenbomb_scene : PackedScene;
 @export var anim_camera_manager:Node;
+@onready var canvasModulate = $Background;
 
 var cinta_dir := -1;
 var cinta_vel := 1;
@@ -21,10 +22,9 @@ var rondaT := false;
 @onready var pauseMenu = $MenuPause; 
 
 # Eventos aleatorios
-@export var cow_scene:PackedScene;
-@export var cyborg_cow_scene:PackedScene;
-var onCow := false;
-@export var prob_cow:=0.15;
+var onStorm := false;
+@export var prob_storm:=0.15;
+var active_tweens := [];
 
 var onTp := false;
 @export var prob_tp:=0.15;
@@ -52,7 +52,7 @@ func _ready():
 	player2.right_action = "player2_right";
 	player2.shovel_action = "player2_shovel";
 	player2.shovel_up_action = "player2_shovel_up";
-	$Background.hide();
+	canvasModulate.show();
 	$BackgroundScn1.show();
 	$CintasAbajo.show();
 	$CintasArriba.show();
@@ -91,7 +91,7 @@ func on_animation(move := false,hiddenHud:=true):
 func new_game():
 	rondaT = false;
 	deathTime = Initialtime;
-	$Background.hide();
+	canvasModulate.show();
 	$BackgroundScn1.show();
 	$CintasAbajo.show();
 	$CintasArriba.show();
@@ -111,6 +111,8 @@ func new_game():
 	if !$Music.playing:
 		$Music.play();
 	get_tree().call_group("box","queue_free");
+	
+	onStorm = false;
 	onSDEvent = false;
 	suddenManager.stop_timer();
 	if suddenManager.SDObject_instance != null:
@@ -187,7 +189,7 @@ func apply_spawn_phase(phase:int):
 	
 	var cajas = get_tree().get_nodes_in_group("box")
 	for caja in cajas:
-		if caja.has_method("actualizar_velocidad") and caja.typeName != "Cow":
+		if caja.has_method("actualizar_velocidad"):
 			caja.actualizar_velocidad(vel_cajas);
 			
 	print("Wait_time: ",$BoxTimer.wait_time);
@@ -290,6 +292,16 @@ func on_win(player):
 		player2.ToRotate.rotation = deg_to_rad(180);
 		player1.direccion_shovel = 1;
 		player2.direccion_shovel = 1;
+		player1.can_launch_box
+		##Tweens
+		for t in active_tweens:
+			if t.is_valid():
+				t.kill()
+		active_tweens.clear();
+		$Tormenta.position.x = 0;
+		if $SnowStorm.playing:
+			$SnowStorm.stop();
+		canvasModulate.color = Color("#d7def6");
 		new_game();
 	else:
 		$Music.stop();
@@ -311,49 +323,45 @@ func finishGame():
 	GameData.winner = int(player2.score > player1.score) + 1;
 	get_tree().change_scene_to_file("res://Escenas/VictoryScreen.tscn");
 
-func _throwCow(mutant:=false):
-	if deathTime > 55: #Para no arrojas vacas desde el inicio xd
+func _StormEvent(mutant:=false):
+	if deathTime > 55:
 		return;
-	if onCow and !mutant:
+	if onStorm:
 		return;
-	onCow = true;
-	var cow_instantiate;
-	if mutant:
-		cow_instantiate = cyborg_cow_scene.instantiate();
-		cow_instantiate.inmortal = true;
-		print("Instanciando vaca cyborg");
-	else:
-		cow_instantiate = cow_scene.instantiate();
-		print("Instanciando vaca normal");
-	cow_instantiate.cow_died.connect(_on_cow_died);
-	var spawn = randi_range(0,1);
-	var PosX:float
-	var PosY:float
+	print("Nevando!!");
+	onStorm = true;
+	## Canvas
+	var tweenBG = create_tween();
+	active_tweens.append(tweenBG);
+	## Sonido
+	sonido_delay($SnowStorm);
+	# Para animaciones paralelas
+	tweenBG.set_parallel(true);
+	# Oscurecer
+	##.trans -> curva de movimiento
+	##.ease -> Define donde acelera/desacelera
+	tweenBG.tween_property(canvasModulate,"color",Color("#4a5a8a"),1.4)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT); #curva suave y acelera
 	
-	PosY = randf_range($SpawnBoxesLP2.position.y+50, $SpawnBoxesLP1.position.y-50);
-		
-	cow_instantiate.use_local_direction = true;
-	if mutant:
-		cow_instantiate.hitted = true;
-	else:
-		cow_instantiate.actualizar_velocidad(vel_cajas * 2);
-	if spawn == 0:
-		if not mutant:
-			cow_instantiate.direction_local = -cinta_dir;
-			PosX = $SpawnBoxesRP1.position.x + 50;
-	elif spawn == 1:
-		if not mutant:
-			cow_instantiate.direction_local = cinta_dir;
-			PosX = $SpawnBoxesLP1.position.x - 50;
-	if mutant:
-		PosX = $SpawnBoxesRP1.position.x/2;
-	cow_instantiate.position = Vector2(PosX,PosY);
-	## == Spawneamos la caja agregandolo a la escena:
-	add_child(cow_instantiate);
-	return cow_instantiate;
+	## Tormenta
+	tweenBG.tween_property($Tormenta,"position:x",-11500, 6)\
+		.set_delay(1.1)\
+		.set_trans(Tween.TRANS_LINEAR); #vel. constante
 
-func _on_cow_died():
-	onCow = false
+	##Retornar al color normal del canvas
+	tweenBG.tween_property(canvasModulate,"color",Color("#d7def6"),2)\
+		.set_delay(5.6)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN);
+	
+	await tweenBG.finished;
+	$Tormenta.position.x = 0;
+	onStorm = false;
+
+func sonido_delay(sonido:AudioStreamPlayer):
+	await get_tree().create_timer(0.4).timeout;
+	sonido.play();
 
 func _tpPlayers():
 	if deathTime > 55: #Para no empezar a tepear desde el inicio xd
@@ -416,16 +424,20 @@ func _tpPlayers():
 	if !player2.onFreeze:
 		player2.can_move = true;
 	$Tp2.play();
+	#Shake camara
+	$Camera2D.offset += Vector2(randf_range(-6, 6), randf_range(-6, 6));
+	await get_tree().create_timer(0.08, false).timeout
+	$Camera2D.offset = Vector2(640, 360);
 	player1.swapCS(); ##Prendemos CollisionShape
 	player2.swapCS();
 		
 	onTp = false;
 	
 func _on_timer_random_events_timeout() -> void:
-	#if !onCow:
-		#var nr = randf();
-		#if nr <= prob_cow and deathTime > 2:
-			#_throwCow();
+	if !onStorm:
+		var nr = randf();
+		if nr <= prob_storm:
+			_StormEvent();
 	if !onTp:
 		var nr = randf();
 		if nr <= prob_tp:

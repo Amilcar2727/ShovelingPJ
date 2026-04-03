@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://gakltdbohxpe"]
+[gd_scene load_steps=31 format=3 uid="uid://gakltdbohxpe"]
 
 [ext_resource type="Script" path="res://Scripts/main3.gd" id="1_ah630"]
 [ext_resource type="PackedScene" uid="uid://b1pm8ib6rmkie" path="res://Escenas/box_sf.tscn" id="2_er38h"]
@@ -6,8 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://ger4lk6hd2bv" path="res://Escenas/oxygenBomb_sf.tscn" id="4_tv14g"]
 [ext_resource type="Texture2D" uid="uid://pe8pttaaaqpo" path="res://art/WhiteForestBackGround.png" id="7_qnrn8"]
 [ext_resource type="PackedScene" uid="uid://dhcx0qiyy28w2" path="res://Escenas/wall_bomb.tscn" id="8_jllo6"]
+[ext_resource type="AudioStream" uid="uid://dbko7aaww0b34" path="res://Sounds/Snowstorm2.wav" id="9_1mcuv"]
 [ext_resource type="Texture2D" uid="uid://cpxovtrfcg5mj" path="res://art/Map3_SF/Platform.png" id="9_fmwet"]
 [ext_resource type="AudioStream" uid="uid://c31g3ab8l345a" path="res://Sounds/The 4 Seasons, Op. 84, RV 297, Winter.wav" id="10_8v6eo"]
+[ext_resource type="Texture2D" uid="uid://ck8lcbwacg10u" path="res://art/Map3_SF/SnowStorm1.png" id="21_e52dd"]
+[ext_resource type="Texture2D" uid="uid://oklntkimksl3" path="res://art/Map3_SF/SnowStorm2.png" id="22_uhqvr"]
 [ext_resource type="AudioStream" uid="uid://bdm6y134kpke" path="res://Sounds/Conveyor.wav" id="34_ghjtr"]
 [ext_resource type="AudioStream" uid="uid://bg1uvxh72sl2q" path="res://Sounds/Tp1.wav" id="35_5d78r"]
 [ext_resource type="AudioStream" uid="uid://d0lora80gurrn" path="res://Sounds/Tp2.wav" id="36_7wyfv"]
@@ -401,8 +404,9 @@ sprite_frames = SubResource("SpriteFrames_dmmgr")
 stream = ExtResource("10_8v6eo")
 volume_db = -15.0
 
-[node name="LightsOn" type="AudioStreamPlayer" parent="."]
-volume_db = -10.0
+[node name="SnowStorm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_1mcuv")
+volume_db = -8.0
 
 [node name="Conveyor" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("34_ghjtr")
@@ -460,7 +464,7 @@ visible = false
 
 [node name="Background" type="CanvasModulate" parent="."]
 z_index = 4
-color = Color(0.913044, 0.777103, 0.999427, 1)
+color = Color(0.842324, 0.868657, 0.96605, 1)
 
 [node name="BordesMundo" type="Node2D" parent="."]
 
@@ -503,6 +507,32 @@ script = ExtResource("45_tkdqp")
 shape = SubResource("RectangleShape2D_coxxd")
 
 [node name="TimerRandomEvents" type="Timer" parent="."]
+
+[node name="Tormenta" type="Node2D" parent="."]
+
+[node name="SnowStorm" type="TextureRect" parent="Tormenta"]
+z_index = 5
+offset_left = 1303.0
+offset_right = 4616.93
+offset_bottom = 721.0
+texture = ExtResource("21_e52dd")
+expand_mode = 3
+
+[node name="SnowStorm2" type="TextureRect" parent="Tormenta"]
+z_index = 5
+offset_left = 4616.93
+offset_right = 7930.86
+offset_bottom = 721.0
+texture = ExtResource("22_uhqvr")
+expand_mode = 3
+
+[node name="SnowStorm3" type="TextureRect" parent="Tormenta"]
+z_index = 5
+offset_left = 7930.86
+offset_right = 11244.8
+offset_bottom = 721.0
+texture = ExtResource("21_e52dd")
+expand_mode = 3
 
 [connection signal="suddenDSignal" from="." to="SuddenDeathManager" method="_on_main_sudden_d_signal"]
 [connection signal="timeout" from="BoxTimer" to="." method="_on_box_timer_timeout"]
