@@ -80,7 +80,7 @@ position = Vector2(0, 10)
 shape = SubResource("CircleShape2D_sh8e0")
 
 [node name="Luces" type="Node2D" parent="."]
-visible = false
+position = Vector2(0, 8)
 
 [node name="PointLight2D" type="PointLight2D" parent="Luces"]
 scale = Vector2(0.3, 0.3)

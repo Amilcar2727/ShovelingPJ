@@ -108,10 +108,9 @@ func explote():
 	$ExplosionSprite.visible = true;
 	$Luces.visible = true;
 	$BoomSound.play();
-	#$ExplosionArea/AnimationPlayer.play("laser_explosion_up_down");
+	#
+	_animacion_giro();
 	await get_tree().create_timer(3,false).timeout; #Simula animacion
-	#$ExplosionArea/AnimationPlayer.play("laser_explosion_down_up");
-	#await $ExplosionArea/AnimationPlayer.animation_finished;
 	on_blackh = false;
 	## Restaurar fuerzas
 	for jugador in fuerzas_guardadas.keys():
@@ -128,6 +127,23 @@ func explote():
 	$MidArea2.monitoring = false;
 	$OuterArea3.monitoring = false;
 	queue_free();
+		
+func _animacion_giro():
+	var tween_rot = create_tween()
+	tween_rot.set_parallel(true);
+	tween_rot.tween_property($ExplosionSprite, "rotation", PI * 2, 4.0)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_OUT);
+	tween_rot.tween_property($Luces, "rotation", PI * 2, 4.0)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_OUT);
+		
+	var tween_scale = create_tween()
+	tween_scale.set_loops()  # Loop infinito
+	tween_scale.tween_property($ExplosionSprite, "scale", Vector2(0.52,0.52), 0.6)\
+		.set_trans(Tween.TRANS_SINE);
+	tween_scale.tween_property($ExplosionSprite, "scale", Vector2(0.48,0.48), 0.6)\
+		.set_trans(Tween.TRANS_SINE);
 		
 func _on_impact(_body):
 	explote();
