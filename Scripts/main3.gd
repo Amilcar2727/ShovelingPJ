@@ -12,7 +12,7 @@ var cambiando_cinta := false;
 var vel_cajas := 100;
 
 var spawn_phase := 0
-const Initialtime:int = 60;
+const Initialtime:int = 5;
 var deathTime:int = Initialtime;
 var rondaN = 1;
 var rondaT := false;
@@ -28,6 +28,7 @@ var active_tweens := [];
 
 var onTp := false;
 @export var prob_tp:=0.15;
+var timeWaitTp := 0.5;
 # Antena
 #@export var antena_scene:PackedScene;
 #@export var palanca_scene:PackedScene;
@@ -125,8 +126,10 @@ func new_game():
 	player2.cinta_activa = false;
 	on_animation(false,false);
 	DirectionCintas(cinta_vel,cinta_dir);
+	canvasModulate.color = Color("#d7def6");
 	await HUD.getReady(rondaN);
 	cinta_dir = -1;
+	timeWaitTp = 0.5;
 	#Cintas animacion
 	refresh_phase();
 	$Conveyor.play();
@@ -246,14 +249,17 @@ func _on_death_timer_timeout():
 	if(deathTime == 0):	#SuddenDeath
 		player1.fuerzaEmpujeCinta = -250*cinta_dir;
 		player2.fuerzaEmpujeCinta = 250*cinta_dir;
-		HUD.show_sudden_death();
 		$DeathTimer.stop();
-		$BoxTimer.stop();
-		get_tree().call_group("box","queue_free");
+		#$BoxTimer.stop();
+		#get_tree().call_group("box","queue_free");
+		HUD.show_sudden_death();
 		await get_tree().process_frame;
 		onSDEvent = true;
 		suddenDSignal.emit();
-		
+	
+func changes_sd():
+	timeWaitTp = 0.2;
+	
 func spawnObject(instancia,escena:PackedScene,pos:Vector2):
 	instancia = escena.instantiate();
 	instancia.position = pos;
@@ -271,10 +277,6 @@ func on_win(player):
 	$BoxTimer.stop();
 	$TimerRandomEvents.stop();
 	player.score += 1;
-	if onSDEvent:
-		suddenManager.stop_timer();
-		onSDEvent = false;
-		
 	await game_show_win("Player "+str(player.player_id));
 	#Aumenta en 1 a las rondas
 	if player1.score != 3 && player2.score != 3:
@@ -301,7 +303,9 @@ func on_win(player):
 		$Tormenta.position.x = 0;
 		if $SnowStorm.playing:
 			$SnowStorm.stop();
-		canvasModulate.color = Color("#d7def6");
+		if onSDEvent:
+			suddenManager.stop_timer();
+			onSDEvent = false;
 		new_game();
 	else:
 		$Music.stop();
@@ -340,9 +344,22 @@ func _StormEvent(mutant:=false):
 	# Oscurecer
 	##.trans -> curva de movimiento
 	##.ease -> Define donde acelera/desacelera
-	tweenBG.tween_property(canvasModulate,"color",Color("#4a5a8a"),1.4)\
-		.set_trans(Tween.TRANS_SINE)\
-		.set_ease(Tween.EASE_OUT); #curva suave y acelera
+	tweenBG.tween_callback(func():
+		if !onSDEvent:
+			print("Entrando Color Normal Canvas");
+			var t = create_tween()
+			active_tweens.append(t);
+			t.tween_property(canvasModulate,"color",Color("#4a5a8a"),1.4)\
+			.set_trans(Tween.TRANS_SINE)\
+			.set_ease(Tween.EASE_OUT); #curva suave y acelera
+		else:
+			print("Entrando Color SD Canvas")
+			var t = create_tween();
+			active_tweens.append(t);
+			t.tween_property(canvasModulate,"color",Color("#a02819"),1.4)\
+			.set_trans(Tween.TRANS_SINE)\
+			.set_ease(Tween.EASE_OUT); #curva suave y acelera
+	)
 	
 	## SnowMan para las cajas
 	tweenBG.tween_callback(func():
@@ -353,13 +370,23 @@ func _StormEvent(mutant:=false):
 	tweenBG.tween_property($Tormenta,"position:x",-11500, 6)\
 		.set_delay(1.1)\
 		.set_trans(Tween.TRANS_LINEAR); #vel. constante
-
-	##Retornar al color normal del canvas
-	tweenBG.tween_property(canvasModulate,"color",Color("#d7def6"),2)\
-		.set_delay(5.6)\
-		.set_trans(Tween.TRANS_SINE)\
-		.set_ease(Tween.EASE_IN);
 	
+	tweenBG.tween_callback(func():
+		if !onSDEvent:
+			print("Regresando Color Normal Canvas")
+			var t = create_tween()
+			active_tweens.append(t);
+			t.tween_property(canvasModulate,"color",Color("#d7def6"),2)\
+				.set_trans(Tween.TRANS_SINE)\
+				.set_ease(Tween.EASE_IN)
+		else:
+			print("Regresando Color SD Canvas")
+			var t = create_tween()
+			active_tweens.append(t);
+			t.tween_property(canvasModulate,"color",Color("#ff7a2f"),2)\
+				.set_trans(Tween.TRANS_SINE)\
+				.set_ease(Tween.EASE_IN)
+	).set_delay(5.6)
 	await tweenBG.finished;
 	$Tormenta.position.x = 0;
 	onStorm = false;
@@ -428,7 +455,7 @@ func _tpPlayers():
 	player1.vel_actual = Vector2.ZERO;
 	player1.swapCS(); ##Apagamos CollisionShape
 	player2.swapCS();
-	await get_tree().create_timer(0.5,false).timeout;
+	await get_tree().create_timer(timeWaitTp,false).timeout;
 	
 	#Tepear
 	var pos_actual_x1 = player1.position.x;

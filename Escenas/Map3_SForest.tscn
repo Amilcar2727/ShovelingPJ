@@ -10,15 +10,15 @@
 [ext_resource type="Texture2D" uid="uid://cpxovtrfcg5mj" path="res://art/Map3_SF/Platform.png" id="9_fmwet"]
 [ext_resource type="AudioStream" uid="uid://c31g3ab8l345a" path="res://Sounds/The 4 Seasons, Op. 84, RV 297, Winter.wav" id="10_8v6eo"]
 [ext_resource type="AudioStream" uid="uid://bw6w7fpimnvf0" path="res://Sounds/SnowMan.wav" id="13_2f6mb"]
+[ext_resource type="Script" path="res://Scripts/sudden_death_manager3.gd" id="16_u26ah"]
 [ext_resource type="Texture2D" uid="uid://ck8lcbwacg10u" path="res://art/Map3_SF/SnowStorm1.png" id="21_e52dd"]
 [ext_resource type="Texture2D" uid="uid://oklntkimksl3" path="res://art/Map3_SF/SnowStorm2.png" id="22_uhqvr"]
+[ext_resource type="PackedScene" uid="uid://l1d8lhsi5low" path="res://Escenas/BlackHole.tscn" id="25_iw4q4"]
 [ext_resource type="AudioStream" uid="uid://bdm6y134kpke" path="res://Sounds/Conveyor.wav" id="34_ghjtr"]
 [ext_resource type="AudioStream" uid="uid://bg1uvxh72sl2q" path="res://Sounds/Tp1.wav" id="35_5d78r"]
 [ext_resource type="AudioStream" uid="uid://d0lora80gurrn" path="res://Sounds/Tp2.wav" id="36_7wyfv"]
 [ext_resource type="PackedScene" uid="uid://cr5nto0v1cvtd" path="res://Escenas/player.tscn" id="37_3172w"]
 [ext_resource type="PackedScene" uid="uid://cegydit6x7onr" path="res://Escenas/hud.tscn" id="38_dvppm"]
-[ext_resource type="Script" path="res://Scripts/sudden_death_manager2.gd" id="39_5nwa1"]
-[ext_resource type="PackedScene" uid="uid://b4bgrygy1um2p" path="res://Escenas/PortalBeacons.tscn" id="40_vixnj"]
 [ext_resource type="AudioStream" uid="uid://claiwdfhckttv" path="res://Sounds/fighting.wav" id="41_r5r5t"]
 [ext_resource type="AudioStream" uid="uid://csifcv3w0jpms" path="res://Sounds/falling.wav" id="42_2sk68"]
 [ext_resource type="Script" path="res://Scripts/animation_manager.gd" id="43_jfpw1"]
@@ -281,7 +281,7 @@ _data = {
 size = Vector2(1920, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_coxxd"]
-size = Vector2(1080, 10)
+size = Vector2(1540, 10)
 
 [node name="main" type="Node" node_paths=PackedStringArray("anim_camera_manager")]
 process_mode = 1
@@ -440,8 +440,8 @@ player_id = 2
 [node name="HUD" parent="." instance=ExtResource("38_dvppm")]
 
 [node name="SuddenDeathManager" type="Node" parent="."]
-script = ExtResource("39_5nwa1")
-SDObject_scene = ExtResource("40_vixnj")
+script = ExtResource("16_u26ah")
+SDObject_scene = ExtResource("25_iw4q4")
 
 [node name="SuddenDeathTimer" type="Timer" parent="."]
 
@@ -469,12 +469,12 @@ visible = false
 
 [node name="Background" type="CanvasModulate" parent="."]
 z_index = 4
-color = Color(0.842324, 0.868657, 0.96605, 1)
+color = Color(0.843137, 0.870588, 0.964706, 1)
 
 [node name="BordesMundo" type="Node2D" parent="."]
 
 [node name="Area2D" type="Area2D" parent="BordesMundo"]
-position = Vector2(640, 900)
+position = Vector2(640, 1125)
 collision_layer = 32
 collision_mask = 4
 script = ExtResource("45_tkdqp")
@@ -483,7 +483,7 @@ script = ExtResource("45_tkdqp")
 shape = SubResource("RectangleShape2D_anuap")
 
 [node name="Area2D2" type="Area2D" parent="BordesMundo"]
-position = Vector2(640, -180)
+position = Vector2(640, -405)
 collision_layer = 32
 collision_mask = 4
 script = ExtResource("45_tkdqp")

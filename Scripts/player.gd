@@ -344,7 +344,8 @@ func _electric_shock():
 	$TimerShockElec.start();
 
 ### Congelando
-func _freezing():
+func _freezing(time:=3):
+	$TimerFrozen.wait_time = time;
 	if onFreeze:
 		$TimerFrozen.start();
 		if !$FrozeSound.playing:

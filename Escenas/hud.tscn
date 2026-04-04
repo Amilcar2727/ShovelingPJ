@@ -250,5 +250,7 @@ texture = ExtResource("4_uvus4")
 expand_mode = 2
 flip_h = true
 
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="pressed" from="OptionsButton" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="GoBackGameButton" to="." method="_on_go_back_game_button_pressed"]

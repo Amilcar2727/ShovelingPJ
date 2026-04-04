@@ -23,6 +23,7 @@ func show_message(text,color=null):
 	#$MessageTimer.start();
 	
 func getReady(rondaN):
+	messageLabel.show();
 	show_message("Round " + str(rondaN));
 	await get_tree().create_timer(1.5,false).timeout;
 	show_message("Get Ready!");
@@ -34,7 +35,9 @@ func getReady(rondaN):
 func show_sudden_death():
 	messageLabel.show();
 	show_message("MUERTE SÚBITA!",Color(128, 0, 128, 1));
-	await get_tree().create_timer(1.5,false).timeout;
+	$Timer.wait_time = 1.5;
+	$Timer.start();
+	await $Timer.timeout;
 	messageLabel.hide();
 	
 func show_game_won(player:String):
@@ -44,7 +47,9 @@ func show_game_won(player:String):
 		show_message(msgWinner, Color(1,0.36,0.3,1));
 	elif(player == "Player 2"):
 		show_message(msgWinner, Color(0.35,0.61,1,1));
-	await get_tree().create_timer(4.0,false).timeout;
+	$Timer.wait_time = 4;
+	$Timer.start();
+	await $Timer.timeout;
 	# Wait until the MessageTimer has counted down.
 	#await $MessageTimer.timeout;
 	# Make a one-shot timer and wait for it to finish.

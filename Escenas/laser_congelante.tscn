@@ -1,27 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://dkhyl6ifm0cwk"]
+[gd_scene load_steps=11 format=3 uid="uid://bicvqrgnae6oi"]
 
-[ext_resource type="Script" path="res://Scripts/oxygen_bomb_ufo.gd" id="1_bnrsp"]
-[ext_resource type="Texture2D" uid="uid://bug2os1l5kpnr" path="res://art/Map2_UFO/BeaconBomba.png" id="2_t1qan"]
-[ext_resource type="Texture2D" uid="uid://dh5j8y3gcbvc8" path="res://art/Map2_UFO/BeaconLaser.png" id="3_p6klg"]
-[ext_resource type="AudioStream" uid="uid://bg0primpb4ybb" path="res://Sounds/Laser.wav" id="4_46adm"]
-[ext_resource type="AudioStream" uid="uid://eff7riha1qm6" path="res://Sounds/BeaconBeep.wav" id="5_37ufw"]
+[ext_resource type="Script" path="res://Scripts/laser_congelante.gd" id="1_gegd6"]
+[ext_resource type="AudioStream" uid="uid://bg0primpb4ybb" path="res://Sounds/Laser.wav" id="2_8xamd"]
+[ext_resource type="Texture2D" uid="uid://dqbpjq4y4cago" path="res://art/Map3_SF/LaserCongelante.png" id="2_38dxv"]
+[ext_resource type="AudioStream" uid="uid://eff7riha1qm6" path="res://Sounds/BeaconBeep.wav" id="3_76w3r"]
+[ext_resource type="Texture2D" uid="uid://dxtpxpy27n7s0" path="res://art/Map3_SF/WarningSign.png" id="3_l6txi"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_gf44t"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_t1qan")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 0.0
-}]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdfon"]
-size = Vector2(30, 30)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_fwj67"]
-size = Vector2(200, 1440)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hdfnw"]
+size = Vector2(180, 1440)
 
 [sub_resource type="Animation" id="Animation_urgqw"]
 length = 0.001
@@ -113,36 +99,28 @@ _data = {
 "laser_explosion_up_down": SubResource("Animation_rhvfu")
 }
 
-[node name="OxygenBomb" type="RigidBody2D"]
-z_index = 2
-collision_layer = 68
-collision_mask = 47
-mass = 2.0
-gravity_scale = 0.0
-script = ExtResource("1_bnrsp")
-metadata/_edit_group_ = true
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, 10)
-scale = Vector2(0.05, 0.05)
-sprite_frames = SubResource("SpriteFrames_gf44t")
-animation = &"idle"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 10)
-shape = SubResource("RectangleShape2D_jdfon")
+[node name="LaserCongelante" type="Node2D"]
+script = ExtResource("1_gegd6")
 
 [node name="ExplosionSprite" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.784314)
 z_index = 3
-scale = Vector2(2, 1.3)
-texture = ExtResource("3_p6klg")
+position = Vector2(0, -1500)
+scale = Vector2(1.6, 2)
+texture = ExtResource("2_38dxv")
+
+[node name="ExplosionSprite2" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.729412)
+z_index = 3
+scale = Vector2(1.6, 2)
+texture = ExtResource("3_l6txi")
 
 [node name="ExplosionArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 37
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea"]
-shape = SubResource("RectangleShape2D_fwj67")
+shape = SubResource("RectangleShape2D_hdfnw")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ExplosionArea"]
 libraries = {
@@ -152,26 +130,16 @@ libraries = {
 [node name="Luces" type="Node2D" parent="."]
 
 [node name="PointLight2D" type="PointLight2D" parent="Luces"]
-scale = Vector2(2.5, 2.5)
-color = Color(1, 1, 0.101961, 1)
-energy = 2.0
-texture = ExtResource("3_p6klg")
-
-[node name="PointLight2D2" type="PointLight2D" parent="Luces"]
-color = Color(0.713726, 0, 0.0156863, 1)
-energy = 10.0
-texture = ExtResource("3_p6klg")
+scale = Vector2(1.09, 2)
+color = Color(0.615686, 1, 1, 1)
+texture = ExtResource("2_38dxv")
 
 [node name="BoomSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_46adm")
+stream = ExtResource("2_8xamd")
 volume_db = -16.0
 
 [node name="Call" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("5_37ufw")
+stream = ExtResource("3_76w3r")
 volume_db = -13.0
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-position = Vector2(0, 8)
-
 [connection signal="area_entered" from="ExplosionArea" to="." method="_on_explosion_area_area_entered"]
-[connection signal="body_entered" from="ExplosionArea" to="." method="_on_explosion_area_body_entered"]

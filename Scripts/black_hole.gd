@@ -1,42 +1,55 @@
-extends BaseBox
+extends Node2D
 
-var exploting := false;
-var on_blackh := false;
+var on_blackh:=true;
+var forceMid := 600;
+var forceOuter := 450; 
 var fuerzas_guardadas := {};
 var bodies_guardados := [];
+## Laser Congelante
+@export var laser_scene:PackedScene;
+var on_laser := false;
+
+##Referencias nodos
+@onready var ExplosionArea = $BlackHole/ExplosionArea;
+@onready var MidArea2 = $BlackHole/MidArea2;
+@onready var OuterArea3 = $BlackHole/OuterArea3;
+
+@onready var ExplosionSprite = $BlackHole/ExplosionSprite;
+@onready var Luces = $BlackHole/Luces;
+@onready var BoomSound = $BlackHole/BoomSound;
 
 func _ready():
-	typeName = "OxygenBomb"
-	$ExplosionArea.monitoring = false; #Empieza apagado
-	$MidArea2.monitoring = false; #Empieza apagado
-	$OuterArea3.monitoring = false; #Empieza apagado
-	$ExplosionSprite.visible = false;
-	$AnimatedSprite2D.visible = true;
-	exploting = false;
+	ExplosionArea.monitoring = false; #Empieza apagado
+	MidArea2.monitoring = false; #Empieza apagado
+	OuterArea3.monitoring = false; #Empieza apagado
+	ExplosionSprite.visible = false;
 	on_blackh = false;
-	$Luces.visible = false;
+	Luces.visible = false;
 	fuerzas_guardadas = {};
-	super()
+	explote();
+
+func _StartTimerLaser(time:=4) -> void:
+	$TimerLaser.wait_time = time;
+	if on_laser:
+		return;
+	$TimerLaser.start();
 	
-func ChangeColorRed():
-	$AnimatedSprite2D.modulate = Color(1, 0.1, 0.1, 1);
-	actual_modulate = "red";
-func ChangeColorBlue():
-	$AnimatedSprite2D.modulate = Color(0.1, 0.35, 1, 1);
-	actual_modulate = "blue";
+func _ChangeForces(force:Vector2):
+	forceOuter = force.x;
+	forceMid = force.y;
 	
 func _physics_process(_delta: float) -> void:
 	if !on_blackh:
 		return;
-	_apply_force($OuterArea3, 350);
-	_apply_force($MidArea2, 525);
+	_apply_force(OuterArea3, forceOuter);
+	_apply_force(MidArea2, forceMid);
 
 func _apply_force(area:Area2D, fuerza:float):
 	for body in area.get_overlapping_bodies():
 		if body is BaseBox and body != self:
 			body.hitted = true;
 			# Direccion del agujero negro al objeto
-			var dir = (self.global_position - body.global_position).normalized();
+			var dir = ($BlackHole.global_position - body.global_position).normalized();
 			var force_vector = dir * fuerza * body.mass;
 			# Aplicamos impulso
 			body.apply_central_force(force_vector);
@@ -47,39 +60,20 @@ func _apply_force(area:Area2D, fuerza:float):
 			print(rootNode, rootNode.name);
 			fuerzas_guardadas[rootNode] = rootNode.fuerzaExterna;
 		# Direccion del agujero negro al objeto
-		var dir = (self.global_position - rootNode.global_position).normalized();
-		var fuerza_aplicada = fuerza * 0.36;
+		var dir = ($BlackHole.global_position - rootNode.global_position).normalized();
+		var fuerza_aplicada = fuerza * 0.58;
 		rootNode.fuerzaExterna = fuerza_aplicada * sign(dir.x);
-
-func _on_body_entered(_body):
-	##Si el cuerpo choca con el jugador, hiteable, o piso, explota
-	if (_body.name in ["Floor1", "Floor2"] or _body.is_in_group("box")) and _body != self:
-		if hitted:
-			explote();
-		else:
-			pass;
-	super._on_body_entered(_body);
 	
 func explote():
-	if exploting:
-		return;
-	exploting = true;
-	# Apagamos el area de una vez para evitar fuerzas adicionales
-	$CollisionShape2D.call_deferred("set_disabled",true);
-	set_deferred("linear_velocity",Vector2.ZERO); #Lo detenemos
-	set_deferred("angular_velocity", 0);
-	## Animacion de llamado a blackhole
-	$Call.play();
-	
 	## BlackHole
-	$ExplosionArea.monitoring = true;
-	$MidArea2.monitoring = true;
-	$OuterArea3.monitoring = true;
+	ExplosionArea.monitoring = true;
+	MidArea2.monitoring = true;
+	OuterArea3.monitoring = true;
 	#Esperamos 2 frames a que se actualizen las colisiones
 	await get_tree().physics_frame; #Espera un frame
 	await get_tree().physics_frame; #Espera un frame
 	## Desactivamos el mask si estan en area cercana (la outer abarca todo)
-	for body in $OuterArea3.get_overlapping_bodies():
+	for body in OuterArea3.get_overlapping_bodies():
 		if !is_instance_valid(body):
 			continue;
 		if body.has_method("explote") and body != self:
@@ -89,7 +83,7 @@ func explote():
 				bodies_guardados.append(body);
 	
 	#Eliminamos los objetos en el area
-	for body in $ExplosionArea.get_overlapping_bodies(): #Hiteables
+	for body in ExplosionArea.get_overlapping_bodies(): #Hiteables
 		if body.has_method("_on_explosion") and body != self:
 			print("On_explosion_bodies: ",body.typeName);
 			if body.typeName == "OxygenBomb":
@@ -97,21 +91,19 @@ func explote():
 				continue;
 			#print(body.name);
 			body._on_explosion(self);
-	for area in $ExplosionArea.get_overlapping_areas(): #Players
+	for area in ExplosionArea.get_overlapping_areas(): #Players
 		var rootNode = area.get_owner();
 		if rootNode.has_method("_on_explosion") and rootNode != self:
+			print("Murio al inicio: ",rootNode.name);
 			rootNode._on_explosion(self);
-	##Prendemos area
+
 	on_blackh = true;
-	$AnimatedSprite2D.visible = false;
-	if $SnowMan.visible:
-		$SnowMan.visible = false;
-	$ExplosionSprite.visible = true;
-	$Luces.visible = true;
-	$BoomSound.play();
+	ExplosionSprite.visible = true;
+	Luces.visible = true;
+	BoomSound.play();
 	#
 	_animacion_giro();
-	await get_tree().create_timer(3,false).timeout; #Simula animacion
+	await get_tree().create_timer(30,false).timeout; #Simula animacion
 	#Apagamos area
 	on_blackh = false;
 	## Restaurar fuerzas
@@ -123,39 +115,35 @@ func explote():
 	## Restauramos orbes
 	_restaurar_cuerpos();
 	# Apagamos area
-	if $BoomSound.playing:
-		await $BoomSound.finished;
-	$ExplosionArea.monitoring = false;
-	$MidArea2.monitoring = false;
-	$OuterArea3.monitoring = false;
+	if BoomSound.playing:
+		await BoomSound.finished;
+	ExplosionArea.monitoring = false;
+	MidArea2.monitoring = false;
+	OuterArea3.monitoring = false;
 	queue_free();
 		
 func _animacion_giro():
 	var tween_rot = create_tween()
-	tween_rot.set_parallel(true);
-	tween_rot.tween_property($ExplosionSprite, "rotation", PI * 2, 4.0)\
-		.set_trans(Tween.TRANS_LINEAR)\
-		.set_ease(Tween.EASE_OUT);
-	tween_rot.tween_property($Luces, "rotation", PI * 2, 4.0)\
-		.set_trans(Tween.TRANS_LINEAR)\
-		.set_ease(Tween.EASE_OUT);
+	tween_rot.set_loops();
+	tween_rot.tween_property(ExplosionSprite, "rotation", PI * 2, 2.0)\
+		.as_relative()\
+		.set_trans(Tween.TRANS_LINEAR);
+		
+	var tween_luces = create_tween();
+	tween_luces.set_loops();
+	tween_luces.tween_property(Luces, "rotation", PI * 2, 2.0)\
+		.as_relative()\
+		.set_trans(Tween.TRANS_LINEAR);
 		
 	var tween_scale = create_tween()
 	tween_scale.set_loops()  # Loop infinito
-	tween_scale.tween_property($ExplosionSprite, "scale", Vector2(0.52,0.52), 0.6)\
-		.set_trans(Tween.TRANS_SINE);
-	tween_scale.tween_property($ExplosionSprite, "scale", Vector2(0.48,0.48), 0.6)\
-		.set_trans(Tween.TRANS_SINE);
+	tween_scale.tween_property(ExplosionSprite, "scale", Vector2(1.1,1.1), 0.8)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT);
 		
-func _on_impact(_body):
-	explote();
-	_body.hide();
-	_body.hit.emit();
-
-func _on_explosion(_body):
-	if exploting:
-		return
-	queue_free();
+	tween_scale.tween_property(ExplosionSprite, "scale", Vector2(0.9,0.9), 0.8)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN);
 
 func _on_explosion_area_body_entered(body: Node2D) -> void:
 	if !on_blackh:
@@ -168,6 +156,7 @@ func _on_explosion_area_area_entered(area: Area2D) -> void:
 		return;
 	var rootNode = area.get_owner();
 	if rootNode.has_method("_on_explosion") and rootNode != self:
+		print("Murio despues: ",rootNode.name);
 		rootNode._on_explosion(self);
 
 #Entrada blackhole para orbes
@@ -199,3 +188,25 @@ func _restaurar_cuerpos():
 	
 func _exit_tree() -> void:
 	_restaurar_cuerpos();
+
+func instanciar_laser() -> void:
+	if on_laser:
+		return;
+	print("Instanciando Laser!!");
+	on_laser = true;
+	var instancia_laser1 = laser_scene.instantiate();
+	var instancia_laser2 = laser_scene.instantiate();
+	const spawn_y = 500;
+	var spawn1_x = randi_range(40,410);
+	var spawn2_x = randi_range(860,1230);
+	instancia_laser1.position = Vector2(spawn1_x,spawn_y);
+	instancia_laser2.position = Vector2(spawn2_x,spawn_y);
+	add_child(instancia_laser1);
+	add_child(instancia_laser2);
+	on_laser = false;
+	
+func _on_timer_laser_timeout() -> void:
+	if on_laser:
+		return;
+	instanciar_laser();
+	print("Fuerzas->",forceOuter,forceMid);
