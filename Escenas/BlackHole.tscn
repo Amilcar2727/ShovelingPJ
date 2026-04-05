@@ -29,9 +29,11 @@ position = Vector2(640, 384)
 modulate = Color(1, 0.528034, 0.388195, 1)
 light_mask = 2
 z_index = -1
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("25_xv5bm")
 
 [node name="ExplosionArea" type="Area2D" parent="BlackHole"]
+scale = Vector2(0.25, 0.25)
 collision_layer = 0
 collision_mask = 5
 
@@ -39,6 +41,7 @@ collision_mask = 5
 shape = SubResource("CircleShape2D_u7phg")
 
 [node name="MidArea2" type="Area2D" parent="BlackHole"]
+scale = Vector2(0.25, 0.25)
 collision_layer = 0
 collision_mask = 5
 

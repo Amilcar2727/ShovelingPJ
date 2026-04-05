@@ -8,6 +8,10 @@ var bodies_guardados := [];
 ## Laser Congelante
 @export var laser_scene:PackedScene;
 var on_laser := false;
+var instancia_laser1 = null;
+var instancia_laser2 = null;
+#Tweens
+var active_tweens := []
 
 ##Referencias nodos
 @onready var ExplosionArea = $BlackHole/ExplosionArea;
@@ -17,6 +21,8 @@ var on_laser := false;
 @onready var ExplosionSprite = $BlackHole/ExplosionSprite;
 @onready var Luces = $BlackHole/Luces;
 @onready var BoomSound = $BlackHole/BoomSound;
+
+var finished := false;
 
 func _ready():
 	ExplosionArea.monitoring = false; #Empieza apagado
@@ -57,7 +63,6 @@ func _apply_force(area:Area2D, fuerza:float):
 	for area_overlapped:Area2D in area.get_overlapping_areas():
 		var rootNode = area_overlapped.get_owner();
 		if not fuerzas_guardadas.has(rootNode):
-			print(rootNode, rootNode.name);
 			fuerzas_guardadas[rootNode] = rootNode.fuerzaExterna;
 		# Direccion del agujero negro al objeto
 		var dir = ($BlackHole.global_position - rootNode.global_position).normalized();
@@ -85,27 +90,50 @@ func explote():
 	#Eliminamos los objetos en el area
 	for body in ExplosionArea.get_overlapping_bodies(): #Hiteables
 		if body.has_method("_on_explosion") and body != self:
-			print("On_explosion_bodies: ",body.typeName);
 			if body.typeName == "OxygenBomb":
 				body.queue_free();
 				continue;
-			#print(body.name);
 			body._on_explosion(self);
 	for area in ExplosionArea.get_overlapping_areas(): #Players
 		var rootNode = area.get_owner();
 		if rootNode.has_method("_on_explosion") and rootNode != self:
-			print("Murio al inicio: ",rootNode.name);
 			rootNode._on_explosion(self);
-
+	
 	on_blackh = true;
 	ExplosionSprite.visible = true;
 	Luces.visible = true;
 	BoomSound.play();
 	#
+	_animacion_entrada();
 	_animacion_giro();
-	await get_tree().create_timer(30,false).timeout; #Simula animacion
+
+func _finish_event():
+	if finished:
+		return;
+	finished = true;
+	print("Finalizando Evento")
 	#Apagamos area
+	var tween_finish = create_tween();
+	tween_finish.set_parallel(true);
+	active_tweens.append(tween_finish);
+	tween_finish.tween_property(ExplosionSprite, "scale",Vector2(0.1,0.1),1);
+	tween_finish.tween_property(ExplosionArea, "scale",Vector2(0.1,0.1),1);
+	tween_finish.tween_property(MidArea2, "scale",Vector2(0.1,0.1),1);
+	await tween_finish.finished;
+	##Tweens
+	for t in active_tweens:
+		if t.is_valid():
+			t.kill()
+	active_tweens.clear();
+	
 	on_blackh = false;
+	##Apagamos timer
+	if !$TimerLaser.is_stopped():
+		$TimerLaser.stop();
+	if is_instance_valid(instancia_laser1):
+		instancia_laser1.call_deferred("queue_free");
+	if is_instance_valid(instancia_laser2):
+		instancia_laser2.call_deferred("queue_free");
 	## Restaurar fuerzas
 	for jugador in fuerzas_guardadas.keys():
 		if jugador.get_owner().rondaT:
@@ -120,22 +148,32 @@ func explote():
 	ExplosionArea.monitoring = false;
 	MidArea2.monitoring = false;
 	OuterArea3.monitoring = false;
-	queue_free();
-		
+
+func _animacion_entrada():
+	var tween_aparicion = create_tween();
+	tween_aparicion.set_parallel(true);
+	active_tweens.append(tween_aparicion);
+	tween_aparicion.tween_property(ExplosionSprite, "scale",Vector2(1,1),10);
+	tween_aparicion.tween_property(ExplosionArea, "scale",Vector2(1,1),5);
+	tween_aparicion.tween_property(MidArea2, "scale",Vector2(1,1),5);
+	
 func _animacion_giro():
 	var tween_rot = create_tween()
+	active_tweens.append(tween_rot);
 	tween_rot.set_loops();
 	tween_rot.tween_property(ExplosionSprite, "rotation", PI * 2, 2.0)\
 		.as_relative()\
 		.set_trans(Tween.TRANS_LINEAR);
 		
 	var tween_luces = create_tween();
+	active_tweens.append(tween_luces);
 	tween_luces.set_loops();
 	tween_luces.tween_property(Luces, "rotation", PI * 2, 2.0)\
 		.as_relative()\
 		.set_trans(Tween.TRANS_LINEAR);
 		
 	var tween_scale = create_tween()
+	active_tweens.append(tween_scale);
 	tween_scale.set_loops()  # Loop infinito
 	tween_scale.tween_property(ExplosionSprite, "scale", Vector2(1.1,1.1), 0.8)\
 		.set_trans(Tween.TRANS_SINE)\
@@ -156,7 +194,6 @@ func _on_explosion_area_area_entered(area: Area2D) -> void:
 		return;
 	var rootNode = area.get_owner();
 	if rootNode.has_method("_on_explosion") and rootNode != self:
-		print("Murio despues: ",rootNode.name);
 		rootNode._on_explosion(self);
 
 #Entrada blackhole para orbes
@@ -194,8 +231,8 @@ func instanciar_laser() -> void:
 		return;
 	print("Instanciando Laser!!");
 	on_laser = true;
-	var instancia_laser1 = laser_scene.instantiate();
-	var instancia_laser2 = laser_scene.instantiate();
+	instancia_laser1 = laser_scene.instantiate();
+	instancia_laser2 = laser_scene.instantiate();
 	const spawn_y = 500;
 	var spawn1_x = randi_range(40,410);
 	var spawn2_x = randi_range(860,1230);
@@ -206,7 +243,6 @@ func instanciar_laser() -> void:
 	on_laser = false;
 	
 func _on_timer_laser_timeout() -> void:
-	if on_laser:
+	if on_laser or finished:
 		return;
 	instanciar_laser();
-	print("Fuerzas->",forceOuter,forceMid);

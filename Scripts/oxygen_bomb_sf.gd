@@ -44,7 +44,6 @@ func _apply_force(area:Area2D, fuerza:float):
 	for area_overlapped:Area2D in area.get_overlapping_areas():
 		var rootNode = area_overlapped.get_owner();
 		if not fuerzas_guardadas.has(rootNode):
-			print(rootNode, rootNode.name);
 			fuerzas_guardadas[rootNode] = rootNode.fuerzaExterna;
 		# Direccion del agujero negro al objeto
 		var dir = (self.global_position - rootNode.global_position).normalized();
@@ -65,9 +64,10 @@ func explote():
 		return;
 	exploting = true;
 	# Apagamos el area de una vez para evitar fuerzas adicionales
-	$CollisionShape2D.call_deferred("set_disabled",true);
-	set_deferred("linear_velocity",Vector2.ZERO); #Lo detenemos
-	set_deferred("angular_velocity", 0);
+	if !get_tree().current_scene.onSDEvent:
+		$CollisionShape2D.call_deferred("set_disabled",true);
+		set_deferred("linear_velocity",Vector2.ZERO); #Lo detenemos
+		set_deferred("angular_velocity", 0);
 	## Animacion de llamado a blackhole
 	$Call.play();
 	
@@ -153,7 +153,7 @@ func _on_impact(_body):
 	_body.hit.emit();
 
 func _on_explosion(_body):
-	if exploting:
+	if exploting and not get_tree().current_scene.onSDEvent:
 		return
 	queue_free();
 

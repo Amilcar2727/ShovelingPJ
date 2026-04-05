@@ -96,6 +96,13 @@ func new_game():
 	$BackgroundScn1.show();
 	$CintasAbajo.show();
 	$CintasArriba.show();
+	
+	##Posiciones iniciales
+	$SpawnBoxesRP1.position = Vector2(1300, 570);
+	$SpawnBoxesRP2.position = Vector2(1300, 193);
+	$SpawnBoxesLP1.position = Vector2(-20, 570);
+	$SpawnBoxesLP2.position = Vector2(-20, 193);
+	
 	#Cintas animacion
 	AnimacionesStop($CintasAbajo);
 	AnimacionesStop($CintasArriba);
@@ -218,6 +225,9 @@ func _on_box_timer_timeout():
 	throwable.use_local_direction = true;
 	throwable.actualizar_velocidad(vel_cajas);
 	throwable.direction_local = cinta_dir;
+	if onSDEvent:
+		cinta_dir = randi_range(0,1);
+	
 	if spawn == 0:
 		if cinta_dir == 1:
 			throwable.position = $SpawnBoxesLP1.position# + diferencia;
@@ -259,6 +269,16 @@ func _on_death_timer_timeout():
 	
 func changes_sd():
 	timeWaitTp = 0.2;
+	#640,384
+	$SpawnBoxesRP1.position.x = 1500;
+	$SpawnBoxesRP1.position.y = randi_range(334,434);
+	$SpawnBoxesRP2.position.x = 1500;
+	$SpawnBoxesRP2.position.y = randi_range(334,434);
+	
+	$SpawnBoxesLP1.position.x = -220;
+	$SpawnBoxesLP1.position.y = randi_range(334,434);
+	$SpawnBoxesLP2.position.x = -220;
+	$SpawnBoxesLP2.position.y = randi_range(334,434);
 	
 func spawnObject(instancia,escena:PackedScene,pos:Vector2):
 	instancia = escena.instantiate();
@@ -277,9 +297,19 @@ func on_win(player):
 	$BoxTimer.stop();
 	$TimerRandomEvents.stop();
 	player.score += 1;
+	if onSDEvent:
+		suddenManager.stop_timer();
+	#print("Regresando Color Normal Canvas")
+	var t1 = create_tween();
+	active_tweens.append(t1);
+	t1.tween_property(canvasModulate,"color",Color("#d7def6"),2)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN)
 	await game_show_win("Player "+str(player.player_id));
 	#Aumenta en 1 a las rondas
 	if player1.score != 3 && player2.score != 3:
+		if onSDEvent:
+			onSDEvent = false;
 		rondaN += 1;
 		spawn_phase = 0
 		$Conveyor.stop();
@@ -303,9 +333,6 @@ func on_win(player):
 		$Tormenta.position.x = 0;
 		if $SnowStorm.playing:
 			$SnowStorm.stop();
-		if onSDEvent:
-			suddenManager.stop_timer();
-			onSDEvent = false;
 		new_game();
 	else:
 		$Music.stop();
@@ -346,14 +373,14 @@ func _StormEvent(mutant:=false):
 	##.ease -> Define donde acelera/desacelera
 	tweenBG.tween_callback(func():
 		if !onSDEvent:
-			print("Entrando Color Normal Canvas");
+			#print("Entrando Color Normal Canvas");
 			var t = create_tween()
 			active_tweens.append(t);
 			t.tween_property(canvasModulate,"color",Color("#4a5a8a"),1.4)\
 			.set_trans(Tween.TRANS_SINE)\
 			.set_ease(Tween.EASE_OUT); #curva suave y acelera
 		else:
-			print("Entrando Color SD Canvas")
+			#print("Entrando Color SD Canvas")
 			var t = create_tween();
 			active_tweens.append(t);
 			t.tween_property(canvasModulate,"color",Color("#a02819"),1.4)\
@@ -373,14 +400,14 @@ func _StormEvent(mutant:=false):
 	
 	tweenBG.tween_callback(func():
 		if !onSDEvent:
-			print("Regresando Color Normal Canvas")
+			#print("Regresando Color Normal Canvas")
 			var t = create_tween()
 			active_tweens.append(t);
 			t.tween_property(canvasModulate,"color",Color("#d7def6"),2)\
 				.set_trans(Tween.TRANS_SINE)\
 				.set_ease(Tween.EASE_IN)
 		else:
-			print("Regresando Color SD Canvas")
+			#print("Regresando Color SD Canvas")
 			var t = create_tween()
 			active_tweens.append(t);
 			t.tween_property(canvasModulate,"color",Color("#ff7a2f"),2)\

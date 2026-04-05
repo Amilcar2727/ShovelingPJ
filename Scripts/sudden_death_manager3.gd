@@ -50,11 +50,24 @@ func _on_main_sudden_d_signal() -> void:
 	tweenForce.tween_method(
 		SDObject_instance._ChangeForces,
 		Vector2(450, 600),
-		Vector2(550,700),
-		20
+		Vector2(650, 800),
+		25
 	).set_trans(Tween.TRANS_LINEAR);
 	
 func spawnObject(escena:PackedScene,pos:Vector2):
 	var instancia = escena.instantiate();
 	instancia.position = pos;
 	return instancia;
+
+func _on_player_1_hit() -> void:
+	if !get_tree().current_scene.onSDEvent:
+		return;
+	SDObject_instance._finish_event();
+	await get_tree().create_timer(1,false).timeout;
+	SDObject_instance.queue_free();
+func _on_player_2_hit() -> void:
+	if !get_tree().current_scene.onSDEvent:
+		return;
+	SDObject_instance._finish_event();
+	await get_tree().create_timer(1,false).timeout;
+	SDObject_instance.queue_free();

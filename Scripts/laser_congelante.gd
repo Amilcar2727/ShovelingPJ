@@ -42,4 +42,4 @@ func _on_explosion_area_area_entered(area: Area2D) -> void:
 		return;
 	var rootNode = area.get_owner();
 	if rootNode.has_method("_freezing") and rootNode != self:
-		rootNode._freezing(1);
+		rootNode._freezing(1.75);

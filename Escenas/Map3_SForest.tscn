@@ -543,5 +543,7 @@ expand_mode = 3
 [connection signal="timeout" from="BoxTimer" to="." method="_on_box_timer_timeout"]
 [connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
 [connection signal="hit" from="Player1" to="." method="_on_player_1_hit"]
+[connection signal="hit" from="Player1" to="SuddenDeathManager" method="_on_player_1_hit"]
 [connection signal="hit" from="Player2" to="." method="_on_player_2_hit"]
+[connection signal="hit" from="Player2" to="SuddenDeathManager" method="_on_player_2_hit"]
 [connection signal="timeout" from="TimerRandomEvents" to="." method="_on_timer_random_events_timeout"]
