@@ -16,6 +16,7 @@ const initial_speed := 500;
 @onready var ShockElec = $ToRotate/ShockElec;
 @onready var PointLight = $ToRotate/PointLight2D;
 @onready var LightFrozen = $ToRotate/LightFrozzen;
+@onready var IndicadorPlayer = $IndicadorPlayer;
 
 var screen_size;	#Size of the game window
 #Score
@@ -69,11 +70,12 @@ func _ready():
 	LightFrozen.hide();
 	const P1Color = Color(1,0.36,0.3,1);
 	const P2Color = Color(0.35,0.61,1,1);
+	IndicadorPlayer.hide();
 	if player_id == 1:
-		$IndicadorPlayer.add_theme_color_override("font_color",P1Color);
+		IndicadorPlayer.add_theme_color_override("font_color",P1Color);
 	else:
-		$IndicadorPlayer.add_theme_color_override("font_color",P2Color);
-	$IndicadorPlayer.text = "P"+str(player_id);
+		IndicadorPlayer.add_theme_color_override("font_color",P2Color);
+	IndicadorPlayer.text = "P"+str(player_id);
 	hide();
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -316,7 +318,7 @@ func _finish_asyncs():
 		$TimerFrozen.stop();
 		
 func _on_dark(v=true):
-	$PointLight2D.visible = v;
+	PointLight.visible = v;
 	
 func _on_shock():
 	# Eliminamos movimiento y mostramos elect

@@ -29,6 +29,7 @@ var rondaT := false;
 #rAnatieneelanoasibiengrande- anton
 #antonesunhomosexualLamecaca- eylleen
 #labbcdekurtestuvoaqui - kurt
+#MIKIN - Ficapro
 
 # SuddenDeath
 signal suddenDSignal;
@@ -67,7 +68,27 @@ func _ready():
 	player2.position = Vector2(0,0);
 	player1.show();
 	player2.show();
-	await anim_camera_manager.animationCameraInitPlay();
+	print("===Empezando===")
+	print("Player 1 Scale: ",player1.scale)
+	print("Player 2 Scale: ",player2.scale)
+	player2.orientation = "right";
+	player2.scale = Vector2(-1,-1);
+	print("==========================");
+	print("==========================");
+	print("===INICIANDO ANIMACION ===");
+	print("==========================");
+	print("==========================");
+	
+	#await anim_camera_manager.animationCameraInitPlay();
+	
+	print("==========================");
+	print("==========================");
+	print("===TERMINANDO ANIMACION ===");
+	print("==========================");
+	print("==========================");
+	#player2.orientation = "right";
+	print("Player 1 Scale: ",player1.scale)
+	print("Player 2 Scale: ",player2.scale)
 	##Nuevo juego
 	#$Camera2D.zoom = Vector2(0.6,0.6);
 	new_game();
@@ -102,12 +123,12 @@ func new_game():
 	HUD.update_time(deathTime);
 	#HUD.show_message("Get Ready!");
 	player1.start($StartPositionP1.position);
-	player1.orientation = "right";
-	player1.ToRotate.scale.x = 1;
+	#player1.orientation = "right";
+	#player1.ToRotate.scale.x = 1;
 	player2.start($StartPositionP2.position);
-	player2.ToRotate.rotation = deg_to_rad(180);
-	player2.ToRotate.scale.x = -1;
-	player2.orientation = "right";
+	#player2.ToRotate.rotation = deg_to_rad(360);
+	#player2.ToRotate.scale.x = -1;
+	#player2.ToRotate.scale.y = -1;
 	if !$Music.playing:
 		$Music.play();
 	get_tree().call_group("box","queue_free");
@@ -260,7 +281,7 @@ func _makeDark():
 	await $Background/AnimationPlayer.animation_finished;
 	player1._on_dark(true);
 	player2._on_dark(true);
-	$DarkTimer.wait_time = randi_range(2,4);
+	$DarkTimer.wait_time = randi_range(3,5);
 	$DarkTimer.start();
 
 func refresh_phase():

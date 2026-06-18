@@ -1,0 +1,127 @@
+[gd_scene load_steps=7 format=3 uid="uid://xstqnubncwy0"]
+
+[ext_resource type="Script" path="res://Scripts/test_scene.gd" id="1_styub"]
+[ext_resource type="PackedScene" uid="uid://cr5nto0v1cvtd" path="res://Escenas/player.tscn" id="1_xxact"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vm6tl"]
+radius = 20.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nfrlp"]
+size = Vector2(400, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uulkf"]
+radius = 150.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ucmdd"]
+size = Vector2(50, 50)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_styub")
+
+[node name="Player" parent="." instance=ExtResource("1_xxact")]
+position = Vector2(240, 416)
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(688, 472)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[node name="RigidBody2D4" type="RigidBody2D" parent="."]
+position = Vector2(888, 440)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D4"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[node name="RigidBody2D5" type="RigidBody2D" parent="."]
+position = Vector2(752, 440)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D5"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[node name="RigidBody2D2" type="RigidBody2D" parent="."]
+position = Vector2(816, 480)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D2"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[node name="RigidBody2D6" type="RigidBody2D" parent="."]
+position = Vector2(744, 336)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D6"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[node name="RigidBody2D7" type="RigidBody2D" parent="."]
+position = Vector2(984, 352)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D7"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[node name="RigidBody2D8" type="RigidBody2D" parent="."]
+position = Vector2(848, 304)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D8"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[node name="RigidBody2D3" type="RigidBody2D" parent="."]
+position = Vector2(960, 488)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D3"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(816, 584)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_nfrlp")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2(600, 680)
+rotation = 1.5708
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+shape = SubResource("RectangleShape2D_nfrlp")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+position = Vector2(1032, 672)
+rotation = 1.5708
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+shape = SubResource("RectangleShape2D_nfrlp")
+
+[node name="ExplosionArea" type="Area2D" parent="."]
+position = Vector2(824, 536)
+monitoring = false
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea"]
+shape = SubResource("CircleShape2D_uulkf")
+
+[node name="Switch" type="Area2D" parent="."]
+position = Vector2(56, 424)
+collision_layer = 4
+collision_mask = 7
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Switch"]
+shape = SubResource("RectangleShape2D_ucmdd")
+
+[node name="RigidBody2D9" type="RigidBody2D" parent="."]
+position = Vector2(872, -1032)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D9"]
+shape = SubResource("CircleShape2D_vm6tl")
+
+[connection signal="area_entered" from="Switch" to="." method="_on_switch_area_entered"]
