@@ -31,7 +31,10 @@ func explote():
 		return;
 	exploting = true;
 	print("EXPLOTANDO!!");
-	linear_velocity = Vector2.ZERO #Lo detenemos
+	# Apagamos el area de una vez para evitar fuerzas adicionales
+	$CollisionShape2D.call_deferred("set_disabled",true);
+	set_deferred("linear_velocity",Vector2.ZERO); #Lo detenemos
+	set_deferred("angular_velocity", 0);
 	$ExplosionArea.monitoring = true;
 	#Esperamos 2 frames a que se actualizen las colisiones
 	await get_tree().physics_frame; #Espera un frame

@@ -70,7 +70,7 @@ func _ready():
 	player2.show();
 	#await anim_camera_manager.animationCameraInitPlay();
 	##Nuevo juego
-	#$Camera2D.zoom = Vector2(0.6,0.6);
+	$Camera2D.zoom = Vector2(0.6,0.6);
 	new_game();
 
 ##Input
@@ -200,21 +200,21 @@ func apply_spawn_phase(phase:int):
 	match phase:
 		1:
 			$BoxTimer.wait_time = 1;
-			prob_apagon = 0.05;
+			prob_apagon = 0.07;
 			#DirectionCintas(7);
 			player1.fuerzaEmpujeCinta = -110*cinta_dir;
 			player2.fuerzaEmpujeCinta = -110*cinta_dir;
 			BaseBox.speed_all = 110;
 		2:
 			$BoxTimer.wait_time = 0.75;
-			prob_apagon = 0.10;
+			prob_apagon = 0.14;
 			DirectionCintas(9,cinta_dir);
 			player1.fuerzaEmpujeCinta = -160*cinta_dir;
 			player2.fuerzaEmpujeCinta = -160*cinta_dir;
 			BaseBox.speed_all = 125;
 		3:
 			$BoxTimer.wait_time = 0.5;
-			prob_apagon = 0.15;
+			prob_apagon = 0.20;
 			DirectionCintas(12,cinta_dir);
 			player1.fuerzaEmpujeCinta = -200*cinta_dir;
 			player2.fuerzaEmpujeCinta = -200*cinta_dir;
@@ -242,15 +242,21 @@ func _on_box_timer_timeout():
 	else:
 		return;
 	if spawn == 0:
-		if cinta_dir == 1:
+		if cinta_dir == 1 and !$SpawnBoxesRP1/Area2D.has_overlapping_bodies():
 			throwable.position = $SpawnBoxesRP1.position# + diferencia;
-		else:
+		elif cinta_dir != 1 and !$SpawnBoxesLP1/Area2D.has_overlapping_bodies():	
 			throwable.position = $SpawnBoxesLP1.position# + diferencia;
-	elif spawn == 1:
-		if cinta_dir == 1:
-			throwable.position = $SpawnBoxesRP2.position + diferencia;
 		else:
+			throwable.queue_free();
+			return;
+	elif spawn == 1:
+		if cinta_dir == 1 and !$SpawnBoxesRP2/Area2D.has_overlapping_bodies():
+			throwable.position = $SpawnBoxesRP2.position + diferencia;
+		elif cinta_dir != 1 and !$SpawnBoxesLP2/Area2D.has_overlapping_bodies():
 			throwable.position = $SpawnBoxesLP2.position + diferencia;
+		else:
+			throwable.queue_free();
+			return;
 	## == Spawneamos la caja agregandolo a la escena:
 	add_child(throwable);
 
@@ -299,6 +305,8 @@ func on_win(player):
 	$DeathTimer.stop();
 	$BoxTimer.stop();
 	$LightningTimer.stop();
+	$DarkTimer.stop();
+	onDark = false;
 	player.score += 1;
 	if onSDEvent:
 		suddenManager.stop_timer();
@@ -309,6 +317,10 @@ func on_win(player):
 		rondaN += 1;
 		spawn_phase = 0
 		$Conveyor.stop();
+		player1._on_dark(false);
+		player2._on_dark(false);
+		$Background.hide();
+		$Background/AnimationPlayer.stop();
 		new_game();
 	else:
 		$Music.stop();
@@ -339,6 +351,8 @@ func finishGame():
 	get_tree().change_scene_to_file("res://Escenas/VictoryScreen.tscn");
 
 func _on_dark_timer_timeout() -> void:
+	if !onDark:
+		return;
 	player1._on_dark(false);
 	player2._on_dark(false);
 	$Background/AnimationPlayer.play("Lightning_on");

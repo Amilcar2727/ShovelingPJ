@@ -106,7 +106,7 @@ func explote():
 	$AnimatedSprite2D.visible = false;
 	if $SnowMan.visible:
 		$SnowMan.visible = false;
-	$ExplosionSprite.visible = true;
+	$ExplosionSprite.visible = true
 	$Luces.visible = true;
 	$BoomSound.play();
 	#
