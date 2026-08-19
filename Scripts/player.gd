@@ -229,6 +229,7 @@ func changeColorBody(mode = 'draw'):
 func _on_shoveling_area_body_entered(body):
 	if body not in (current_boxes):
 		if body is BaseBox and body.tepeando:
+			changeColorBody('clear');
 			current_boxes.push_back(body);
 			return;
 		changeColorBody('clear');

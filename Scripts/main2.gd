@@ -425,15 +425,15 @@ func _tpBoxes():
 		if velocidad_guardada and (caja.hitted or caja.typeName == "Cow"):
 			caja.call_deferred("set_linear_velocity",velocidad_guardada["velocidad"]);
 			caja.call_deferred("set_angular_velocity",velocidad_guardada["angular"]);
-		#Aplicar TP
-		caja.freeze = false;
 		$Tp2.play();
-		caja.swapCS(); ##Prendemos CollisionShape
 		#caja.show();
 		await get_tree().create_timer(0.25,false).timeout;
 		if !is_instance_valid(caja):
 			continue;
-		caja.ChangeColorOrig();
+		#Aplicar TP
+		caja.freeze = false;
+		caja.swapCS(); ##Prendemos CollisionShape
+		caja.ChangeColor(caja.last_hitter if caja.last_hitter != 0 else 0);
 		caja.tepeando = false;
 		
 	onTp = false;

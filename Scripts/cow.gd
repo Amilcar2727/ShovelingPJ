@@ -90,4 +90,4 @@ func _on_explosion(_body):
 	else:
 		pass;
 func ChangeColor(_player_id):
-	pass;
+	ChangeColorOrig();
