@@ -119,7 +119,6 @@ wait_time = 3.0
 one_shot = true
 
 [node name="IndicadorPlayer" type="Label" parent="."]
-visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5

@@ -12,7 +12,7 @@ var cambiando_cinta := false;
 var vel_cajas := 100;
 
 var spawn_phase := 0
-const Initialtime:int = 5;
+const Initialtime:int = 60;
 var deathTime:int = Initialtime;
 var rondaN = 1;
 var rondaT := false;

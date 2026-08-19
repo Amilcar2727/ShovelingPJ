@@ -70,7 +70,7 @@ func _ready():
 	LightFrozen.hide();
 	const P1Color = Color(1,0.36,0.3,1);
 	const P2Color = Color(0.35,0.61,1,1);
-	IndicadorPlayer.hide();
+	#IndicadorPlayer.hide();
 	if player_id == 1:
 		IndicadorPlayer.add_theme_color_override("font_color",P1Color);
 	else:
