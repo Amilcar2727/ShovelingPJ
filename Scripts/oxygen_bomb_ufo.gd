@@ -59,7 +59,9 @@ func explote(piso:="Floor1"):
 	for body in $ExplosionArea.get_overlapping_bodies(): #Hiteables
 		if body.has_method("_on_explosion") and body != self:
 			body._on_explosion(self);
-			
+	## Detenemos de nuevo por si acaso
+	set_deferred("linear_velocity",Vector2.ZERO); #Lo detenemos
+	set_deferred("angular_velocity", 0);
 	on_laser = true;
 	#Apagamos area
 	$AnimatedSprite2D.visible = false;
