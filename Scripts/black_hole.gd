@@ -121,19 +121,16 @@ func _finish_event():
 	tween_finish.tween_property(MidArea2, "scale",Vector2(0.1,0.1),1);
 	await tween_finish.finished;
 	##Tweens
+	print("active tweens:",len(active_tweens));
 	for t in active_tweens:
 		if t.is_valid():
 			t.kill()
 	active_tweens.clear();
-	
 	on_blackh = false;
+	$BlackHole.hide();
 	##Apagamos timer
 	if !$TimerLaser.is_stopped():
 		$TimerLaser.stop();
-	if is_instance_valid(instancia_laser1):
-		instancia_laser1.call_deferred("queue_free");
-	if is_instance_valid(instancia_laser2):
-		instancia_laser2.call_deferred("queue_free");
 	## Restaurar fuerzas
 	for jugador in fuerzas_guardadas.keys():
 		if jugador.get_owner().rondaT:
@@ -144,10 +141,14 @@ func _finish_event():
 	_restaurar_cuerpos();
 	# Apagamos area
 	if BoomSound.playing:
-		await BoomSound.finished;
+		BoomSound.stop();
 	ExplosionArea.monitoring = false;
 	MidArea2.monitoring = false;
 	OuterArea3.monitoring = false;
+	if is_instance_valid(instancia_laser1):
+		await instancia_laser1.tree_exited;
+	if is_instance_valid(instancia_laser2):
+		await instancia_laser2.tree_exited;
 
 func _animacion_entrada():
 	var tween_aparicion = create_tween();

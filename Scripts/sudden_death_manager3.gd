@@ -32,7 +32,7 @@ func _on_death_timer_timeout() -> void:
 func _on_main_sudden_d_signal() -> void:
 	suddenTime = timeC;
 	HUD.update_time("First On Die!");
-	# Aparecemos portal
+	# Aparecemos black hole
 	SDObject_instance = spawnObject(SDObject_scene, Vector2(0,0));
 	get_tree().current_scene.add_child(SDObject_instance);
 	var scene = get_tree().current_scene
@@ -60,14 +60,14 @@ func spawnObject(escena:PackedScene,pos:Vector2):
 	return instancia;
 
 func _on_player_1_hit() -> void:
-	if !get_tree().current_scene.onSDEvent:
-		return;
-	SDObject_instance._finish_event();
-	await get_tree().create_timer(1,false).timeout;
-	SDObject_instance.queue_free();
+	if is_instance_valid(SDObject_instance):
+		if SDObject_instance.finished:
+			return;
+		await SDObject_instance._finish_event();
+		SDObject_instance.queue_free();
 func _on_player_2_hit() -> void:
-	if !get_tree().current_scene.onSDEvent:
-		return;
-	SDObject_instance._finish_event();
-	await get_tree().create_timer(1,false).timeout;
-	SDObject_instance.queue_free();
+	if is_instance_valid(SDObject_instance):
+		if SDObject_instance.finished:
+			return;
+		await SDObject_instance._finish_event();
+		SDObject_instance.queue_free();

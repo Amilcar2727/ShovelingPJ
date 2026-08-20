@@ -50,7 +50,7 @@ var onFreeze:= false;
 var direccion_shovel := 1;
 
 ##3er mapa
-@export var friction = speed * 2 #Frenado
+@export var friction = speed * 1.75 #Frenado
 var vel_actual := Vector2.ZERO;
 
 func _ready():
@@ -164,10 +164,16 @@ func _process_resbala(delta): ##Para 3er mapa
 	var new_pos = position + vel_actual * delta;
 	if new_pos.x < 0:
 		new_pos.x = 0;
-		vel_actual.x = 0;
+		if !get_tree().current_scene.onSDEvent:
+			vel_actual.x = 0;
+		else:
+			vel_actual.x = vel_actual.x/2;
 	elif new_pos.x > screen_size.x:
 		new_pos.x = screen_size.x;
-		vel_actual.x = 0;
+		if !get_tree().current_scene.onSDEvent:
+			vel_actual.x = 0;
+		else:
+			vel_actual.x = vel_actual.x/2;
 	position = new_pos;
 	#Flip
 	leftOrRight(orientation);
@@ -177,8 +183,8 @@ func start(pos):
 	onBanana = false;
 	Banana.hide();
 	show();
-	AreaColisionShape.disabled = false;
-	AreaShovelShape.disabled = false;
+	AreaColisionShape.set_deferred("disabled",false);
+	AreaShovelShape.set_deferred("disabled",false);
 func leftOrRight(orientationA:String):
 	if(orientationA == "right"):
 		if(player_id == 1):
